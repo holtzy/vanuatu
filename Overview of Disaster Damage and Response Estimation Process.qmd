@@ -26,7 +26,7 @@ editor: visual
 
 # Baseline Education Indicators
 
-Objective: Tabulate the number of schools, students, and teachers by school level (ECCE, Primary, Secondary) and area council.
+**Objective:** Tabulate the number of schools, students, and teachers by school level (ECCE, Primary, Secondary) and area council.
 
 Source data from the cleaned Excel education baseline.
 
@@ -246,13 +246,529 @@ for (province in provinces_to_bold) {
 
 # Add vertical black lines between specified columns and after the last column
 ft <- ft %>%
+  # Add vertical black line at the far left of the table
+  vline_left(border = officer::fp_border(color = "black", width = 1)) %>%
+  # Add vertical black lines between specific columns
   vline(j = c(1, 4, 7, total_cols), border = officer::fp_border(color = "black", width = 1))
 
 # Display the table
 ft
 ```
 
+# Estimated Damage to Schools and Students
+
+**Formulas:**
+
+- Damaged Schools = # of Schools × Cyclone Multiplier
+- Students Affected = # of Students × Cyclone Multiplier
+
+**Example Calculation (for Category 5 in Torres):**
+
+- ECCE Schools Damaged = 2 × 0.8 = 1.6
+- ECCE Students Affected = 12 × 0.8 = 9.6
+
+This is repeated by school level and area council.
 
 ```{r}
+# Load required packages
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(flextable)
+library(stringr)
+
+# Read the Excel file, specifically the "Education" sheet
+education_data <- read_excel("baseline_indicators.xlsx", sheet = "Education")
+
+# First, properly reshape and aggregate the data
+table_data <- education_data %>%
+  # Filter only rows that contain school or student counts
+  filter(Indicator %in% c("Number of schools", "Number of students")) %>%
+  # Extract the measure type (schools, students)
+  mutate(
+    Level = Attribute,
+    Measure = gsub("Number of ", "", Indicator)
+  ) %>%
+  # Ensure we have clean Region data
+  mutate(
+    Region = if_else(!is.na(`Area Council`), `Area Council`, Province),
+    # If both Province and Area Council are NA, use "Vanuatu" as the region
+    Region = if_else(is.na(Region), "Vanuatu", Region),
+    # Capitalize the first letter of each word in the region names
+    Region = str_to_title(Region)
+  ) %>%
+  # Select and group by the relevant columns
+  select(Region, Level, Measure, Value) %>%
+  # Make sure we don't have duplicates when pivoting
+  group_by(Region, Level, Measure) %>%
+  summarize(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  # Now pivot to get the wide format
+  pivot_wider(
+    names_from = c(Level, Measure),
+    values_from = Value,
+    names_sep = "_"
+  )
+
+# Identify unmatched regions to be removed
+unmatched_regions <- c("Canal Fanafo", "North Ambrum", "Not Stated")
+
+# Remove the unmatched regions from the data
+table_data <- table_data %>%
+  filter(!Region %in% unmatched_regions)
+
+# Define the desired order of regions with capitalized first letter of each word
+region_order <- c(
+  "Vanuatu", "Torba", "Torres", "Ureparapara", "Motalava",
+  "West Vanualava", "East Vanualava", "Mota", "East Gaua", "West Gaua",
+  "Merelava", "Sanma", "Luganville", "North West Santo", "Big Bay Coast",
+  "Big Bay Inland", "West Santo", "South Santo 1", "South Santo 2",
+  "East Santo", "South East Santo", "West Malo", "East Malo", "Penama",
+  "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo",
+  "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2",
+  "South Pentecost", "Malampa", "North West Malekula", "North East Malekula",
+  "Central Malekula", "South West Malekula", "South East Malekula",
+  "South Malekula", "North Ambrym", "West Ambrym", "South East Ambrym",
+  "Paama", "Shefa", "Port Vila", "Vermali", "Vermaul", "Varisu", "South Epi",
+  "North Tongoa", "Tongariki", "Makimae", "Nguna", "Emau", "Malorua",
+  "North Efate", "Mele", "Tanvasoko", "Ifira", "Pango", "Erakor", "Eratap",
+  "Eton", "Tafea", "North Erromango", "South Erromango", "Aniwa",
+  "North Tanna", "West Tanna", "Middle Bush Tanna", "South West Tanna",
+  "Whitesands", "South Tanna", "Futuna", "Aneityum"
+)
+
+# Make sure we have all the columns we need
+desired_columns <- c("Region", 
+                    "ECCE_schools", "ECCE_students",
+                    "Primary_schools", "Primary_students",
+                    "Secondary_schools", "Secondary_students")
+
+# Add missing columns with NA values
+for (col in desired_columns) {
+  if (!col %in% names(table_data)) {
+    table_data[[col]] <- NA
+  }
+}
+
+# Select only the columns we want in the right order
+final_table <- table_data %>%
+  select(all_of(desired_columns))
+
+# Add any missing regions as rows with NA values
+missing_regions <- setdiff(region_order, final_table$Region)
+if (length(missing_regions) > 0) {
+  missing_rows <- data.frame(
+    Region = missing_regions,
+    matrix(NA, 
+           nrow = length(missing_regions), 
+           ncol = length(desired_columns) - 1,
+           dimnames = list(NULL, desired_columns[-1]))
+  )
+  final_table <- bind_rows(final_table, missing_rows)
+}
+
+# Order the table according to the specified region order
+final_table <- final_table %>%
+  mutate(Region = factor(Region, levels = region_order)) %>%
+  arrange(Region) %>%
+  # Convert back to character after sorting
+  mutate(Region = as.character(Region))
+
+# List of province names to bold
+provinces_to_bold <- c("Vanuatu", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
+
+# Get total number of columns
+total_cols <- length(desired_columns)
+
+# Create the flextable
+ft <- flextable(final_table) %>%
+  # Set labels for the second header row
+  set_header_labels(
+    Region = "Region",
+    ECCE_schools = "Schools", ECCE_students = "Students",
+    Primary_schools = "Schools", Primary_students = "Students",
+    Secondary_schools = "Schools", Secondary_students = "Students"
+  ) %>%
+  # Add the top header row
+  add_header_row(
+    values = c("Region", "ECCE", "Primary", "Secondary"),
+    colwidths = c(1, 2, 2, 2)
+  ) %>%
+  # Merge the Region cells vertically in the header
+  merge_at(i = 1:2, j = 1, part = "header") %>%
+  # Center the Region header
+  align(i = 1, j = 1, align = "center", part = "header") %>%
+  # Apply theme and general alignment
+  theme_vanilla() %>%
+  align(align = "center", part = "all") %>%
+  align(align = "left", j = 1, part = "body") %>%  # Left align region names in body
+  autofit()
+
+# Bold specific province names
+for (province in provinces_to_bold) {
+  # Find the row indices for the provinces to bold
+  idx <- which(final_table$Region == province)
+  if (length(idx) > 0) {
+    ft <- ft %>% bold(i = idx, j = 1)
+  }
+}
+
+# Add vertical black lines between specified columns and after the last column
+ft <- ft %>%
+  # Add vertical black line at the far left of the table
+  vline_left(border = officer::fp_border(color = "black", width = 1)) %>%
+  # Add vertical black lines between specific columns
+  vline(j = c(1, 3, 5, total_cols), border = officer::fp_border(color = "black", width = 1))
+
+# Display the table
+ft
 ```
 
+# Emergency Response Resources Required
+
+**Formulas:**
+
+-	Tents = # of Schools × Multiplier × 1
+-	Solar Lamps = # of Schools × Multiplier × 10
+-	Water = # of Students × Multiplier × Litres per person × Days
+-	Rice = # of Students × Multiplier × 200g × Days
+-	Tuna = # of Students × Multiplier × 1 tin × Days
+
+Specify Litres per person and Days as parameters in your Quarto code chunk.
+
+```{r}
+# Load required packages
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(flextable)
+library(stringr)
+
+# Parameters for Emergency Response Resources
+litres_per_person <- 5  # Specify Litres per person
+days <- 7               # Specify the number of days
+multiplier <- 1         # Use 1 as the multiplier for now
+
+# Read the Excel file, specifically the "Education" sheet
+education_data <- read_excel("baseline_indicators.xlsx", sheet = "Education")
+
+# Process the data to get the number of schools and students
+table_data <- education_data %>%
+  # Filter only rows that contain school or student counts
+  filter(Indicator %in% c("Number of schools", "Number of students")) %>%
+  # Extract the measure type (schools, students)
+  mutate(
+    Level = Attribute,
+    Measure = gsub("Number of ", "", Indicator)
+  ) %>%
+  # Ensure we have clean Region data
+  mutate(
+    Region = if_else(!is.na(`Area Council`), `Area Council`, Province),
+    # If both Province and Area Council are NA, use "Vanuatu" as the region
+    Region = if_else(is.na(Region), "Vanuatu", Region),
+    # Capitalize the first letter of each word in the region names
+    Region = str_to_title(Region)
+  ) %>%
+  # Select and group by the relevant columns
+  select(Region, Level, Measure, Value) %>%
+  # Make sure we don't have duplicates when pivoting
+  group_by(Region, Level, Measure) %>%
+  summarize(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  # Now pivot to get the wide format
+  pivot_wider(
+    names_from = c(Level, Measure),
+    values_from = Value,
+    names_sep = "_"
+  )
+
+# Identify unmatched regions to be removed
+unmatched_regions <- c("Canal Fanafo", "North Ambrum", "Not Stated")
+
+# Remove the unmatched regions from the data
+table_data <- table_data %>%
+  filter(!Region %in% unmatched_regions)
+
+# Define the desired order of regions with capitalized first letter of each word
+region_order <- c(
+  "Vanuatu", "Torba", "Torres", "Ureparapara", "Motalava",
+  "West Vanualava", "East Vanualava", "Mota", "East Gaua", "West Gaua",
+  "Merelava", "Sanma", "Luganville", "North West Santo", "Big Bay Coast",
+  "Big Bay Inland", "West Santo", "South Santo 1", "South Santo 2",
+  "East Santo", "South East Santo", "West Malo", "East Malo", "Penama",
+  "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo",
+  "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2",
+  "South Pentecost", "Malampa", "North West Malekula", "North East Malekula",
+  "Central Malekula", "South West Malekula", "South East Malekula",
+  "South Malekula", "North Ambrym", "West Ambrym", "South East Ambrym",
+  "Paama", "Shefa", "Port Vila", "Vermali", "Vermaul", "Varisu", "South Epi",
+  "North Tongoa", "Tongariki", "Makimae", "Nguna", "Emau", "Malorua",
+  "North Efate", "Mele", "Tanvasoko", "Ifira", "Pango", "Erakor", "Eratap",
+  "Eton", "Tafea", "North Erromango", "South Erromango", "Aniwa",
+  "North Tanna", "West Tanna", "Middle Bush Tanna", "South West Tanna",
+  "Whitesands", "South Tanna", "Futuna", "Aneityum"
+)
+
+# Make sure we have all the columns we need
+desired_columns <- c("Region", 
+                    "ECCE_schools", "ECCE_students",
+                    "Primary_schools", "Primary_students",
+                    "Secondary_schools", "Secondary_students")
+
+# Add missing columns with NA values
+for (col in desired_columns) {
+  if (!col %in% names(table_data)) {
+    table_data[[col]] <- NA
+  }
+}
+
+# Select only the columns we want in the right order
+final_table <- table_data %>%
+  select(all_of(desired_columns))
+
+# Add any missing regions as rows with NA values
+missing_regions <- setdiff(region_order, final_table$Region)
+if (length(missing_regions) > 0) {
+  missing_rows <- data.frame(
+    Region = missing_regions,
+    matrix(NA, 
+           nrow = length(missing_regions), 
+           ncol = length(desired_columns) - 1,
+           dimnames = list(NULL, desired_columns[-1]))
+  )
+  final_table <- bind_rows(final_table, missing_rows)
+}
+
+# Order the table according to the specified region order
+final_table <- final_table %>%
+  mutate(Region = factor(Region, levels = region_order)) %>%
+  arrange(Region) %>%
+  # Convert back to character after sorting
+  mutate(Region = as.character(Region))
+
+# Calculate Emergency Response Resources
+emergency_table <- final_table %>%
+  mutate(
+    # ECCE Calculations
+    ECCE_Tents = ECCE_schools * multiplier * 1,
+    ECCE_SolarLamps = ECCE_schools * multiplier * 10,
+    ECCE_Water = ECCE_students * multiplier * litres_per_person * days,
+    ECCE_Rice = ECCE_students * multiplier * 0.2 * days,
+    ECCE_Tuna = ECCE_students * multiplier * 1 * days,
+    # Primary Calculations
+    Primary_Tents = Primary_schools * multiplier * 1,
+    Primary_SolarLamps = Primary_schools * multiplier * 10,
+    Primary_Water = Primary_students * multiplier * litres_per_person * days,
+    Primary_Rice = Primary_students * multiplier * 0.2 * days,
+    Primary_Tuna = Primary_students * multiplier * 1 * days,
+    # Secondary Calculations
+    Secondary_Tents = Secondary_schools * multiplier * 1,
+    Secondary_SolarLamps = Secondary_schools * multiplier * 10,
+    Secondary_Water = Secondary_students * multiplier * litres_per_person * days,
+    Secondary_Rice = Secondary_students * multiplier * 0.2 * days,
+    Secondary_Tuna = Secondary_students * multiplier * 1 * days
+  ) %>%
+  select(
+    Region,
+    ECCE_Tents, ECCE_SolarLamps, ECCE_Water, ECCE_Rice, ECCE_Tuna,
+    Primary_Tents, Primary_SolarLamps, Primary_Water, Primary_Rice, Primary_Tuna,
+    Secondary_Tents, Secondary_SolarLamps, Secondary_Water, Secondary_Rice, Secondary_Tuna
+  )
+
+# List of province names to bold
+provinces_to_bold <- c("Vanuatu", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
+
+# Get the total number of columns in the emergency table
+total_cols <- ncol(emergency_table)
+
+# Create the flextable
+emergency_ft <- flextable(emergency_table) %>%
+  # Add a header row for categories
+  add_header_row(
+    values = c("Region", "ECCE", "Primary", "Secondary"),
+    colwidths = c(1, 5, 5, 5)  # Ensure these add up to 16
+  ) %>%
+  # Set labels for the second header row
+  set_header_labels(
+    Region = "Region",
+    ECCE_Tents = "Tents", ECCE_SolarLamps = "Solar Lamps",
+    ECCE_Water = "Water", ECCE_Rice = "Rice", ECCE_Tuna = "Tin",
+    Primary_Tents = "Tents", Primary_SolarLamps = "Solar Lamps",
+    Primary_Water = "Water", Primary_Rice = "Rice", Primary_Tuna = "Tin",
+    Secondary_Tents = "Tents", Secondary_SolarLamps = "Solar Lamps",
+    Secondary_Water = "Water", Secondary_Rice = "Rice", Secondary_Tuna = "Tin"
+  ) %>%
+  # Apply a clean theme
+  theme_vanilla() %>%
+  # Align all columns to center and the region column to the left
+  align(align = "center", part = "all") %>%
+  align(align = "left", j = 1, part = "body") %>%
+  # Bold the specific province names
+  bold(i = which(emergency_table$Region %in% provinces_to_bold), j = 1, bold = TRUE) %>%
+  # Add vertical black lines between specified columns
+  vline_left(border = officer::fp_border(color = "black", width = 1)) %>%
+  vline(j = c(1, 6, 11, total_cols), border = officer::fp_border(color = "black", width = 1)) %>%
+  # Adjust column widths
+  width(j = 1, width = 2) %>%  # Adjust the width of the first column (Region)
+  width(j = 2:ncol(emergency_table), width = 1.5)  # Adjust the width of all other columns
+
+# Display the table
+emergency_ft
+```
+
+# Estimated Financial Damage
+
+**Formula:**
+
+-	Cost of Damaged Schools = # of Schools × Cyclone Multiplier × Unit Cost
+-	Unit costs for each school type should be sourced from a financial cost lookup table in Excel.
+
+**Example:**
+
+-	If ECCE school unit cost = 1,000,000 VT, and Torres had 2 schools under a Category 5 cyclone (0.8 multiplier):
+-	→ 2 × 0.8 × 1,000,000 = 1,600,000 VT
+
+```{r}
+# Load required packages
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(flextable)
+library(stringr)
+
+# Cyclone multiplier (set to 1 for now, adjust for cyclone category later)
+cyclone_multiplier <- 1
+
+# Load the education data from the Excel file
+education_data <- read_excel("baseline_indicators.xlsx", sheet = "Education")
+
+# Process the education data to get the number of schools per region
+school_data <- education_data %>%
+  # Filter only rows that contain school counts
+  filter(Indicator == "Number of schools") %>%
+  # Extract school type (ECCE, Primary, Secondary)
+  mutate(School_Type = Attribute) %>%
+  # Ensure we have clean Region data
+  mutate(
+    Region = if_else(!is.na(`Area Council`), `Area Council`, Province),
+    Region = if_else(is.na(Region), "Vanuatu", Region),
+    Region = str_to_title(Region)  # Capitalize the first letter of each word
+  ) %>%
+  # Select relevant columns and clean up names
+  select(Region, School_Type, Value) %>%
+  rename(Number_of_Schools = Value) %>%
+  group_by(Region, School_Type) %>%
+  summarize(Number_of_Schools = sum(Number_of_Schools, na.rm = TRUE), .groups = "drop") %>%
+  # Pivot to wide format
+  pivot_wider(
+    names_from = School_Type,
+    values_from = Number_of_Schools,
+    names_prefix = "",
+    values_fill = 0
+  )
+
+# Rename columns to match school types
+colnames(school_data) <- c("Region", "ECCE_schools", "Primary_schools", "Secondary_schools")
+
+# Load the unit costs for each school type from another Excel file
+unit_cost <- read_excel("estimated_cost.xlsx", sheet = 1) %>%
+  filter(Indicator == "Education") %>%
+  select(attributes, `Price (VUV)`) %>%
+  rename(School_Type = attributes, Unit_Cost = `Price (VUV)`)
+
+# Remove columns with NA names
+school_data <- school_data[, !is.na(colnames(school_data))]
+
+# Calculate the estimated financial damage
+estimated_damage <- school_data %>%
+  # Add the unit costs for each school type
+  mutate(
+    ECCE_Unit_Cost = unit_cost$Unit_Cost[match("ECCE", unit_cost$School_Type)],
+    Primary_Unit_Cost = unit_cost$Unit_Cost[match("Primary", unit_cost$School_Type)],
+    Secondary_Unit_Cost = unit_cost$Unit_Cost[match("Secondary", unit_cost$School_Type)]
+  ) %>%
+  # Calculate the financial damage for each school type
+  mutate(
+    ECCE_Damage = ECCE_schools * cyclone_multiplier * ECCE_Unit_Cost,
+    Primary_Damage = Primary_schools * cyclone_multiplier * Primary_Unit_Cost,
+    Secondary_Damage = Secondary_schools * cyclone_multiplier * Secondary_Unit_Cost
+  ) %>%
+  # Select only relevant columns for the output table
+  select(Region, ECCE_Damage, Primary_Damage, Secondary_Damage)
+
+# Define the desired order of regions
+region_order <- c(
+  "Vanuatu", "Torba", "Torres", "Ureparapara", "Motalava",
+  "West Vanualava", "East Vanualava", "Mota", "East Gaua", "West Gaua",
+  "Merelava", "Sanma", "Luganville", "North West Santo", "Big Bay Coast",
+  "Big Bay Inland", "West Santo", "South Santo 1", "South Santo 2",
+  "East Santo", "South East Santo", "West Malo", "East Malo", "Penama",
+  "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo",
+  "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2",
+  "South Pentecost", "Malampa", "North West Malekula", "North East Malekula",
+  "Central Malekula", "South West Malekula", "South East Malekula",
+  "South Malekula", "North Ambrym", "West Ambrym", "South East Ambrym",
+  "Paama", "Shefa", "Port Vila", "Vermali", "Vermaul", "Varisu", "South Epi",
+  "North Tongoa", "Tongariki", "Makimae", "Nguna", "Emau", "Malorua",
+  "North Efate", "Mele", "Tanvasoko", "Ifira", "Pango", "Erakor", "Eratap",
+  "Eton", "Tafea", "North Erromango", "South Erromango", "Aniwa",
+  "North Tanna", "West Tanna", "Middle Bush Tanna", "South West Tanna",
+  "Whitesands", "South Tanna", "Futuna", "Aneityum"
+)
+
+# Add missing regions with NA values
+missing_regions <- setdiff(region_order, estimated_damage$Region)
+if (length(missing_regions) > 0) {
+  missing_rows <- data.frame(
+    Region = missing_regions,
+    ECCE_Damage = NA,
+    Primary_Damage = NA,
+    Secondary_Damage = NA
+  )
+  estimated_damage <- bind_rows(estimated_damage, missing_rows)
+}
+
+# Order the regions
+estimated_damage <- estimated_damage %>%
+  mutate(Region = factor(Region, levels = region_order)) %>%
+  arrange(Region) %>%
+  mutate(Region = as.character(Region))
+
+# Bold specific regions
+provinces_to_bold <- c("Vanuatu", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
+
+# Identify rows with missing or unnamed regions
+unnamed_regions <- estimated_damage %>%
+  filter(is.na(Region) | Region == "")
+
+# Print the rows with missing regions to identify the issue
+#print(unnamed_regions)
+
+# Remove rows with missing region names if they shouldn't exist
+estimated_damage <- estimated_damage %>%
+  filter(!(is.na(Region) | Region == ""))
+
+# Re-create the flextable with the vertical line on the left and other fixes
+damage_ft <- flextable(estimated_damage) %>%
+  # Set header labels
+  set_header_labels(
+    Region = "Region",
+    ECCE_Damage = "ECCE (VUV)",
+    Primary_Damage = "Primary (VUV)",
+    Secondary_Damage = "Secondary (VUV)"
+  ) %>%
+  # Apply theme
+  theme_vanilla() %>%
+  # Align all columns to center, except Region (left-aligned)
+  align(align = "center", part = "all") %>%
+  align(align = "left", j = 1, part = "body") %>%
+  # Bold specific regions
+  bold(i = which(estimated_damage$Region %in% provinces_to_bold), j = 1, bold = TRUE) %>%
+  # Add vertical black lines
+  vline_left(border = officer::fp_border(color = "black", width = 1)) %>%  # Left border
+  vline(j = c(1, 2, 3, 4), border = officer::fp_border(color = "black", width = 1)) %>%
+  # Adjust column widths
+  width(j = 1, width = 2) %>%  # Region column
+  width(j = 2:ncol(estimated_damage), width = 1.5)  # Other columns
+
+# Display the table
+damage_ft
+```
