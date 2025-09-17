@@ -194,10 +194,114 @@ reactable(
 )
 ```
 
-
+## Estimating damage: Number of damaged schools and students affected 
 
 ```{r}
-#| echo: false
-2 * 2
+
+# Load required packages
+library(dplyr)
+library(tidyr)
+library(reactable)
+library(htmltools)
+library(readxl)
+
+# Load the baseline multiplying factors
+baseline_factors <- read_excel(here("Second documents", "12. Baseline_Multiplying_Factors.xlsx"))
+
+# Create a configuration function for damage multipliers
+get_damage_multiplier <- function(cyclone_category, education_level, measure_type) {
+  # Filter the baseline factors for education and the specific combination
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Education",
+      Attribute == tolower(education_level),
+      grepl(measure_type, Indicator, ignore.case = TRUE)
+    ) %>%
+    pull(!!paste0("Category ", cyclone_category))
+  
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
+# Create damage estimation function
+calculate_damage <- function(region_data, cyclone_category) {
+  
+  # Calculate damages using multipliers for each row
+  region_data %>%
+    mutate(
+      # ECCE damages
+      ECCE_Schools_Damaged = round(ECCE_Schools * get_damage_multiplier(cyclone_category, "ecce", "Schools")),
+      ECCE_Students_Affected = round(ECCE_Students * get_damage_multiplier(cyclone_category, "ecce", "Students")),
+      
+      # Primary damages  
+      Primary_Schools_Damaged = round(Primary_Schools * get_damage_multiplier(cyclone_category, "primary", "Schools")),
+      Primary_Students_Affected = round(Primary_Students * get_damage_multiplier(cyclone_category, "primary", "Students")),
+      
+      # Secondary damages
+      Secondary_Schools_Damaged = round(Secondary_Schools * get_damage_multiplier(cyclone_category, "secondary", "Schools")),
+      Secondary_Students_Affected = round(Secondary_Students * get_damage_multiplier(cyclone_category, "secondary", "Students"))
+    ) %>%
+    select(Region_Formatted, contains("_Damaged"), contains("_Affected"))
+}
+
+# For now, let's assume a default cyclone category (you can modify this)
+# Example: Category 4 cyclone affecting all regions
+default_cyclone_category <- 4
+
+# Apply damage calculations to all regions from the education_wide dataset
+damage_estimates <- education_wide %>%
+  select(Region_Formatted, contains("ECCE"), contains("Primary"), contains("Secondary")) %>%
+  calculate_damage(default_cyclone_category)
+
+# Create the damage estimation reactable
+reactable(
+  damage_estimates,
+  columns = list(
+    Region_Formatted = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE # Allow HTML formatting for bold text (national/provincial levels)
+    ),
+    
+    # ECCE columns
+    ECCE_Schools_Damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
+    ECCE_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
+    
+    # Primary columns  
+    Primary_Schools_Damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
+    Primary_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
+    
+    # Secondary columns
+    Secondary_Schools_Damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
+    Secondary_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region_Formatted")),
+    colGroup(name = "ECCE", columns = c("ECCE_Schools_Damaged", "ECCE_Students_Affected")),
+    colGroup(name = "Primary", columns = c("Primary_Schools_Damaged", "Primary_Students_Affected")),
+    colGroup(name = "Secondary", columns = c("Secondary_Schools_Damaged", "Secondary_Students_Affected"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 100,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+
+```
+
+# Resources needed to be sent to those affected
+
+```{r}
+
 ```
 
