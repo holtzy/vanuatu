@@ -1,0 +1,189 @@
+---
+title: "Disaster Damage and Response Estimation"
+author: "Théophile L. Mouton"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    highlight-style: github
+    code-fold: true
+    code-tools: true
+    code-summary: "Show code"
+    theme: cosmo
+    fig-width: 8
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: false
+editor: visual
+---
+
+# Education
+
+## Baseline: Number of Schools, Students, and Teachers
+
+```{r}
+
+# Load required packages
+library(here)
+library(readxl)
+
+# Read the Excel file
+full_data <- read_excel(here("Second documents", "11b. Full Data Set.xlsx"))
+
+# Load required packages
+library(dplyr)
+library(tidyr)
+library(reactable)
+library(htmltools)
+
+# Filter for Education cluster only
+education_data <- full_data %>%
+  filter(Cluster == "Education")
+
+# Create Region column (combining National, Province, Area Council info)
+education_data <- education_data %>%
+  mutate(
+    Region = case_when(
+      !is.na(`Area Council`) ~ `Area Council`,
+      !is.na(Province) ~ Province,
+      National == "Vanuatu" ~ "National",
+      TRUE ~ "Unknown"
+    )
+  )
+
+# Reshape the data to get Schools, Students, Teachers as separate columns
+# and ECCE, Primary, Secondary as rows that will become columns
+education_wide <- education_data %>%
+  # Create a combined indicator for what we're measuring
+  mutate(
+    Education_Level = case_when(
+      Attribute == "ecce" ~ "ECCE",
+      Attribute == "primary" ~ "Primary", 
+      Attribute == "secondary" ~ "Secondary",
+      TRUE ~ Attribute
+    ),
+    Measure_Type = case_when(
+      grepl("Number Schools", Indicator) ~ "Schools",
+      grepl("Students", Indicator) ~ "Students",
+      grepl("Teachers", Indicator) ~ "Teachers",
+      TRUE ~ "Other"
+    )
+  ) %>%
+  # Filter out any rows that don't match our expected measure types
+  filter(Measure_Type %in% c("Schools", "Students", "Teachers")) %>%
+  # Select relevant columns
+  select(Region, Education_Level, Measure_Type, Value) %>%
+  # Pivot wider to get the structure we want
+  pivot_wider(
+    names_from = c(Education_Level, Measure_Type),
+    values_from = Value,
+    names_sep = "_"
+  ) %>%
+  # Replace NA with 0 or empty string as appropriate
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Define the custom order for regions
+region_order <- c(
+  "National", # Will be displayed as Vanuatu
+  "Torba", "Torres", "Ureparapara", "Motalava", "West Vanualava", "East Vanualava", 
+  "Mota", "East Gaua", "West Gaua", "Merelava",
+  "Sanma", "Luganville", "North West Santo", "Big Bay Coast", "Big Bay Inland", 
+  "West Santo", "South Santo 1", "South Santo 2", "East Santo", "South East Santo", 
+  "Canal - Fanafo", "West Malo", "East Malo",
+  "Penama", "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo", 
+  "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2", 
+  "South Pentecost",
+  "Malampa", "North West Malekula", "North East Malekula", "Central Malekula", 
+  "South West Malekula", "South East Malekula", "South Malekula", "North Ambrym", 
+  "West Ambrym", "South East Ambrym", "Paama",
+  "Shefa", "Port Vila", "Vermali", "Vermaul", "Varisu", "South Epi", "North Tongoa", 
+  "Tongariki", "Makimae", "Nguna", "Emau", "Malorua", "North Efate", "Mele", 
+  "Tanvasoko", "Ifira", "Pango", "Erakor", "Eratap", "Eton",
+  "Tafea", "North Erromango", "South Erromango", "Aniwa", "North Tanna", "West Tanna", 
+  "Middle Bush Tanna", "South West Tanna", "Whitesands", "South Tanna", "Futuna", "Aneityum"
+)
+
+# Provincial levels (to be bolded)
+provinces <- c("National", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
+
+# Add default order and formatting columns
+education_wide <- education_wide %>%
+  mutate(
+    # Convert "National" to "Vanuatu" for display
+    Region_Display = ifelse(Region == "National", "Vanuatu", Region),
+    # Create order based on custom sequence
+    default_order = match(Region, region_order),
+    # Add bold formatting for provinces
+    Region_Formatted = ifelse(Region %in% provinces, 
+                             paste0("<b>", Region_Display, "</b>"), 
+                             Region_Display)
+  ) %>%
+  # Sort by the custom order
+  arrange(default_order)
+
+# Create the reactable with nested headers
+reactable(
+  education_wide %>% select(Region_Formatted, everything(), -Region, -Region_Display, -default_order),
+  columns = list(
+    Region_Formatted = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE # Allow HTML formatting for bold text
+    ),
+    
+    # ECCE columns
+    ECCE_Schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    ECCE_Students = colDef(name = "Students", format = colFormat(digits = 0)),
+    ECCE_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
+    
+    # Primary columns  
+    Primary_Schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    Primary_Students = colDef(name = "Students", format = colFormat(digits = 0)),
+    Primary_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
+    
+    # Secondary columns
+    Secondary_Schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    Secondary_Students = colDef(name = "Students", format = colFormat(digits = 0)),
+    Secondary_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region_Formatted")), # This creates the top-level header
+    colGroup(name = "ECCE", columns = c("ECCE_Schools", "ECCE_Students", "ECCE_Teachers")),
+    colGroup(name = "Primary", columns = c("Primary_Schools", "Primary_Students", "Primary_Teachers")),
+    colGroup(name = "Secondary", columns = c("Secondary_Schools", "Secondary_Students", "Secondary_Teachers"))
+  ),
+  # defaultSorted is not needed since data is pre-sorted by arrange(default_order)
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = nrow(education_wide), # Show all rows by default
+  showPageSizeOptions = FALSE, # Hide page size options since we're showing all
+  pageSizeOptions = c(10, 15, 25, 50), # Keep options available if needed
+  showSortable = TRUE
+)
+```
+
+
+
+```{r}
+#| echo: false
+2 * 2
+```
+
