@@ -48,16 +48,29 @@ library(htmltools)
 education_data <- full_data %>%
   filter(Cluster == "Education")
 
-# Create Region column (combining National, Province, Area Council info)
-education_data <- education_data %>%
-  mutate(
-    Region = case_when(
-      !is.na(`Area Council`) ~ `Area Council`,
-      !is.na(Province) ~ Province,
-      National == "Vanuatu" ~ "National",
-      TRUE ~ "Unknown"
-    )
-  )
+# First, get only Area Council level data (the most granular level)
+area_council_data <- education_data %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`)
+
+# Create province-level aggregates by summing area councils
+province_data <- area_council_data %>%
+  group_by(Province, Indicator, Attribute) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Region = Province)
+
+# Create national-level aggregates by summing provinces
+national_data <- province_data %>%
+  group_by(Indicator, Attribute) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Region = "National")
+
+# Combine all levels
+education_data <- bind_rows(
+  area_council_data %>% select(Region, Indicator, Attribute, Value),
+  province_data %>% select(Region, Indicator, Attribute, Value),
+  national_data %>% select(Region, Indicator, Attribute, Value)
+)
 
 # Reshape the data to get Schools, Students, Teachers as separate columns
 # and ECCE, Primary, Secondary as rows that will become columns
@@ -138,7 +151,8 @@ reactable(
       minWidth = 150,
       sortable = TRUE,
       defaultSortOrder = "asc",
-      html = TRUE # Allow HTML formatting for bold text
+      html = TRUE, # Allow HTML formatting for bold text
+      sticky = "left" # Freeze the column on the left
     ),
     
     # ECCE columns
@@ -173,9 +187,9 @@ reactable(
     borderColor = "#ddd",
     stripedColor = "#f6f8fa"
   ),
-  defaultPageSize = nrow(education_wide), # Show all rows by default
-  showPageSizeOptions = FALSE, # Hide page size options since we're showing all
-  pageSizeOptions = c(10, 15, 25, 50), # Keep options available if needed
+  defaultPageSize = 100, # Show all rows by default
+  showPageSizeOptions = TRUE, # Hide page size options since we're showing all
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100), # Keep options available if needed
   showSortable = TRUE
 )
 ```
