@@ -526,7 +526,7 @@ reactable(
     borderColor = "#ddd",
     stripedColor = "#f6f8fa"
   ),
-  defaultPageSize = 100,
+  defaultPageSize = 15,
   showPageSizeOptions = TRUE,
   pageSizeOptions = c(10, 15, 25, 50, 75, 100),
   showSortable = TRUE
