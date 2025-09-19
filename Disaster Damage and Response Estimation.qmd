@@ -299,9 +299,121 @@ reactable(
 
 ```
 
-# Resources needed to be sent to those affected
+## Resources needed to be sent to those affected
 
 ```{r}
+# Load required packages
+library(dplyr)
+library(tidyr)
+library(reactable)
+library(htmltools)
+library(readxl)
 
+# Load the resource response configuration
+resource_config <- read_excel(here("Second documents", "13. Resource_Sent_Response.xlsx"))
+
+# Create a function to get resource multipliers from config
+get_resource_multiplier <- function(resource_type) {
+  multiplier <- resource_config %>%
+    filter(Cluster == "Education", Indicator == resource_type) %>%
+    pull(Value)
+  
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
+# Configuration parameters
+days_of_support <- 14  # Number of days to provide resources
+default_cyclone_category <- 3  # Default cyclone category (can be customized)
+
+# Function to calculate resources needed
+calculate_resources <- function(region_data, cyclone_category, days = 14) {
+  
+  region_data %>%
+    mutate(
+      # Get damage multiplier for this cyclone category
+      damage_multiplier = get_damage_multiplier(cyclone_category, "ecce", "Schools"), # Same multiplier for all
+      
+      # ECCE Resources
+      ECCE_Tents = round(ECCE_Schools * damage_multiplier * get_resource_multiplier("Tent"), 1),
+      ECCE_Solar_Lamps = round(ECCE_Schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
+      ECCE_Water = round(ECCE_Students * damage_multiplier * get_resource_multiplier("Water") * days, 1),
+      ECCE_Rice = round(ECCE_Students * damage_multiplier * get_resource_multiplier("Rice") * days, 1),
+      ECCE_Tin_Fish = round(ECCE_Students * damage_multiplier * get_resource_multiplier("Tin fish") * days, 0),
+      
+      # Primary Resources  
+      Primary_Tents = round(Primary_Schools * damage_multiplier * get_resource_multiplier("Tent"), 1),
+      Primary_Solar_Lamps = round(Primary_Schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
+      Primary_Water = round(Primary_Students * damage_multiplier * get_resource_multiplier("Water") * days, 1),
+      Primary_Rice = round(Primary_Students * damage_multiplier * get_resource_multiplier("Rice") * days, 1),
+      Primary_Tin_Fish = round(Primary_Students * damage_multiplier * get_resource_multiplier("Tin fish") * days, 0),
+      
+      # Secondary Resources
+      Secondary_Tents = round(Secondary_Schools * damage_multiplier * get_resource_multiplier("Tent"), 1),
+      Secondary_Solar_Lamps = round(Secondary_Schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
+      Secondary_Water = round(Secondary_Students * damage_multiplier * get_resource_multiplier("Water") * days, 1),
+      Secondary_Rice = round(Secondary_Students * damage_multiplier * get_resource_multiplier("Rice") * days, 1),
+      Secondary_Tin_Fish = round(Secondary_Students * damage_multiplier * get_resource_multiplier("Tin fish") * days, 0)
+    ) %>%
+    select(Region_Formatted, contains("Tents"), contains("Solar_Lamps"), contains("Water"), contains("Rice"), contains("Tin_Fish"))
+}
+
+# Apply resource calculations to all regions using the education_wide dataset
+resources_needed <- education_wide %>%
+  select(Region_Formatted, contains("ECCE"), contains("Primary"), contains("Secondary")) %>%
+  calculate_resources(default_cyclone_category, days_of_support)
+
+# Create the resources needed reactable
+reactable(
+  resources_needed,
+  columns = list(
+    Region_Formatted = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE # Allow HTML formatting for bold text
+    ),
+    
+    # ECCE columns
+    ECCE_Tents = colDef(name = "Tents", format = colFormat(digits = 1)),
+    ECCE_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    ECCE_Water = colDef(name = "Water (L)", format = colFormat(digits = 1)),
+    ECCE_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    ECCE_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
+    
+    # Primary columns  
+    Primary_Tents = colDef(name = "Tents", format = colFormat(digits = 1)),
+    Primary_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    Primary_Water = colDef(name = "Water (L)", format = colFormat(digits = 1)),
+    Primary_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    Primary_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
+    
+    # Secondary columns
+    Secondary_Tents = colDef(name = "Tents", format = colFormat(digits = 1)),
+    Secondary_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    Secondary_Water = colDef(name = "Water (L)", format = colFormat(digits = 1)),
+    Secondary_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    Secondary_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region_Formatted")),
+    colGroup(name = "ECCE", columns = c("ECCE_Tents", "ECCE_Solar_Lamps", "ECCE_Water", "ECCE_Rice", "ECCE_Tin_Fish")),
+    colGroup(name = "Primary", columns = c("Primary_Tents", "Primary_Solar_Lamps", "Primary_Water", "Primary_Rice", "Primary_Tin_Fish")),
+    colGroup(name = "Secondary", columns = c("Secondary_Tents", "Secondary_Solar_Lamps", "Secondary_Water", "Secondary_Rice", "Secondary_Tin_Fish"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 100,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
 ```
 
