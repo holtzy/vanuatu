@@ -194,6 +194,7 @@ reactable(
 )
 ```
 
+
 ## Estimating damage: Number of damaged schools and students affected
 
 ```{r}
