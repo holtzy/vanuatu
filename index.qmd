@@ -38,18 +38,23 @@ config <- read.csv("data/config.csv")
 head(config)
 ```
 
+And load the required libs
 
+```{r}
+# Load required packages
+library(dplyr)
+library(tidyr)
+library(reactable)
+library(htmltools)
+library(readxl)
+library(here)
+````
 
 # Education
 
 ## Baseline: Number of Schools, Students, and Teachers
 
 ```{r}
-
-# Load required packages
-library(here)
-library(readxl)
-
 # Read the Excel file
 full_data <- read_excel(here("data", "11b. Full Data Set.xlsx"))
 
@@ -212,14 +217,6 @@ reactable(
 ## Estimating damage: Number of damaged schools and students affected
 
 ```{r}
-
-# Load required packages
-library(dplyr)
-library(tidyr)
-library(reactable)
-library(htmltools)
-library(readxl)
-
 # Load the baseline multiplying factors
 baseline_factors <- read_excel(here("data", "12. Baseline_Multiplying_Factors.xlsx"))
 
