@@ -36,7 +36,7 @@ library(here)
 library(readxl)
 
 # Read the Excel file
-full_data <- read_excel(here("Second documents", "11b. Full Data Set.xlsx"))
+full_data <- read_excel(here("data", "11b. Full Data Set.xlsx"))
 
 # Load required packages
 library(dplyr)
@@ -194,7 +194,6 @@ reactable(
 )
 ```
 
-
 ## Estimating damage: Number of damaged schools and students affected
 
 ```{r}
@@ -207,7 +206,7 @@ library(htmltools)
 library(readxl)
 
 # Load the baseline multiplying factors
-baseline_factors <- read_excel(here("Second documents", "12. Baseline_Multiplying_Factors.xlsx"))
+baseline_factors <- read_excel(here("data", "12. Baseline_Multiplying_Factors.xlsx"))
 
 # Create a configuration function for damage multipliers
 get_damage_multiplier <- function(cyclone_category, education_level, measure_type) {
@@ -311,7 +310,7 @@ library(htmltools)
 library(readxl)
 
 # Load the resource response configuration
-resource_config <- read_excel(here("Second documents", "13. Resource_Sent_Response.xlsx"))
+resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
 
 # Create a function to get resource multipliers from config
 get_resource_multiplier <- function(resource_type) {
@@ -445,7 +444,7 @@ library(htmltools)
 library(readxl)
 
 # Load the financial damage estimation config
-financial_config <- read_excel(here("Second documents", "14. Estimation_Financial_Damage.xlsx"))
+financial_config <- read_excel(here("data", "14. Estimation_Financial_Damage.xlsx"))
 
 # Clean column names to remove any extra spaces
 names(financial_config) <- trimws(names(financial_config))
