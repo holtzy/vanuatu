@@ -25,6 +25,21 @@ execute:
 editor: visual
 ---
 
+# Intro
+
+This file runs based on a file called `config.csv`. This file provides the cyclone category applied to each council in Vanuatu. It has just 2 columns:
+- council name
+- cyclone category (number from 3 to 5)
+
+Let's load this file to use it later in our analysis:
+
+```{r}
+config <- read.csv("data/config.csv")
+head(config)
+```
+
+
+
 # Education
 
 ## Baseline: Number of Schools, Students, and Teachers
