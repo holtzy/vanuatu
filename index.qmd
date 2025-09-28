@@ -208,6 +208,9 @@ reactable(
   pageSizeOptions = c(10, 15, 25, 50, 75, 100), # Keep options available if needed
   showSortable = TRUE
 )
+
+
+
 ```
 
 ## Estimating damage: Number of damaged schools and students affected
@@ -235,32 +238,51 @@ get_damage_multiplier <- function(cyclone_category, education_level, measure_typ
 }
 
 # Create damage estimation function
-calculate_damage <- function(region_data) {
-  region_data %>%
+damage_estimates <- education_with_config %>%
+    select(Region_Formatted, Region, contains("ECCE"), contains("Primary"), contains("Secondary"), category) %>%
+    filter(!is.na(category)) %>%
     rowwise() %>%
+  
     mutate(
-      # Use region-specific category (default to 0 if NA)
-      cyclone_cat = ifelse(is.na(category), 0, category),
+
+      ECCE_Schools_Damaged = round(ECCE_Schools * get_damage_multiplier(category, "ecce", "Schools")),
+      ECCE_Students_Affected = round(ECCE_Students * get_damage_multiplier(category, "ecce", "Students")),
       
-      ECCE_Schools_Damaged = round(ECCE_Schools * get_damage_multiplier(cyclone_cat, "ecce", "Schools")),
-      ECCE_Students_Affected = round(ECCE_Students * get_damage_multiplier(cyclone_cat, "ecce", "Students")),
+      Primary_Schools_Damaged = round(Primary_Schools * get_damage_multiplier(category, "primary", "Schools")),
+      Primary_Students_Affected = round(Primary_Students * get_damage_multiplier(category, "primary", "Students")),
       
-      Primary_Schools_Damaged = round(Primary_Schools * get_damage_multiplier(cyclone_cat, "primary", "Schools")),
-      Primary_Students_Affected = round(Primary_Students * get_damage_multiplier(cyclone_cat, "primary", "Students")),
-      
-      Secondary_Schools_Damaged = round(Secondary_Schools * get_damage_multiplier(cyclone_cat, "secondary", "Schools")),
-      Secondary_Students_Affected = round(Secondary_Students * get_damage_multiplier(cyclone_cat, "secondary", "Students"))
+      Secondary_Schools_Damaged = round(Secondary_Schools * get_damage_multiplier(category, "secondary", "Schools")),
+      Secondary_Students_Affected = round(Secondary_Students * get_damage_multiplier(category, "secondary", "Students"))
     ) %>%
+  
     ungroup() %>%
-    select(Region_Formatted, contains("_Damaged"), contains("_Affected"))
-}
+    select(Region_Formatted, contains("_Damaged"), contains("_Affected"), category)
 
+# The damage_estimates table provides values for concils only. 
+# We need to aggregate values per province and country
+province_damage <- damage_estimates %>%
+  # remove bolding for now so we can group cleanly
+  mutate(Region = gsub("<b>|</b>", "", Region_Formatted)) %>%
+  left_join(education_wide %>% select(Region, Province), by = "Region") %>%
+  group_by(Province) %>%
+  summarise(across(ends_with("Damaged") | ends_with("Affected"), sum, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(
+    Region_Formatted = paste0("<b>", Province, "</b>")  # bold for display
+  )
 
+# Step 3. National-level damages (sum of provinces)
+national_damage <- province_damage %>%
+  summarise(across(ends_with("Damaged") | ends_with("Affected"), sum, na.rm = TRUE)) %>%
+  mutate(Region_Formatted = "<b>Vanuatu</b>")
 
-# Apply damage calculations to all regions from the education_wide dataset
-damage_estimates <- education_wide %>%
-  select(Region_Formatted, contains("ECCE"), contains("Primary"), contains("Secondary")) %>%
-  calculate_damage(default_cyclone_category)
+# Step 4. Combine all levels
+damage_estimates <- bind_rows(
+  national_damage,
+  province_damage,
+  council_damage
+)
+
 
 # Create the damage estimation reactable
 reactable(
