@@ -177,6 +177,7 @@ education_wide <- education_wide %>%
   # Sort by the custom order
   arrange(default_order)
 
+
 # Create the reactable with nested headers
 reactable(
   education_wide %>% select(Region_Formatted, everything(), -Region, -Region_Display, -default_order),
@@ -283,28 +284,41 @@ province_damage <- damage_estimates %>%
   left_join(council_province_lookup, by = c("Region_Formatted" = "Council")) %>%
   group_by(Province) %>%
   summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
-  mutate(Region_Formatted = paste0("<b>", Province, "</b>"))  # bold for display
-
-# Step 2: Aggregate to national level
+  mutate(Region_Formatted = Province)  
 national_damage <- province_damage %>%
   summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
-  mutate(Region_Formatted = "<b>Vanuatu</b>")
-
-# Step 3: Combine all levels
+  mutate(Region_Formatted = "Vanuatu")
 damage_estimates_full <- bind_rows(
   national_damage,
   province_damage,
   damage_estimates
 )
 
+# Now I need to format the table: sort columns, sort rows, add bold.
+education_wide <- damage_estimates_full %>%
+  mutate(
+    # Convert "National" to "Vanuatu" for display
+    # Region_Display = ifelse(Region == "National", "Vanuatu", Region),
+    # Create order based on custom sequence
+    default_order = match(Region_Formatted, region_order),
+    # Add bold formatting for provinces
+    Region_Formatted = ifelse(Region_Formatted %in% provinces, 
+                             paste0("<b>", Region_Formatted, "</b>"), 
+                             Region_Formatted)
+  ) %>%
+  # Sort by the custom order
+  arrange(default_order) %>%
+  select(Region_Formatted, contains("_Damaged"), contains("_Affected"), category)
+
+
 
 
 # Create the damage estimation reactable
 reactable(
-  damage_estimates,
+  education_wide,
   columns = list(
     Region_Formatted = colDef(
-      name = "Region", 
+      name = "Region_Formatted", 
       minWidth = 150,
       sticky = "left",
       html = TRUE # Allow HTML formatting for bold text (national/provincial levels)
