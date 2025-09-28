@@ -35,7 +35,6 @@ Let's load this file to use it later in our analysis:
 
 ```{r}
 config <- read.csv("data/config.csv")
-head(config)
 ```
 
 Another file that will be useful: a 2 columns dataframe that provides the list of councils with their Province
@@ -46,7 +45,7 @@ council_province_lookup <- read.csv("data/council_province_lookup.csv")
 
 And load the required libs
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # Load required packages
 library(dplyr)
 library(tidyr)
@@ -498,17 +497,12 @@ reactable(
 )
 ```
 
+
+
+
 ## Estimate financial damage from cyclone
 
 ```{r}
-
-# Load required packages
-library(dplyr)
-library(tidyr)
-library(reactable)
-library(htmltools)
-library(readxl)
-
 # Load the financial damage estimation config
 financial_config <- read_excel(here("data", "14. Estimation_Financial_Damage.xlsx"))
 
