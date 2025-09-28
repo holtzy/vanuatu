@@ -48,7 +48,7 @@ library(reactable)
 library(htmltools)
 library(readxl)
 library(here)
-````
+```
 
 # Education
 
@@ -57,12 +57,6 @@ library(here)
 ```{r}
 # Read the Excel file
 full_data <- read_excel(here("data", "11b. Full Data Set.xlsx"))
-
-# Load required packages
-library(dplyr)
-library(tidyr)
-library(reactable)
-library(htmltools)
 
 # Filter for Education cluster only
 education_data <- full_data %>%
@@ -74,12 +68,14 @@ area_council_data <- education_data %>%
   mutate(Region = `Area Council`)
 
 # Create province-level aggregates by summing area councils
+# NOTE FOR THEO: I think those values are already available in the initial file. education_data has them on top
 province_data <- area_council_data %>%
   group_by(Province, Indicator, Attribute) %>%
   summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
   mutate(Region = Province)
 
 # Create national-level aggregates by summing provinces
+# NOTE FOR THEO: I think those values are already available in the initial file. education_data has them on top
 national_data <- province_data %>%
   group_by(Indicator, Attribute) %>%
   summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
@@ -217,6 +213,10 @@ reactable(
 ## Estimating damage: Number of damaged schools and students affected
 
 ```{r}
+# Add the cyclone strength to the baseline values table:
+education_with_config <- education_wide %>%
+  left_join(config, by = c("Region" = "council"))
+
 # Load the baseline multiplying factors
 baseline_factors <- read_excel(here("data", "12. Baseline_Multiplying_Factors.xlsx"))
 
@@ -235,29 +235,27 @@ get_damage_multiplier <- function(cyclone_category, education_level, measure_typ
 }
 
 # Create damage estimation function
-calculate_damage <- function(region_data, cyclone_category) {
-  
-  # Calculate damages using multipliers for each row
+calculate_damage <- function(region_data) {
   region_data %>%
+    rowwise() %>%
     mutate(
-      # ECCE damages
-      ECCE_Schools_Damaged = round(ECCE_Schools * get_damage_multiplier(cyclone_category, "ecce", "Schools")),
-      ECCE_Students_Affected = round(ECCE_Students * get_damage_multiplier(cyclone_category, "ecce", "Students")),
+      # Use region-specific category (default to 0 if NA)
+      cyclone_cat = ifelse(is.na(category), 0, category),
       
-      # Primary damages  
-      Primary_Schools_Damaged = round(Primary_Schools * get_damage_multiplier(cyclone_category, "primary", "Schools")),
-      Primary_Students_Affected = round(Primary_Students * get_damage_multiplier(cyclone_category, "primary", "Students")),
+      ECCE_Schools_Damaged = round(ECCE_Schools * get_damage_multiplier(cyclone_cat, "ecce", "Schools")),
+      ECCE_Students_Affected = round(ECCE_Students * get_damage_multiplier(cyclone_cat, "ecce", "Students")),
       
-      # Secondary damages
-      Secondary_Schools_Damaged = round(Secondary_Schools * get_damage_multiplier(cyclone_category, "secondary", "Schools")),
-      Secondary_Students_Affected = round(Secondary_Students * get_damage_multiplier(cyclone_category, "secondary", "Students"))
+      Primary_Schools_Damaged = round(Primary_Schools * get_damage_multiplier(cyclone_cat, "primary", "Schools")),
+      Primary_Students_Affected = round(Primary_Students * get_damage_multiplier(cyclone_cat, "primary", "Students")),
+      
+      Secondary_Schools_Damaged = round(Secondary_Schools * get_damage_multiplier(cyclone_cat, "secondary", "Schools")),
+      Secondary_Students_Affected = round(Secondary_Students * get_damage_multiplier(cyclone_cat, "secondary", "Students"))
     ) %>%
+    ungroup() %>%
     select(Region_Formatted, contains("_Damaged"), contains("_Affected"))
 }
 
-# For now, let's assume a default cyclone category (you can modify this)
-# Example: Category 4 cyclone affecting all regions
-default_cyclone_category <- 4
+
 
 # Apply damage calculations to all regions from the education_wide dataset
 damage_estimates <- education_wide %>%
