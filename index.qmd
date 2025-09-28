@@ -38,6 +38,12 @@ config <- read.csv("data/config.csv")
 head(config)
 ```
 
+Another file that will be useful: a 2 columns dataframe that provides the list of councils with their Province
+```{r}
+council_province_lookup <- read.csv("data/council_province_lookup.csv")
+```
+
+
 And load the required libs
 
 ```{r}
@@ -49,6 +55,19 @@ library(htmltools)
 library(readxl)
 library(here)
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Education
 
@@ -258,30 +277,26 @@ damage_estimates <- education_with_config %>%
     ungroup() %>%
     select(Region_Formatted, contains("_Damaged"), contains("_Affected"), category)
 
-# The damage_estimates table provides values for concils only. 
+# The damage_estimates table provides values for coucils only. 
 # We need to aggregate values per province and country
 province_damage <- damage_estimates %>%
-  # remove bolding for now so we can group cleanly
-  mutate(Region = gsub("<b>|</b>", "", Region_Formatted)) %>%
-  left_join(education_wide %>% select(Region, Province), by = "Region") %>%
+  left_join(council_province_lookup, by = c("Region_Formatted" = "Council")) %>%
   group_by(Province) %>%
-  summarise(across(ends_with("Damaged") | ends_with("Affected"), sum, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(
-    Region_Formatted = paste0("<b>", Province, "</b>")  # bold for display
-  )
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Region_Formatted = paste0("<b>", Province, "</b>"))  # bold for display
 
-# Step 3. National-level damages (sum of provinces)
+# Step 2: Aggregate to national level
 national_damage <- province_damage %>%
-  summarise(across(ends_with("Damaged") | ends_with("Affected"), sum, na.rm = TRUE)) %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
   mutate(Region_Formatted = "<b>Vanuatu</b>")
 
-# Step 4. Combine all levels
-damage_estimates <- bind_rows(
+# Step 3: Combine all levels
+damage_estimates_full <- bind_rows(
   national_damage,
   province_damage,
-  council_damage
+  damage_estimates
 )
+
 
 
 # Create the damage estimation reactable
@@ -330,6 +345,11 @@ reactable(
 )
 
 ```
+
+
+
+
+
 
 ## Resources needed to be sent to those affected
 
