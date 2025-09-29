@@ -144,50 +144,41 @@ format_table <- function(data){
 # Read the Excel file
 full_data <- read_excel(here("data", "11b. Full Data Set.xlsx"))
 
-# Filter for Education cluster and Area Council level data (the most granular level)
+# === DATA WRANGLING ===
+# Filter for Education cluster and Area Council level data
 education_data <- full_data %>%
   filter(Cluster == "Education") %>%
   filter(!is.na(`Area Council`)) %>%
   mutate(Region = `Area Council`)
 
 # Reshape the data to get Schools, Students, Teachers as separate columns
-# and ECCE, Primary, Secondary as rows that will become columns
 education_wide <- education_data %>%
-  # Create a combined indicator for what we're measuring
   mutate(
-    Education_Level = case_when(
-      Attribute == "ecce" ~ "ECCE",
-      Attribute == "primary" ~ "Primary", 
-      Attribute == "secondary" ~ "Secondary",
-      TRUE ~ Attribute
-    ),
-    Measure_Type = case_when(
-      grepl("Number Schools", Indicator) ~ "Schools",
-      grepl("Students", Indicator) ~ "Students",
-      grepl("Teachers", Indicator) ~ "Teachers",
-      TRUE ~ "Other"
+    education_level = tolower(Attribute),  # Keep lowercase for consistency
+    measure_type = case_when(
+      grepl("Number Schools", Indicator) ~ "schools",
+      grepl("Students", Indicator) ~ "students",
+      grepl("Teachers", Indicator) ~ "teachers",
+      TRUE ~ "other"
     )
   ) %>%
-  # Filter out any rows that don't match our expected measure types
-  filter(Measure_Type %in% c("Schools", "Students", "Teachers")) %>%
-  # Select relevant columns
-  select(Region, Education_Level, Measure_Type, Value) %>%
-  # Pivot wider to get the structure we want
+  filter(measure_type %in% c("schools", "students", "teachers")) %>%
+  select(Region, education_level, measure_type, Value) %>%
   pivot_wider(
-    names_from = c(Education_Level, Measure_Type),
+    names_from = c(education_level, measure_type),
     values_from = Value,
     names_sep = "_"
   ) %>%
-  # Replace NA with 0 or empty string as appropriate
   mutate(across(where(is.numeric), ~replace_na(.x, 0)))
 
-# Compute aggregates = value per province and for the whole country
+# Compute aggregates (province and national levels)
 education_aggregated <- compute_council_aggregates(education_wide)
 
-# Formatted table
+# === PRESENTATION ===
+# Format for display
 formatted <- format_table(education_aggregated)
 
-# Create the reactable with nested headers
+# Create the reactable with proper case labels
 reactable(
   formatted,
   columns = list(
@@ -196,32 +187,31 @@ reactable(
       minWidth = 150,
       sortable = TRUE,
       defaultSortOrder = "asc",
-      html = TRUE, # Allow HTML formatting for bold text
-      sticky = "left" # Freeze the column on the left
+      html = TRUE,
+      sticky = "left"
     ),
     
     # ECCE columns
-    ECCE_Schools = colDef(name = "Schools", format = colFormat(digits = 0)),
-    ECCE_Students = colDef(name = "Students", format = colFormat(digits = 0)),
-    ECCE_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
+    ecce_schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    ecce_students = colDef(name = "Students", format = colFormat(digits = 0)),
+    ecce_teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
     
     # Primary columns  
-    Primary_Schools = colDef(name = "Schools", format = colFormat(digits = 0)),
-    Primary_Students = colDef(name = "Students", format = colFormat(digits = 0)),
-    Primary_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
+    primary_schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    primary_students = colDef(name = "Students", format = colFormat(digits = 0)),
+    primary_teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
     
     # Secondary columns
-    Secondary_Schools = colDef(name = "Schools", format = colFormat(digits = 0)),
-    Secondary_Students = colDef(name = "Students", format = colFormat(digits = 0)),
-    Secondary_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0))
+    secondary_schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    secondary_students = colDef(name = "Students", format = colFormat(digits = 0)),
+    secondary_teachers = colDef(name = "Teachers", format = colFormat(digits = 0))
   ),
   columnGroups = list(
-    colGroup(name = "Region", columns = c("Region")), # This creates the top-level header
-    colGroup(name = "ECCE", columns = c("ECCE_Schools", "ECCE_Students", "ECCE_Teachers")),
-    colGroup(name = "Primary", columns = c("Primary_Schools", "Primary_Students", "Primary_Teachers")),
-    colGroup(name = "Secondary", columns = c("Secondary_Schools", "Secondary_Students", "Secondary_Teachers"))
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "ECCE", columns = c("ecce_schools", "ecce_students", "ecce_teachers")),
+    colGroup(name = "Primary", columns = c("primary_schools", "primary_students", "primary_teachers")),
+    colGroup(name = "Secondary", columns = c("secondary_schools", "secondary_students", "secondary_teachers"))
   ),
-  # defaultSorted is not needed since data is pre-sorted by arrange(default_order)
   striped = TRUE,
   highlight = TRUE,
   bordered = TRUE,
@@ -232,9 +222,9 @@ reactable(
     borderColor = "#ddd",
     stripedColor = "#f6f8fa"
   ),
-  defaultPageSize = 15, # Show all rows by default
-  showPageSizeOptions = TRUE, # Hide page size options since we're showing all
-  pageSizeOptions = c(10, 15, 25, 50, 75, 100), # Keep options available if needed
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
   showSortable = TRUE
 )
 ```
@@ -246,20 +236,20 @@ reactable(
 ## Estimating damage: Number of damaged schools and students affected
 
 ```{r}
-# Add the cyclone strength to the baseline values table:
+# === DATA WRANGLING ===
+# Add cyclone strength to baseline values
 education_with_config <- education_wide %>%
   left_join(config, by = c("Region" = "council"))
 
 # Load the baseline multiplying factors
 baseline_factors <- read_excel(here("data", "12. Baseline_Multiplying_Factors.xlsx"))
 
-# Create a configuration function for damage multipliers
+# Helper function for damage multipliers
 get_damage_multiplier <- function(cyclone_category, education_level, measure_type) {
-  # Filter the baseline factors for education and the specific combination
   multiplier <- baseline_factors %>%
     filter(
       Cluster == "Education",
-      Attribute == tolower(education_level),
+      Attribute == education_level,  # Now both are lowercase
       grepl(measure_type, Indicator, ignore.case = TRUE)
     ) %>%
     pull(!!paste0("Category ", cyclone_category))
@@ -267,32 +257,32 @@ get_damage_multiplier <- function(cyclone_category, education_level, measure_typ
   return(ifelse(length(multiplier) > 0, multiplier, 0))
 }
 
-# Create damage estimation function
+# Calculate damage estimates
 damage_estimates <- education_with_config %>%
-    filter(!is.na(category)) %>%
-    rowwise() %>%
-  
-    mutate(
+  filter(!is.na(category)) %>%
+  rowwise() %>%
+  mutate(
+    # Changed from ECCE_Schools to ecce_schools (lowercase)
+    ecce_schools_damaged = round(ecce_schools * get_damage_multiplier(category, "ecce", "schools")),
+    ecce_students_affected = round(ecce_students * get_damage_multiplier(category, "ecce", "students")),
+    
+    # Changed from Primary_Schools to primary_schools (lowercase)
+    primary_schools_damaged = round(primary_schools * get_damage_multiplier(category, "primary", "schools")),
+    primary_students_affected = round(primary_students * get_damage_multiplier(category, "primary", "students")),
+    
+    # Changed from Secondary_Schools to secondary_schools (lowercase)
+    secondary_schools_damaged = round(secondary_schools * get_damage_multiplier(category, "secondary", "schools")),
+    secondary_students_affected = round(secondary_students * get_damage_multiplier(category, "secondary", "students"))
+  ) %>%
+  ungroup() %>%
+  select(Region, contains("_damaged"), contains("_affected"))
 
-      ECCE_Schools_Damaged = round(ECCE_Schools * get_damage_multiplier(category, "ecce", "Schools")),
-      ECCE_Students_Affected = round(ECCE_Students * get_damage_multiplier(category, "ecce", "Students")),
-      
-      Primary_Schools_Damaged = round(Primary_Schools * get_damage_multiplier(category, "primary", "Schools")),
-      Primary_Students_Affected = round(Primary_Students * get_damage_multiplier(category, "primary", "Students")),
-      
-      Secondary_Schools_Damaged = round(Secondary_Schools * get_damage_multiplier(category, "secondary", "Schools")),
-      Secondary_Students_Affected = round(Secondary_Students * get_damage_multiplier(category, "secondary", "Students"))
-    ) %>%
-  
-    ungroup() %>%
-    select(Region, contains("_Damaged"), contains("_Affected"))
-
-# The damage_estimates table provides values for coucils only. 
-# We need to aggregate values per province and country
+# Aggregate to province and national levels
 damage_estimates_full <- compute_council_aggregates(damage_estimates)
+
+# === PRESENTATION ===
+# Format for display
 formatted <- format_table(damage_estimates_full)
-
-
 
 # Create the damage estimation reactable
 reactable(
@@ -302,26 +292,26 @@ reactable(
       name = "Region", 
       minWidth = 150,
       sticky = "left",
-      html = TRUE # Allow HTML formatting for bold text (national/provincial levels)
+      html = TRUE
     ),
     
     # ECCE columns
-    ECCE_Schools_Damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
-    ECCE_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
+    ecce_schools_damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
+    ecce_students_affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
     
     # Primary columns  
-    Primary_Schools_Damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
-    Primary_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
+    primary_schools_damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
+    primary_students_affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
     
     # Secondary columns
-    Secondary_Schools_Damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
-    Secondary_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0))
+    secondary_schools_damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
+    secondary_students_affected = colDef(name = "Students Affected", format = colFormat(digits = 0))
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "ECCE", columns = c("ECCE_Schools_Damaged", "ECCE_Students_Affected")),
-    colGroup(name = "Primary", columns = c("Primary_Schools_Damaged", "Primary_Students_Affected")),
-    colGroup(name = "Secondary", columns = c("Secondary_Schools_Damaged", "Secondary_Students_Affected"))
+    colGroup(name = "ECCE", columns = c("ecce_schools_damaged", "ecce_students_affected")),
+    colGroup(name = "Primary", columns = c("primary_schools_damaged", "primary_students_affected")),
+    colGroup(name = "Secondary", columns = c("secondary_schools_damaged", "secondary_students_affected"))
   ),
   striped = TRUE,
   highlight = TRUE,
