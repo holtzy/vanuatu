@@ -339,10 +339,11 @@ reactable(
 ## Resources needed to be sent to those affected
 
 ```{r}
+# === DATA WRANGLING ===
 # Load the resource response configuration
 resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
 
-# Create a function to get resource multipliers from config
+# Helper function to get resource multipliers from config
 get_resource_multiplier <- function(resource_type) {
   multiplier <- resource_config %>%
     filter(Cluster == "Education", Indicator == resource_type) %>%
@@ -353,52 +354,55 @@ get_resource_multiplier <- function(resource_type) {
 
 # Configuration parameters
 days_of_support <- 14  # Number of days to provide resources
-default_cyclone_category <- 4  # Default cyclone category (can be customized)
 
-# Function to calculate resources needed
-calculate_resources <- function(region_data, cyclone_category, days = 14) {
-  
-  region_data %>%
-    mutate(
-      # Get damage multiplier for this cyclone category
-      damage_multiplier = get_damage_multiplier(cyclone_category, "ecce", "Schools"), # Same multiplier for all
-      
-      # ECCE Resources
-      ECCE_Tents = round(ECCE_Schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
-      ECCE_Solar_Lamps = round(ECCE_Schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
-      ECCE_Water = ceiling(ECCE_Students * damage_multiplier * get_resource_multiplier("Water") * days), # Round up for bottles
-      ECCE_Rice = round(ECCE_Students * damage_multiplier * get_resource_multiplier("Rice") * days, 1),
-      ECCE_Tin_Fish = round(ECCE_Students * damage_multiplier * get_resource_multiplier("Tin fish") * days, 0),
-      
-      # Primary Resources  
-      Primary_Tents = round(Primary_Schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
-      Primary_Solar_Lamps = round(Primary_Schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
-      Primary_Water = ceiling(Primary_Students * damage_multiplier * get_resource_multiplier("Water") * days), # Round up for bottles
-      Primary_Rice = round(Primary_Students * damage_multiplier * get_resource_multiplier("Rice") * days, 1),
-      Primary_Tin_Fish = round(Primary_Students * damage_multiplier * get_resource_multiplier("Tin fish") * days, 0),
-      
-      # Secondary Resources
-      Secondary_Tents = round(Secondary_Schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
-      Secondary_Solar_Lamps = round(Secondary_Schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
-      Secondary_Water = ceiling(Secondary_Students * damage_multiplier * get_resource_multiplier("Water") * days), # Round up for bottles
-      Secondary_Rice = round(Secondary_Students * damage_multiplier * get_resource_multiplier("Rice") * days, 1),
-      Secondary_Tin_Fish = round(Secondary_Students * damage_multiplier * get_resource_multiplier("Tin fish") * days, 0),
-      
-      # Total Resources (sum across all education levels)
-      Total_Tents = ECCE_Tents + Primary_Tents + Secondary_Tents,
-      Total_Solar_Lamps = ECCE_Solar_Lamps + Primary_Solar_Lamps + Secondary_Solar_Lamps,
-      Total_Water = ECCE_Water + Primary_Water + Secondary_Water, # Already whole numbers
-      Total_Rice = round(ECCE_Rice + Primary_Rice + Secondary_Rice, 1),
-      Total_Tin_Fish = ECCE_Tin_Fish + Primary_Tin_Fish + Secondary_Tin_Fish
-    ) %>%
-    select(Region, contains("Tents"), contains("Solar_Lamps"), contains("Water"), contains("Rice"), contains("Tin_Fish"))
-}
+# Add cyclone categories from config file to education baseline data
+education_with_config_resources <- education_wide %>%
+  left_join(config, by = c("Region" = "council"))
 
-# Apply resource calculations to all regions using the education_wide dataset
-resources_needed <- education_wide %>%
-  calculate_resources(default_cyclone_category, days_of_support)
+# Calculate resources needed using council-specific cyclone categories
+resources_needed <- education_with_config_resources %>%
+  filter(!is.na(category)) %>%  # Only calculate for councils with assigned categories
+  rowwise() %>%
+  mutate(
+    # Get damage multiplier for this council's specific cyclone category
+    damage_multiplier = get_damage_multiplier(category, "ecce", "schools"),
+    
+    # ECCE Resources
+    ecce_tents = round(ecce_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
+    ecce_solar_lamps = round(ecce_schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
+    ecce_water = ceiling(ecce_students * damage_multiplier * get_resource_multiplier("Water") * days_of_support),
+    ecce_rice = round(ecce_students * damage_multiplier * get_resource_multiplier("Rice") * days_of_support, 1),
+    ecce_tin_fish = round(ecce_students * damage_multiplier * get_resource_multiplier("Tin fish") * days_of_support, 0),
+    
+    # Primary Resources
+    primary_tents = round(primary_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
+    primary_solar_lamps = round(primary_schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
+    primary_water = ceiling(primary_students * damage_multiplier * get_resource_multiplier("Water") * days_of_support),
+    primary_rice = round(primary_students * damage_multiplier * get_resource_multiplier("Rice") * days_of_support, 1),
+    primary_tin_fish = round(primary_students * damage_multiplier * get_resource_multiplier("Tin fish") * days_of_support, 0),
+    
+    # Secondary Resources
+    secondary_tents = round(secondary_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
+    secondary_solar_lamps = round(secondary_schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
+    secondary_water = ceiling(secondary_students * damage_multiplier * get_resource_multiplier("Water") * days_of_support),
+    secondary_rice = round(secondary_students * damage_multiplier * get_resource_multiplier("Rice") * days_of_support, 1),
+    secondary_tin_fish = round(secondary_students * damage_multiplier * get_resource_multiplier("Tin fish") * days_of_support, 0),
+    
+    # Total Resources (sum across all education levels)
+    total_tents = ecce_tents + primary_tents + secondary_tents,
+    total_solar_lamps = ecce_solar_lamps + primary_solar_lamps + secondary_solar_lamps,
+    total_water = ecce_water + primary_water + secondary_water,
+    total_rice = round(ecce_rice + primary_rice + secondary_rice, 1),
+    total_tin_fish = ecce_tin_fish + primary_tin_fish + secondary_tin_fish
+  ) %>%
+  ungroup() %>%
+  select(Region, contains("tents"), contains("solar_lamps"), contains("water"), contains("rice"), contains("tin_fish"))
 
+# Aggregate to province and national levels
 resources_needed_full <- compute_council_aggregates(resources_needed)
+
+# === PRESENTATION ===
+# Format for display
 formatted <- format_table(resources_needed_full)
 
 # Create the resources needed reactable
@@ -409,43 +413,43 @@ reactable(
       name = "Region", 
       minWidth = 150,
       sticky = "left",
-      html = TRUE # Allow HTML formatting for bold text
+      html = TRUE
     ),
     
     # ECCE columns
-    ECCE_Tents = colDef(name = "Tents", format = colFormat(digits = 0)),
-    ECCE_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
-    ECCE_Water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    ECCE_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
-    ECCE_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
+    ecce_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
+    ecce_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    ecce_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
+    ecce_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    ecce_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
     
     # Primary columns  
-    Primary_Tents = colDef(name = "Tents", format = colFormat(digits = 0)),
-    Primary_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
-    Primary_Water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    Primary_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
-    Primary_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
+    primary_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
+    primary_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    primary_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
+    primary_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    primary_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
     
     # Secondary columns
-    Secondary_Tents = colDef(name = "Tents", format = colFormat(digits = 0)),
-    Secondary_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
-    Secondary_Water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    Secondary_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
-    Secondary_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
+    secondary_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
+    secondary_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    secondary_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
+    secondary_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    secondary_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
     
     # Total columns
-    Total_Tents = colDef(name = "Tents", format = colFormat(digits = 0)),
-    Total_Solar_Lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
-    Total_Water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    Total_Rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
-    Total_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0))
+    total_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
+    total_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
+    total_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
+    total_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
+    total_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0))
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "ECCE", columns = c("ECCE_Tents", "ECCE_Solar_Lamps", "ECCE_Water", "ECCE_Rice", "ECCE_Tin_Fish")),
-    colGroup(name = "Primary", columns = c("Primary_Tents", "Primary_Solar_Lamps", "Primary_Water", "Primary_Rice", "Primary_Tin_Fish")),
-    colGroup(name = "Secondary", columns = c("Secondary_Tents", "Secondary_Solar_Lamps", "Secondary_Water", "Secondary_Rice", "Secondary_Tin_Fish")),
-    colGroup(name = "Totals", columns = c("Total_Tents", "Total_Solar_Lamps", "Total_Water", "Total_Rice", "Total_Tin_Fish"))
+    colGroup(name = "ECCE", columns = c("ecce_tents", "ecce_solar_lamps", "ecce_water", "ecce_rice", "ecce_tin_fish")),
+    colGroup(name = "Primary", columns = c("primary_tents", "primary_solar_lamps", "primary_water", "primary_rice", "primary_tin_fish")),
+    colGroup(name = "Secondary", columns = c("secondary_tents", "secondary_solar_lamps", "secondary_water", "secondary_rice", "secondary_tin_fish")),
+    colGroup(name = "Totals", columns = c("total_tents", "total_solar_lamps", "total_water", "total_rice", "total_tin_fish"))
   ),
   striped = TRUE,
   highlight = TRUE,
