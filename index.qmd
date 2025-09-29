@@ -58,8 +58,77 @@ library(here)
 ```
 
 
-Source some useful functions used along the script.
+Order of councils and provinces in the final tables:
 
+```{r}
+# Define the custom order for regions
+region_order <- c(
+  "National", # Will be displayed as Vanuatu
+  "Torba", "Torres", "Ureparapara", "Motalava", "West Vanualava", "East Vanualava", 
+  "Mota", "East Gaua", "West Gaua", "Merelava",
+  "Sanma", "Luganville", "North West Santo", "Big Bay Coast", "Big Bay Inland", 
+  "West Santo", "South Santo 1", "South Santo 2", "East Santo", "South East Santo", 
+  "Canal - Fanafo", "West Malo", "East Malo",
+  "Penama", "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo", 
+  "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2", 
+  "South Pentecost",
+  "Malampa", "North West Malekula", "North East Malekula", "Central Malekula", 
+  "South West Malekula", "South East Malekula", "South Malekula", "North Ambrym", 
+  "West Ambrym", "South East Ambrym", "Paama",
+  "Shefa", "Port Vila", "Vermali", "Vermaul", "Varisu", "South Epi", "North Tongoa", 
+  "Tongariki", "Makimae", "Nguna", "Emau", "Malorua", "North Efate", "Mele", 
+  "Tanvasoko", "Ifira", "Pango", "Erakor", "Eratap", "Eton",
+  "Tafea", "North Erromango", "South Erromango", "Aniwa", "North Tanna", "West Tanna", 
+  "Middle Bush Tanna", "South West Tanna", "Whitesands", "South Tanna", "Futuna", "Aneityum"
+)
+
+# Provincial levels (to be bolded)
+provinces <- c("National", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
+```
+
+A function to aggregate a table with one row per council. It adds value per province and for the whole country
+```{r}
+# council_data must be a data frame with a column called "Region"
+compute_council_aggregates <- function(council_data) {
+  
+  province_data <- education_wide %>%
+    left_join(council_province_lookup, by = c("Region" = "Council")) %>%
+    group_by(Province) %>%
+    summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
+    rename(Region = Province)  
+  
+  national_data <- province_data %>%
+    summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
+    mutate(Region = "National")
+  
+  result <- bind_rows(
+    national_data,
+    province_data,
+    council_data
+  )
+  
+  # Add default order and formatting columns
+  result <- result %>%
+    mutate(default_order = match(Region, region_order)) %>%
+    arrange(default_order) %>%
+    select(-default_order)
+
+  return(result)
+}
+
+format_table <- function(data){
+  result <- data %>%
+    select(Region, everything()) %>% 
+    mutate(
+      Region = ifelse(
+        Region %in% provinces, 
+        paste0("<b>", Region, "</b>"), 
+        Region
+      )
+    )
+  return(result)
+}
+```
 
 
 
@@ -75,35 +144,11 @@ Source some useful functions used along the script.
 # Read the Excel file
 full_data <- read_excel(here("data", "11b. Full Data Set.xlsx"))
 
-# Filter for Education cluster only
+# Filter for Education cluster and Area Council level data (the most granular level)
 education_data <- full_data %>%
-  filter(Cluster == "Education")
-
-# First, get only Area Council level data (the most granular level)
-area_council_data <- education_data %>%
+  filter(Cluster == "Education") %>%
   filter(!is.na(`Area Council`)) %>%
   mutate(Region = `Area Council`)
-
-# Create province-level aggregates by summing area councils
-# NOTE FOR THEO: I think those values are already available in the initial file. education_data has them on top
-province_data <- area_council_data %>%
-  group_by(Province, Indicator, Attribute) %>%
-  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
-  mutate(Region = Province)
-
-# Create national-level aggregates by summing provinces
-# NOTE FOR THEO: I think those values are already available in the initial file. education_data has them on top
-national_data <- province_data %>%
-  group_by(Indicator, Attribute) %>%
-  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
-  mutate(Region = "National")
-
-# Combine all levels
-education_data <- bind_rows(
-  area_council_data %>% select(Region, Indicator, Attribute, Value),
-  province_data %>% select(Region, Indicator, Attribute, Value),
-  national_data %>% select(Region, Indicator, Attribute, Value)
-)
 
 # Reshape the data to get Schools, Students, Teachers as separate columns
 # and ECCE, Primary, Secondary as rows that will become columns
@@ -136,51 +181,25 @@ education_wide <- education_data %>%
   # Replace NA with 0 or empty string as appropriate
   mutate(across(where(is.numeric), ~replace_na(.x, 0)))
 
-# Define the custom order for regions
-region_order <- c(
-  "National", # Will be displayed as Vanuatu
-  "Torba", "Torres", "Ureparapara", "Motalava", "West Vanualava", "East Vanualava", 
-  "Mota", "East Gaua", "West Gaua", "Merelava",
-  "Sanma", "Luganville", "North West Santo", "Big Bay Coast", "Big Bay Inland", 
-  "West Santo", "South Santo 1", "South Santo 2", "East Santo", "South East Santo", 
-  "Canal - Fanafo", "West Malo", "East Malo",
-  "Penama", "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo", 
-  "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2", 
-  "South Pentecost",
-  "Malampa", "North West Malekula", "North East Malekula", "Central Malekula", 
-  "South West Malekula", "South East Malekula", "South Malekula", "North Ambrym", 
-  "West Ambrym", "South East Ambrym", "Paama",
-  "Shefa", "Port Vila", "Vermali", "Vermaul", "Varisu", "South Epi", "North Tongoa", 
-  "Tongariki", "Makimae", "Nguna", "Emau", "Malorua", "North Efate", "Mele", 
-  "Tanvasoko", "Ifira", "Pango", "Erakor", "Eratap", "Eton",
-  "Tafea", "North Erromango", "South Erromango", "Aniwa", "North Tanna", "West Tanna", 
-  "Middle Bush Tanna", "South West Tanna", "Whitesands", "South Tanna", "Futuna", "Aneityum"
-)
+# Compute aggregates = value per province and for the whole country
+education_aggregated <- compute_council_aggregates(education_wide)
 
-# Provincial levels (to be bolded)
-provinces <- c("National", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
-
-# Add default order and formatting columns
-education_wide <- education_wide %>%
+# Formatted table
+formatted <- education_aggregated %>% 
+  select(Region, everything()) %>% 
   mutate(
-    # Convert "National" to "Vanuatu" for display
-    Region_Display = ifelse(Region == "National", "Vanuatu", Region),
-    # Create order based on custom sequence
-    default_order = match(Region, region_order),
-    # Add bold formatting for provinces
-    Region_Formatted = ifelse(Region %in% provinces, 
-                             paste0("<b>", Region_Display, "</b>"), 
-                             Region_Display)
-  ) %>%
-  # Sort by the custom order
-  arrange(default_order)
-
+    Region = ifelse(
+      Region %in% provinces, 
+      paste0("<b>", Region, "</b>"), 
+      Region
+    )
+  )
 
 # Create the reactable with nested headers
 reactable(
-  education_wide %>% select(Region_Formatted, everything(), -Region, -Region_Display, -default_order),
+  formatted,
   columns = list(
-    Region_Formatted = colDef(
+    Region = colDef(
       name = "Region", 
       minWidth = 150,
       sortable = TRUE,
@@ -205,7 +224,7 @@ reactable(
     Secondary_Teachers = colDef(name = "Teachers", format = colFormat(digits = 0))
   ),
   columnGroups = list(
-    colGroup(name = "Region", columns = c("Region_Formatted")), # This creates the top-level header
+    colGroup(name = "Region", columns = c("Region")), # This creates the top-level header
     colGroup(name = "ECCE", columns = c("ECCE_Schools", "ECCE_Students", "ECCE_Teachers")),
     colGroup(name = "Primary", columns = c("Primary_Schools", "Primary_Students", "Primary_Teachers")),
     colGroup(name = "Secondary", columns = c("Secondary_Schools", "Secondary_Students", "Secondary_Teachers"))
@@ -226,8 +245,6 @@ reactable(
   pageSizeOptions = c(10, 15, 25, 50, 75, 100), # Keep options available if needed
   showSortable = TRUE
 )
-
-
 
 ```
 
