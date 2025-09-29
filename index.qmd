@@ -91,7 +91,7 @@ A function to aggregate a table with one row per council. It adds value per prov
 # council_data must be a data frame with a column called "Region"
 compute_council_aggregates <- function(council_data) {
   
-  province_data <- education_wide %>%
+  province_data <- council_data %>%
     left_join(council_province_lookup, by = c("Region" = "Council")) %>%
     group_by(Province) %>%
     summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
@@ -185,15 +185,7 @@ education_wide <- education_data %>%
 education_aggregated <- compute_council_aggregates(education_wide)
 
 # Formatted table
-formatted <- education_aggregated %>% 
-  select(Region, everything()) %>% 
-  mutate(
-    Region = ifelse(
-      Region %in% provinces, 
-      paste0("<b>", Region, "</b>"), 
-      Region
-    )
-  )
+formatted <- format_table(education_aggregated)
 
 # Create the reactable with nested headers
 reactable(
@@ -245,7 +237,6 @@ reactable(
   pageSizeOptions = c(10, 15, 25, 50, 75, 100), # Keep options available if needed
   showSortable = TRUE
 )
-
 ```
 
 ## Estimating damage: Number of damaged schools and students affected
@@ -274,7 +265,6 @@ get_damage_multiplier <- function(cyclone_category, education_level, measure_typ
 
 # Create damage estimation function
 damage_estimates <- education_with_config %>%
-    select(Region_Formatted, Region, contains("ECCE"), contains("Primary"), contains("Secondary"), category) %>%
     filter(!is.na(category)) %>%
     rowwise() %>%
   
@@ -291,49 +281,22 @@ damage_estimates <- education_with_config %>%
     ) %>%
   
     ungroup() %>%
-    select(Region_Formatted, contains("_Damaged"), contains("_Affected"), category)
+    select(Region, contains("_Damaged"), contains("_Affected"), category)
 
 # The damage_estimates table provides values for coucils only. 
 # We need to aggregate values per province and country
-province_damage <- damage_estimates %>%
-  left_join(council_province_lookup, by = c("Region_Formatted" = "Council")) %>%
-  group_by(Province) %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
-  mutate(Region_Formatted = Province)  
-national_damage <- province_damage %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
-  mutate(Region_Formatted = "Vanuatu")
-damage_estimates_full <- bind_rows(
-  national_damage,
-  province_damage,
-  damage_estimates
-)
+damage_estimates_full <- compute_council_aggregates(damage_estimates)
 
-# Now I need to format the table: sort columns, sort rows, add bold.
-education_wide <- damage_estimates_full %>%
-  mutate(
-    # Convert "National" to "Vanuatu" for display
-    # Region_Display = ifelse(Region == "National", "Vanuatu", Region),
-    # Create order based on custom sequence
-    default_order = match(Region_Formatted, region_order),
-    # Add bold formatting for provinces
-    Region_Formatted = ifelse(Region_Formatted %in% provinces, 
-                             paste0("<b>", Region_Formatted, "</b>"), 
-                             Region_Formatted)
-  ) %>%
-  # Sort by the custom order
-  arrange(default_order) %>%
-  select(Region_Formatted, contains("_Damaged"), contains("_Affected"), category)
-
+formatted <- format_table(damage_estimates_full)
 
 
 
 # Create the damage estimation reactable
 reactable(
-  education_wide,
+  formatted,
   columns = list(
-    Region_Formatted = colDef(
-      name = "Region_Formatted", 
+    Region = colDef(
+      name = "Region", 
       minWidth = 150,
       sticky = "left",
       html = TRUE # Allow HTML formatting for bold text (national/provincial levels)
@@ -352,7 +315,7 @@ reactable(
     Secondary_Students_Affected = colDef(name = "Students Affected", format = colFormat(digits = 0))
   ),
   columnGroups = list(
-    colGroup(name = "Region", columns = c("Region_Formatted")),
+    colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "ECCE", columns = c("ECCE_Schools_Damaged", "ECCE_Students_Affected")),
     colGroup(name = "Primary", columns = c("Primary_Schools_Damaged", "Primary_Students_Affected")),
     colGroup(name = "Secondary", columns = c("Secondary_Schools_Damaged", "Secondary_Students_Affected"))
