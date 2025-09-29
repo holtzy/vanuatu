@@ -239,6 +239,10 @@ reactable(
 )
 ```
 
+
+
+
+
 ## Estimating damage: Number of damaged schools and students affected
 
 ```{r}
@@ -286,7 +290,6 @@ damage_estimates <- education_with_config %>%
 # The damage_estimates table provides values for coucils only. 
 # We need to aggregate values per province and country
 damage_estimates_full <- compute_council_aggregates(damage_estimates)
-
 formatted <- format_table(damage_estimates_full)
 
 
@@ -398,19 +401,21 @@ calculate_resources <- function(region_data, cyclone_category, days = 14) {
       Total_Rice = round(ECCE_Rice + Primary_Rice + Secondary_Rice, 1),
       Total_Tin_Fish = ECCE_Tin_Fish + Primary_Tin_Fish + Secondary_Tin_Fish
     ) %>%
-    select(Region_Formatted, contains("Tents"), contains("Solar_Lamps"), contains("Water"), contains("Rice"), contains("Tin_Fish"))
+    select(Region, contains("Tents"), contains("Solar_Lamps"), contains("Water"), contains("Rice"), contains("Tin_Fish"))
 }
 
 # Apply resource calculations to all regions using the education_wide dataset
 resources_needed <- education_wide %>%
-  select(Region_Formatted, contains("ECCE"), contains("Primary"), contains("Secondary")) %>%
   calculate_resources(default_cyclone_category, days_of_support)
+
+resources_needed_full <- compute_council_aggregates(resources_needed)
+formatted <- format_table(resources_needed_full)
 
 # Create the resources needed reactable
 reactable(
-  resources_needed,
+  formatted,
   columns = list(
-    Region_Formatted = colDef(
+    Region = colDef(
       name = "Region", 
       minWidth = 150,
       sticky = "left",
@@ -446,7 +451,7 @@ reactable(
     Total_Tin_Fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0))
   ),
   columnGroups = list(
-    colGroup(name = "Region", columns = c("Region_Formatted")),
+    colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "ECCE", columns = c("ECCE_Tents", "ECCE_Solar_Lamps", "ECCE_Water", "ECCE_Rice", "ECCE_Tin_Fish")),
     colGroup(name = "Primary", columns = c("Primary_Tents", "Primary_Solar_Lamps", "Primary_Water", "Primary_Rice", "Primary_Tin_Fish")),
     colGroup(name = "Secondary", columns = c("Secondary_Tents", "Secondary_Solar_Lamps", "Secondary_Water", "Secondary_Rice", "Secondary_Tin_Fish")),
