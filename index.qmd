@@ -2,8 +2,12 @@
 title: "Disaster Damage and Response Estimation"
 author: "Théophile L. Mouton"
 date: "`r Sys.Date()`"
+include-after-body: "asset/footer.html"
+css: "asset/style.css"
 format:
   html:
+    template-partials: 
+      - asset/title-block.html
     toc: true
     toc-depth: 3
     toc-location: left
@@ -22,7 +26,6 @@ execute:
   warning: false
   message: false
   error: false
-editor: visual
 ---
 
 # Intro
@@ -44,7 +47,6 @@ council_province_lookup <- read.csv("data/council_province_lookup.csv")
 
 
 And load the required libs
-
 ```{r, warning=FALSE, message=FALSE}
 # Load required packages
 library(dplyr)
@@ -56,10 +58,7 @@ library(here)
 ```
 
 
-
-
-
-
+Source some useful functions used along the script.
 
 
 
@@ -366,14 +365,7 @@ reactable(
 
 ## Resources needed to be sent to those affected
 
-```{r}
-# Load required packages
-library(dplyr)
-library(tidyr)
-library(reactable)
-library(htmltools)
-library(readxl)
-
+```{r, eval=FALSE}
 # Load the resource response configuration
 resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
 
@@ -502,7 +494,7 @@ reactable(
 
 ## Estimate financial damage from cyclone
 
-```{r}
+```{r, eval=FALSE}
 # Load the financial damage estimation config
 financial_config <- read_excel(here("data", "14. Estimation_Financial_Damage.xlsx"))
 
