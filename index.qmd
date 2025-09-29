@@ -473,7 +473,7 @@ reactable(
 
 ## Estimate financial damage from cyclone
 
-```{r, eval=FALSE}
+```{r}
 
 # === DATA WRANGLING ===
 # Load the financial damage estimation config
