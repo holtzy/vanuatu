@@ -474,78 +474,89 @@ reactable(
 ## Estimate financial damage from cyclone
 
 ```{r, eval=FALSE}
+
+# === DATA WRANGLING ===
 # Load the financial damage estimation config
 financial_config <- read_excel(here("data", "14. Estimation_Financial_Damage.xlsx"))
 
 # Clean column names to remove any extra spaces
 names(financial_config) <- trimws(names(financial_config))
 
-# Create a function to get unit costs from config
+# Helper function to get unit costs from config
 get_unit_cost <- function(school_type) {
   unit_cost <- financial_config %>%
-    filter(trimws(Cluster) == "Education", 
-           trimws(tolower(Attribute)) == tolower(school_type),
-           grepl("Number Schools", trimws(Indicator), ignore.case = TRUE)) %>%
+    filter(
+      trimws(Cluster) == "Education", 
+      trimws(tolower(Attribute)) == tolower(school_type),
+      grepl("Number Schools", trimws(Indicator), ignore.case = TRUE)
+    ) %>%
     pull(Value)
   
   return(ifelse(length(unit_cost) > 0, unit_cost, 0))
 }
 
-# Configuration parameters
-default_cyclone_category <- 4  # Default cyclone category (can be customized)
+# Add cyclone categories from config file to education baseline data
+education_with_config_financial <- education_wide %>%
+  left_join(config, by = c("Region" = "council"))
 
-# Function to calculate financial damage
-calculate_financial_damage <- function(region_data, cyclone_category) {
-  
-  region_data %>%
-    mutate(
-      # Get damage multiplier for this cyclone category
-      damage_multiplier = get_damage_multiplier(cyclone_category, "ecce", "Schools"), # Same multiplier for all
-      
-      # Calculate financial damage per education level (in VT)
-      ECCE_Financial_Damage = ECCE_Schools * get_unit_cost("ecce") * damage_multiplier,
-      Primary_Financial_Damage = Primary_Schools * get_unit_cost("primary") * damage_multiplier,
-      Secondary_Financial_Damage = Secondary_Schools * get_unit_cost("secondary") * damage_multiplier,
-      
-      # Calculate total financial damage
-      Total_Financial_Damage = ECCE_Financial_Damage + Primary_Financial_Damage + Secondary_Financial_Damage
-    ) %>%
-    select(Region_Formatted, contains("Financial_Damage"))
-}
+# Calculate financial damage using council-specific cyclone categories
+financial_damage <- education_with_config_financial %>%
+  filter(!is.na(category)) %>%  # Only calculate for councils with assigned categories
+  rowwise() %>%
+  mutate(
+    # Get damage multiplier for this council's specific cyclone category
+    damage_multiplier = get_damage_multiplier(category, "ecce", "schools"),
+    
+    # Calculate financial damage per education level (in VT)
+    ecce_financial_damage = ecce_schools * get_unit_cost("ecce") * damage_multiplier,
+    primary_financial_damage = primary_schools * get_unit_cost("primary") * damage_multiplier,
+    secondary_financial_damage = secondary_schools * get_unit_cost("secondary") * damage_multiplier,
+    
+    # Calculate total financial damage
+    total_financial_damage = ecce_financial_damage + primary_financial_damage + secondary_financial_damage
+  ) %>%
+  ungroup() %>%
+  select(Region, contains("financial_damage"))
 
-# Apply financial damage calculations to all regions using the education_wide dataset
-financial_damage <- education_wide %>%
-  select(Region_Formatted, contains("ECCE"), contains("Primary"), contains("Secondary")) %>%
-  calculate_financial_damage(default_cyclone_category)
+# Aggregate to province and national levels
+financial_damage_full <- compute_council_aggregates(financial_damage)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(financial_damage_full)
 
 # Create the financial damage reactable
 reactable(
-  financial_damage,
+  formatted,
   columns = list(
-    Region_Formatted = colDef(
+    Region = colDef(
       name = "Region", 
       minWidth = 150,
       sticky = "left",
-      html = TRUE # Allow HTML formatting for bold text
+      html = TRUE
     ),
     
     # Financial damage columns
-    ECCE_Financial_Damage = colDef(
+    ecce_financial_damage = colDef(
       name = "ECCE", 
       format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
     ),
-    Primary_Financial_Damage = colDef(
+    primary_financial_damage = colDef(
       name = "Primary", 
       format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
     ),
-    Secondary_Financial_Damage = colDef(
+    secondary_financial_damage = colDef(
       name = "Secondary", 
       format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
     ),
-    Total_Financial_Damage = colDef(
+    total_financial_damage = colDef(
       name = "Total", 
       format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
     )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Financial Damage (VT)", columns = c("ecce_financial_damage", "primary_financial_damage", "secondary_financial_damage", "total_financial_damage"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -562,6 +573,5 @@ reactable(
   pageSizeOptions = c(10, 15, 25, 50, 75, 100),
   showSortable = TRUE
 )
-
 
 ```
