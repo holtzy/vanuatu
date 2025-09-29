@@ -285,7 +285,7 @@ damage_estimates <- education_with_config %>%
     ) %>%
   
     ungroup() %>%
-    select(Region, contains("_Damaged"), contains("_Affected"), category)
+    select(Region, contains("_Damaged"), contains("_Affected"))
 
 # The damage_estimates table provides values for coucils only. 
 # We need to aggregate values per province and country
@@ -348,7 +348,7 @@ reactable(
 
 ## Resources needed to be sent to those affected
 
-```{r, eval=FALSE}
+```{r}
 # Load the resource response configuration
 resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
 
