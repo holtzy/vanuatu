@@ -1,0 +1,2557 @@
+Year,Cluster,Indicator,Province,Area Council,Unit,Value
+2025,Education,Tent,Torba,Torres,number,1
+2025,Education,Tent,Torba,Ureparapara,number,1
+2025,Education,Tent,Torba,Motalava,number,1
+2025,Education,Tent,Torba,East Vanualava,number,1
+2025,Education,Tent,Torba,West Vanualava,number,1
+2025,Education,Tent,Torba,Mota,number,1
+2025,Education,Tent,Torba,East Gaua,number,1
+2025,Education,Tent,Torba,West Gaua,number,1
+2025,Education,Tent,Torba,Merelava,number,1
+2025,Education,Tent,Sanma,Luganville,number,1
+2025,Education,Tent,Sanma,North West Santo,number,1
+2025,Education,Tent,Sanma,Big Bay Coast,number,1
+2025,Education,Tent,Sanma,Big Bay Inland,number,1
+2025,Education,Tent,Sanma,West Santo,number,1
+2025,Education,Tent,Sanma,South Santo 1,number,1
+2025,Education,Tent,Sanma,South Santo 2,number,1
+2025,Education,Tent,Sanma,East Santo,number,1
+2025,Education,Tent,Sanma,South East Santo,number,1
+2025,Education,Tent,Sanma,Canal Fanafo,number,1
+2025,Education,Tent,Sanma,West Malo,number,1
+2025,Education,Tent,Sanma,East Malo,number,1
+2025,Education,Tent,Penama,West Ambae,number,1
+2025,Education,Tent,Penama,North Ambae,number,1
+2025,Education,Tent,Penama,East Ambae,number,1
+2025,Education,Tent,Penama,South Ambae,number,1
+2025,Education,Tent,Penama,North Maewo,number,1
+2025,Education,Tent,Penama,South Maewo,number,1
+2025,Education,Tent,Penama,North Pentecost,number,1
+2025,Education,Tent,Penama,Central Pentecost 1,number,1
+2025,Education,Tent,Penama,Central Pentecost 2,number,1
+2025,Education,Tent,Penama,South Pentecost,number,1
+2025,Education,Tent,Malampa,North West Malekula,number,1
+2025,Education,Tent,Malampa,North East Malekula,number,1
+2025,Education,Tent,Malampa,Central Malekula,number,1
+2025,Education,Tent,Malampa,South West Malekula,number,1
+2025,Education,Tent,Malampa,South East Malekula,number,1
+2025,Education,Tent,Malampa,South Malekula,number,1
+2025,Education,Tent,Malampa,North Ambrym,number,1
+2025,Education,Tent,Malampa,West Ambrym,number,1
+2025,Education,Tent,Malampa,South East Ambrym,number,1
+2025,Education,Tent,Malampa,Paama,number,1
+2025,Education,Tent,Shefa,Port Vila,number,1
+2025,Education,Tent,Shefa,Vermali,number,1
+2025,Education,Tent,Shefa,Vermaul,number,1
+2025,Education,Tent,Shefa,Varisu,number,1
+2025,Education,Tent,Shefa,South Epi,number,1
+2025,Education,Tent,Shefa,North Tongoa,number,1
+2025,Education,Tent,Shefa,Makimae,number,1
+2025,Education,Tent,Shefa,Tongariki,number,1
+2025,Education,Tent,Shefa,Nguna,number,1
+2025,Education,Tent,Shefa,Emau,number,1
+2025,Education,Tent,Shefa,Malorua,number,1
+2025,Education,Tent,Shefa,North Efate,number,1
+2025,Education,Tent,Shefa,Mele,number,1
+2025,Education,Tent,Shefa,Tanvasoko,number,1
+2025,Education,Tent,Shefa,Ifira,number,1
+2025,Education,Tent,Shefa,Pango,number,1
+2025,Education,Tent,Shefa,Erakor,number,1
+2025,Education,Tent,Shefa,Eratap,number,1
+2025,Education,Tent,Shefa,Eton,number,1
+2025,Education,Tent,Tafea,North Erromango,number,1
+2025,Education,Tent,Tafea,South Erromango,number,1
+2025,Education,Tent,Tafea,Aniwa,number,1
+2025,Education,Tent,Tafea,North Tanna,number,1
+2025,Education,Tent,Tafea,West Tanna,number,1
+2025,Education,Tent,Tafea,Middle Bush Tanna,number,1
+2025,Education,Tent,Tafea,South West Tanna,number,1
+2025,Education,Tent,Tafea,Whitesands,number,1
+2025,Education,Tent,Tafea,South Tanna,number,1
+2025,Education,Tent,Tafea,Futuna,number,1
+2025,Education,Tent,Tafea,Aneityum,number,1
+2025,Education,Solar Lamp,Torba,Torres,number,10
+2025,Education,Solar Lamp,Torba,Ureparapara,number,10
+2025,Education,Solar Lamp,Torba,Motalava,number,10
+2025,Education,Solar Lamp,Torba,East Vanualava,number,10
+2025,Education,Solar Lamp,Torba,West Vanualava,number,10
+2025,Education,Solar Lamp,Torba,Mota,number,10
+2025,Education,Solar Lamp,Torba,East Gaua,number,10
+2025,Education,Solar Lamp,Torba,West Gaua,number,10
+2025,Education,Solar Lamp,Torba,Merelava,number,10
+2025,Education,Solar Lamp,Sanma,Luganville,number,10
+2025,Education,Solar Lamp,Sanma,North West Santo,number,10
+2025,Education,Solar Lamp,Sanma,Big Bay Coast,number,10
+2025,Education,Solar Lamp,Sanma,Big Bay Inland,number,10
+2025,Education,Solar Lamp,Sanma,West Santo,number,10
+2025,Education,Solar Lamp,Sanma,South Santo 1,number,10
+2025,Education,Solar Lamp,Sanma,South Santo 2,number,10
+2025,Education,Solar Lamp,Sanma,East Santo,number,10
+2025,Education,Solar Lamp,Sanma,South East Santo,number,10
+2025,Education,Solar Lamp,Sanma,Canal Fanafo,number,10
+2025,Education,Solar Lamp,Sanma,West Malo,number,10
+2025,Education,Solar Lamp,Sanma,East Malo,number,10
+2025,Education,Solar Lamp,Penama,West Ambae,number,10
+2025,Education,Solar Lamp,Penama,North Ambae,number,10
+2025,Education,Solar Lamp,Penama,East Ambae,number,10
+2025,Education,Solar Lamp,Penama,South Ambae,number,10
+2025,Education,Solar Lamp,Penama,North Maewo,number,10
+2025,Education,Solar Lamp,Penama,South Maewo,number,10
+2025,Education,Solar Lamp,Penama,North Pentecost,number,10
+2025,Education,Solar Lamp,Penama,Central Pentecost 1,number,10
+2025,Education,Solar Lamp,Penama,Central Pentecost 2,number,10
+2025,Education,Solar Lamp,Penama,South Pentecost,number,10
+2025,Education,Solar Lamp,Malampa,North West Malekula,number,10
+2025,Education,Solar Lamp,Malampa,North East Malekula,number,10
+2025,Education,Solar Lamp,Malampa,Central Malekula,number,10
+2025,Education,Solar Lamp,Malampa,South West Malekula,number,10
+2025,Education,Solar Lamp,Malampa,South East Malekula,number,10
+2025,Education,Solar Lamp,Malampa,South Malekula,number,10
+2025,Education,Solar Lamp,Malampa,North Ambrym,number,10
+2025,Education,Solar Lamp,Malampa,West Ambrym,number,10
+2025,Education,Solar Lamp,Malampa,South East Ambrym,number,10
+2025,Education,Solar Lamp,Malampa,Paama,number,10
+2025,Education,Solar Lamp,Shefa,Port Vila,number,10
+2025,Education,Solar Lamp,Shefa,Vermali,number,10
+2025,Education,Solar Lamp,Shefa,Vermaul,number,10
+2025,Education,Solar Lamp,Shefa,Varisu,number,10
+2025,Education,Solar Lamp,Shefa,South Epi,number,10
+2025,Education,Solar Lamp,Shefa,North Tongoa,number,10
+2025,Education,Solar Lamp,Shefa,Makimae,number,10
+2025,Education,Solar Lamp,Shefa,Tongariki,number,10
+2025,Education,Solar Lamp,Shefa,Nguna,number,10
+2025,Education,Solar Lamp,Shefa,Emau,number,10
+2025,Education,Solar Lamp,Shefa,Malorua,number,10
+2025,Education,Solar Lamp,Shefa,North Efate,number,10
+2025,Education,Solar Lamp,Shefa,Mele,number,10
+2025,Education,Solar Lamp,Shefa,Tanvasoko,number,10
+2025,Education,Solar Lamp,Shefa,Ifira,number,10
+2025,Education,Solar Lamp,Shefa,Pango,number,10
+2025,Education,Solar Lamp,Shefa,Erakor,number,10
+2025,Education,Solar Lamp,Shefa,Eratap,number,10
+2025,Education,Solar Lamp,Shefa,Eton,number,10
+2025,Education,Solar Lamp,Tafea,North Erromango,number,10
+2025,Education,Solar Lamp,Tafea,South Erromango,number,10
+2025,Education,Solar Lamp,Tafea,Aniwa,number,10
+2025,Education,Solar Lamp,Tafea,North Tanna,number,10
+2025,Education,Solar Lamp,Tafea,West Tanna,number,10
+2025,Education,Solar Lamp,Tafea,Middle Bush Tanna,number,10
+2025,Education,Solar Lamp,Tafea,South West Tanna,number,10
+2025,Education,Solar Lamp,Tafea,Whitesands,number,10
+2025,Education,Solar Lamp,Tafea,South Tanna,number,10
+2025,Education,Solar Lamp,Tafea,Futuna,number,10
+2025,Education,Solar Lamp,Tafea,Aneityum,number,10
+2025,Education,Water,Torba,Torres,litre,0.5
+2025,Education,Water,Torba,Ureparapara,litre,0.5
+2025,Education,Water,Torba,Motalava,litre,0.5
+2025,Education,Water,Torba,East Vanualava,litre,0.5
+2025,Education,Water,Torba,West Vanualava,litre,0.5
+2025,Education,Water,Torba,Mota,litre,0.5
+2025,Education,Water,Torba,East Gaua,litre,0.5
+2025,Education,Water,Torba,West Gaua,litre,0.5
+2025,Education,Water,Torba,Merelava,litre,0.5
+2025,Education,Water,Sanma,Luganville,litre,0.5
+2025,Education,Water,Sanma,North West Santo,litre,0.5
+2025,Education,Water,Sanma,Big Bay Coast,litre,0.5
+2025,Education,Water,Sanma,Big Bay Inland,litre,0.5
+2025,Education,Water,Sanma,West Santo,litre,0.5
+2025,Education,Water,Sanma,South Santo 1,litre,0.5
+2025,Education,Water,Sanma,South Santo 2,litre,0.5
+2025,Education,Water,Sanma,East Santo,litre,0.5
+2025,Education,Water,Sanma,South East Santo,litre,0.5
+2025,Education,Water,Sanma,Canal Fanafo,litre,0.5
+2025,Education,Water,Sanma,West Malo,litre,0.5
+2025,Education,Water,Sanma,East Malo,litre,0.5
+2025,Education,Water,Penama,West Ambae,litre,0.5
+2025,Education,Water,Penama,North Ambae,litre,0.5
+2025,Education,Water,Penama,East Ambae,litre,0.5
+2025,Education,Water,Penama,South Ambae,litre,0.5
+2025,Education,Water,Penama,North Maewo,litre,0.5
+2025,Education,Water,Penama,South Maewo,litre,0.5
+2025,Education,Water,Penama,North Pentecost,litre,0.5
+2025,Education,Water,Penama,Central Pentecost 1,litre,0.5
+2025,Education,Water,Penama,Central Pentecost 2,litre,0.5
+2025,Education,Water,Penama,South Pentecost,litre,0.5
+2025,Education,Water,Malampa,North West Malekula,litre,0.5
+2025,Education,Water,Malampa,North East Malekula,litre,0.5
+2025,Education,Water,Malampa,Central Malekula,litre,0.5
+2025,Education,Water,Malampa,South West Malekula,litre,0.5
+2025,Education,Water,Malampa,South East Malekula,litre,0.5
+2025,Education,Water,Malampa,South Malekula,litre,0.5
+2025,Education,Water,Malampa,North Ambrym,litre,0.5
+2025,Education,Water,Malampa,West Ambrym,litre,0.5
+2025,Education,Water,Malampa,South East Ambrym,litre,0.5
+2025,Education,Water,Malampa,Paama,litre,0.5
+2025,Education,Water,Shefa,Port Vila,litre,0.5
+2025,Education,Water,Shefa,Vermali,litre,0.5
+2025,Education,Water,Shefa,Vermaul,litre,0.5
+2025,Education,Water,Shefa,Varisu,litre,0.5
+2025,Education,Water,Shefa,South Epi,litre,0.5
+2025,Education,Water,Shefa,North Tongoa,litre,0.5
+2025,Education,Water,Shefa,Makimae,litre,0.5
+2025,Education,Water,Shefa,Tongariki,litre,0.5
+2025,Education,Water,Shefa,Nguna,litre,0.5
+2025,Education,Water,Shefa,Emau,litre,0.5
+2025,Education,Water,Shefa,Malorua,litre,0.5
+2025,Education,Water,Shefa,North Efate,litre,0.5
+2025,Education,Water,Shefa,Mele,litre,0.5
+2025,Education,Water,Shefa,Tanvasoko,litre,0.5
+2025,Education,Water,Shefa,Ifira,litre,0.5
+2025,Education,Water,Shefa,Pango,litre,0.5
+2025,Education,Water,Shefa,Erakor,litre,0.5
+2025,Education,Water,Shefa,Eratap,litre,0.5
+2025,Education,Water,Shefa,Eton,litre,0.5
+2025,Education,Water,Tafea,North Erromango,litre,0.5
+2025,Education,Water,Tafea,South Erromango,litre,0.5
+2025,Education,Water,Tafea,Aniwa,litre,0.5
+2025,Education,Water,Tafea,North Tanna,litre,0.5
+2025,Education,Water,Tafea,West Tanna,litre,0.5
+2025,Education,Water,Tafea,Middle Bush Tanna,litre,0.5
+2025,Education,Water,Tafea,South West Tanna,litre,0.5
+2025,Education,Water,Tafea,Whitesands,litre,0.5
+2025,Education,Water,Tafea,South Tanna,litre,0.5
+2025,Education,Water,Tafea,Futuna,litre,0.5
+2025,Education,Water,Tafea,Aneityum,litre,0.5
+2025,Education,Tin Fish,Torba,Torres,kilogram,0.4
+2025,Education,Tin Fish,Torba,Ureparapara,kilogram,0.4
+2025,Education,Tin Fish,Torba,Motalava,kilogram,0.4
+2025,Education,Tin Fish,Torba,East Vanualava,kilogram,0.4
+2025,Education,Tin Fish,Torba,West Vanualava,kilogram,0.4
+2025,Education,Tin Fish,Torba,Mota,kilogram,0.4
+2025,Education,Tin Fish,Torba,East Gaua,kilogram,0.4
+2025,Education,Tin Fish,Torba,West Gaua,kilogram,0.4
+2025,Education,Tin Fish,Torba,Merelava,kilogram,0.4
+2025,Education,Tin Fish,Sanma,Luganville,kilogram,0.4
+2025,Education,Tin Fish,Sanma,North West Santo,kilogram,0.4
+2025,Education,Tin Fish,Sanma,Big Bay Coast,kilogram,0.4
+2025,Education,Tin Fish,Sanma,Big Bay Inland,kilogram,0.4
+2025,Education,Tin Fish,Sanma,West Santo,kilogram,0.4
+2025,Education,Tin Fish,Sanma,South Santo 1,kilogram,0.4
+2025,Education,Tin Fish,Sanma,South Santo 2,kilogram,0.4
+2025,Education,Tin Fish,Sanma,East Santo,kilogram,0.4
+2025,Education,Tin Fish,Sanma,South East Santo,kilogram,0.4
+2025,Education,Tin Fish,Sanma,Canal Fanafo,kilogram,0.4
+2025,Education,Tin Fish,Sanma,West Malo,kilogram,0.4
+2025,Education,Tin Fish,Sanma,East Malo,kilogram,0.4
+2025,Education,Tin Fish,Penama,West Ambae,kilogram,0.4
+2025,Education,Tin Fish,Penama,North Ambae,kilogram,0.4
+2025,Education,Tin Fish,Penama,East Ambae,kilogram,0.4
+2025,Education,Tin Fish,Penama,South Ambae,kilogram,0.4
+2025,Education,Tin Fish,Penama,North Maewo,kilogram,0.4
+2025,Education,Tin Fish,Penama,South Maewo,kilogram,0.4
+2025,Education,Tin Fish,Penama,North Pentecost,kilogram,0.4
+2025,Education,Tin Fish,Penama,Central Pentecost 1,kilogram,0.4
+2025,Education,Tin Fish,Penama,Central Pentecost 2,kilogram,0.4
+2025,Education,Tin Fish,Penama,South Pentecost,kilogram,0.4
+2025,Education,Tin Fish,Malampa,North West Malekula,kilogram,0.4
+2025,Education,Tin Fish,Malampa,North East Malekula,kilogram,0.4
+2025,Education,Tin Fish,Malampa,Central Malekula,kilogram,0.4
+2025,Education,Tin Fish,Malampa,South West Malekula,kilogram,0.4
+2025,Education,Tin Fish,Malampa,South East Malekula,kilogram,0.4
+2025,Education,Tin Fish,Malampa,South Malekula,kilogram,0.4
+2025,Education,Tin Fish,Malampa,North Ambrym,kilogram,0.4
+2025,Education,Tin Fish,Malampa,West Ambrym,kilogram,0.4
+2025,Education,Tin Fish,Malampa,South East Ambrym,kilogram,0.4
+2025,Education,Tin Fish,Malampa,Paama,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Port Vila,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Vermali,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Vermaul,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Varisu,kilogram,0.4
+2025,Education,Tin Fish,Shefa,South Epi,kilogram,0.4
+2025,Education,Tin Fish,Shefa,North Tongoa,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Makimae,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Tongariki,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Nguna,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Emau,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Malorua,kilogram,0.4
+2025,Education,Tin Fish,Shefa,North Efate,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Mele,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Tanvasoko,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Ifira,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Pango,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Erakor,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Eratap,kilogram,0.4
+2025,Education,Tin Fish,Shefa,Eton,kilogram,0.4
+2025,Education,Tin Fish,Tafea,North Erromango,kilogram,0.4
+2025,Education,Tin Fish,Tafea,South Erromango,kilogram,0.4
+2025,Education,Tin Fish,Tafea,Aniwa,kilogram,0.4
+2025,Education,Tin Fish,Tafea,North Tanna,kilogram,0.4
+2025,Education,Tin Fish,Tafea,West Tanna,kilogram,0.4
+2025,Education,Tin Fish,Tafea,Middle Bush Tanna,kilogram,0.4
+2025,Education,Tin Fish,Tafea,South West Tanna,kilogram,0.4
+2025,Education,Tin Fish,Tafea,Whitesands,kilogram,0.4
+2025,Education,Tin Fish,Tafea,South Tanna,kilogram,0.4
+2025,Education,Tin Fish,Tafea,Futuna,kilogram,0.4
+2025,Education,Tin Fish,Tafea,Aneityum,kilogram,0.4
+2025,Energy,Solar Lamp,Torba,Torres,number,1
+2025,Energy,Solar Lamp,Torba,Ureparapara,number,1
+2025,Energy,Solar Lamp,Torba,Motalava,number,1
+2025,Energy,Solar Lamp,Torba,East Vanualava,number,1
+2025,Energy,Solar Lamp,Torba,West Vanualava,number,1
+2025,Energy,Solar Lamp,Torba,Mota,number,1
+2025,Energy,Solar Lamp,Torba,East Gaua,number,1
+2025,Energy,Solar Lamp,Torba,West Gaua,number,1
+2025,Energy,Solar Lamp,Torba,Merelava,number,1
+2025,Energy,Solar Lamp,Sanma,Luganville,number,1
+2025,Energy,Solar Lamp,Sanma,North West Santo,number,1
+2025,Energy,Solar Lamp,Sanma,Big Bay Coast,number,1
+2025,Energy,Solar Lamp,Sanma,Big Bay Inland,number,1
+2025,Energy,Solar Lamp,Sanma,West Santo,number,1
+2025,Energy,Solar Lamp,Sanma,South Santo 1,number,1
+2025,Energy,Solar Lamp,Sanma,South Santo 2,number,1
+2025,Energy,Solar Lamp,Sanma,East Santo,number,1
+2025,Energy,Solar Lamp,Sanma,South East Santo,number,1
+2025,Energy,Solar Lamp,Sanma,Canal Fanafo,number,1
+2025,Energy,Solar Lamp,Sanma,West Malo,number,1
+2025,Energy,Solar Lamp,Sanma,East Malo,number,1
+2025,Energy,Solar Lamp,Penama,West Ambae,number,1
+2025,Energy,Solar Lamp,Penama,North Ambae,number,1
+2025,Energy,Solar Lamp,Penama,East Ambae,number,1
+2025,Energy,Solar Lamp,Penama,South Ambae,number,1
+2025,Energy,Solar Lamp,Penama,North Maewo,number,1
+2025,Energy,Solar Lamp,Penama,South Maewo,number,1
+2025,Energy,Solar Lamp,Penama,North Pentecost,number,1
+2025,Energy,Solar Lamp,Penama,Central Pentecost 1,number,1
+2025,Energy,Solar Lamp,Penama,Central Pentecost 2,number,1
+2025,Energy,Solar Lamp,Penama,South Pentecost,number,1
+2025,Energy,Solar Lamp,Malampa,North West Malekula,number,1
+2025,Energy,Solar Lamp,Malampa,North East Malekula,number,1
+2025,Energy,Solar Lamp,Malampa,Central Malekula,number,1
+2025,Energy,Solar Lamp,Malampa,South West Malekula,number,1
+2025,Energy,Solar Lamp,Malampa,South East Malekula,number,1
+2025,Energy,Solar Lamp,Malampa,South Malekula,number,1
+2025,Energy,Solar Lamp,Malampa,North Ambrym,number,1
+2025,Energy,Solar Lamp,Malampa,West Ambrym,number,1
+2025,Energy,Solar Lamp,Malampa,South East Ambrym,number,1
+2025,Energy,Solar Lamp,Malampa,Paama,number,1
+2025,Energy,Solar Lamp,Shefa,Port Vila,number,1
+2025,Energy,Solar Lamp,Shefa,Vermali,number,1
+2025,Energy,Solar Lamp,Shefa,Vermaul,number,1
+2025,Energy,Solar Lamp,Shefa,Varisu,number,1
+2025,Energy,Solar Lamp,Shefa,South Epi,number,1
+2025,Energy,Solar Lamp,Shefa,North Tongoa,number,1
+2025,Energy,Solar Lamp,Shefa,Makimae,number,1
+2025,Energy,Solar Lamp,Shefa,Tongariki,number,1
+2025,Energy,Solar Lamp,Shefa,Nguna,number,1
+2025,Energy,Solar Lamp,Shefa,Emau,number,1
+2025,Energy,Solar Lamp,Shefa,Malorua,number,1
+2025,Energy,Solar Lamp,Shefa,North Efate,number,1
+2025,Energy,Solar Lamp,Shefa,Mele,number,1
+2025,Energy,Solar Lamp,Shefa,Tanvasoko,number,1
+2025,Energy,Solar Lamp,Shefa,Ifira,number,1
+2025,Energy,Solar Lamp,Shefa,Pango,number,1
+2025,Energy,Solar Lamp,Shefa,Erakor,number,1
+2025,Energy,Solar Lamp,Shefa,Eratap,number,1
+2025,Energy,Solar Lamp,Shefa,Eton,number,1
+2025,Energy,Solar Lamp,Tafea,North Erromango,number,1
+2025,Energy,Solar Lamp,Tafea,South Erromango,number,1
+2025,Energy,Solar Lamp,Tafea,Aniwa,number,1
+2025,Energy,Solar Lamp,Tafea,North Tanna,number,1
+2025,Energy,Solar Lamp,Tafea,West Tanna,number,1
+2025,Energy,Solar Lamp,Tafea,Middle Bush Tanna,number,1
+2025,Energy,Solar Lamp,Tafea,South West Tanna,number,1
+2025,Energy,Solar Lamp,Tafea,Whitesands,number,1
+2025,Energy,Solar Lamp,Tafea,South Tanna,number,1
+2025,Energy,Solar Lamp,Tafea,Futuna,number,1
+2025,Energy,Solar Lamp,Tafea,Aneityum,number,1
+2025,Energy,Low Voltage Poles Support,Torba,Torres,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,Ureparapara,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,Motalava,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,East Vanualava,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,West Vanualava,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,Mota,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,East Gaua,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,West Gaua,number,0.2
+2025,Energy,Low Voltage Poles Support,Torba,Merelava,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,Luganville,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,North West Santo,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,Big Bay Coast,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,Big Bay Inland,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,West Santo,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,South Santo 1,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,South Santo 2,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,East Santo,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,South East Santo,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,Canal Fanafo,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,West Malo,number,0.2
+2025,Energy,Low Voltage Poles Support,Sanma,East Malo,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,West Ambae,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,North Ambae,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,East Ambae,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,South Ambae,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,North Maewo,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,South Maewo,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,North Pentecost,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,Central Pentecost 1,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,Central Pentecost 2,number,0.2
+2025,Energy,Low Voltage Poles Support,Penama,South Pentecost,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,North West Malekula,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,North East Malekula,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,Central Malekula,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,South West Malekula,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,South East Malekula,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,South Malekula,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,North Ambrym,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,West Ambrym,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,South East Ambrym,number,0.2
+2025,Energy,Low Voltage Poles Support,Malampa,Paama,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Port Vila,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Vermali,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Vermaul,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Varisu,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,South Epi,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,North Tongoa,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Makimae,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Tongariki,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Nguna,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Emau,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Malorua,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,North Efate,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Mele,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Tanvasoko,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Ifira,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Pango,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Erakor,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Eratap,number,0.2
+2025,Energy,Low Voltage Poles Support,Shefa,Eton,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,North Erromango,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,South Erromango,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,Aniwa,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,North Tanna,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,West Tanna,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,Middle Bush Tanna,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,South West Tanna,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,Whitesands,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,South Tanna,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,Futuna,number,0.2
+2025,Energy,Low Voltage Poles Support,Tafea,Aneityum,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,Torres,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,Ureparapara,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,Motalava,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,East Vanualava,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,West Vanualava,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,Mota,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,East Gaua,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,West Gaua,number,0.2
+2025,Energy,High Voltage Pole Support,Torba,Merelava,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,Luganville,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,North West Santo,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,Big Bay Coast,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,Big Bay Inland,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,West Santo,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,South Santo 1,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,South Santo 2,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,East Santo,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,South East Santo,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,Canal Fanafo,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,West Malo,number,0.2
+2025,Energy,High Voltage Pole Support,Sanma,East Malo,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,West Ambae,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,North Ambae,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,East Ambae,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,South Ambae,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,North Maewo,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,South Maewo,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,North Pentecost,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,Central Pentecost 1,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,Central Pentecost 2,number,0.2
+2025,Energy,High Voltage Pole Support,Penama,South Pentecost,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,North West Malekula,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,North East Malekula,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,Central Malekula,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,South West Malekula,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,South East Malekula,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,South Malekula,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,North Ambrym,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,West Ambrym,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,South East Ambrym,number,0.2
+2025,Energy,High Voltage Pole Support,Malampa,Paama,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Port Vila,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Vermali,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Vermaul,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Varisu,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,South Epi,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,North Tongoa,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Makimae,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Tongariki,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Nguna,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Emau,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Malorua,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,North Efate,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Mele,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Tanvasoko,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Ifira,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Pango,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Erakor,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Eratap,number,0.2
+2025,Energy,High Voltage Pole Support,Shefa,Eton,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,North Erromango,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,South Erromango,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,Aniwa,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,North Tanna,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,West Tanna,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,Middle Bush Tanna,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,South West Tanna,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,Whitesands,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,South Tanna,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,Futuna,number,0.2
+2025,Energy,High Voltage Pole Support,Tafea,Aneityum,number,0.2
+2025,Energy,Power Line Cable,Torba,Torres,metre,100
+2025,Energy,Power Line Cable,Torba,Ureparapara,metre,100
+2025,Energy,Power Line Cable,Torba,Motalava,metre,100
+2025,Energy,Power Line Cable,Torba,East Vanualava,metre,100
+2025,Energy,Power Line Cable,Torba,West Vanualava,metre,100
+2025,Energy,Power Line Cable,Torba,Mota,metre,100
+2025,Energy,Power Line Cable,Torba,East Gaua,metre,100
+2025,Energy,Power Line Cable,Torba,West Gaua,metre,100
+2025,Energy,Power Line Cable,Torba,Merelava,metre,100
+2025,Energy,Power Line Cable,Sanma,Luganville,metre,100
+2025,Energy,Power Line Cable,Sanma,North West Santo,metre,100
+2025,Energy,Power Line Cable,Sanma,Big Bay Coast,metre,100
+2025,Energy,Power Line Cable,Sanma,Big Bay Inland,metre,100
+2025,Energy,Power Line Cable,Sanma,West Santo,metre,100
+2025,Energy,Power Line Cable,Sanma,South Santo 1,metre,100
+2025,Energy,Power Line Cable,Sanma,South Santo 2,metre,100
+2025,Energy,Power Line Cable,Sanma,East Santo,metre,100
+2025,Energy,Power Line Cable,Sanma,South East Santo,metre,100
+2025,Energy,Power Line Cable,Sanma,Canal Fanafo,metre,100
+2025,Energy,Power Line Cable,Sanma,West Malo,metre,100
+2025,Energy,Power Line Cable,Sanma,East Malo,metre,100
+2025,Energy,Power Line Cable,Penama,West Ambae,metre,100
+2025,Energy,Power Line Cable,Penama,North Ambae,metre,100
+2025,Energy,Power Line Cable,Penama,East Ambae,metre,100
+2025,Energy,Power Line Cable,Penama,South Ambae,metre,100
+2025,Energy,Power Line Cable,Penama,North Maewo,metre,100
+2025,Energy,Power Line Cable,Penama,South Maewo,metre,100
+2025,Energy,Power Line Cable,Penama,North Pentecost,metre,100
+2025,Energy,Power Line Cable,Penama,Central Pentecost 1,metre,100
+2025,Energy,Power Line Cable,Penama,Central Pentecost 2,metre,100
+2025,Energy,Power Line Cable,Penama,South Pentecost,metre,100
+2025,Energy,Power Line Cable,Malampa,North West Malekula,metre,100
+2025,Energy,Power Line Cable,Malampa,North East Malekula,metre,100
+2025,Energy,Power Line Cable,Malampa,Central Malekula,metre,100
+2025,Energy,Power Line Cable,Malampa,South West Malekula,metre,100
+2025,Energy,Power Line Cable,Malampa,South East Malekula,metre,100
+2025,Energy,Power Line Cable,Malampa,South Malekula,metre,100
+2025,Energy,Power Line Cable,Malampa,North Ambrym,metre,100
+2025,Energy,Power Line Cable,Malampa,West Ambrym,metre,100
+2025,Energy,Power Line Cable,Malampa,South East Ambrym,metre,100
+2025,Energy,Power Line Cable,Malampa,Paama,metre,100
+2025,Energy,Power Line Cable,Shefa,Port Vila,metre,100
+2025,Energy,Power Line Cable,Shefa,Vermali,metre,100
+2025,Energy,Power Line Cable,Shefa,Vermaul,metre,100
+2025,Energy,Power Line Cable,Shefa,Varisu,metre,100
+2025,Energy,Power Line Cable,Shefa,South Epi,metre,100
+2025,Energy,Power Line Cable,Shefa,North Tongoa,metre,100
+2025,Energy,Power Line Cable,Shefa,Makimae,metre,100
+2025,Energy,Power Line Cable,Shefa,Tongariki,metre,100
+2025,Energy,Power Line Cable,Shefa,Nguna,metre,100
+2025,Energy,Power Line Cable,Shefa,Emau,metre,100
+2025,Energy,Power Line Cable,Shefa,Malorua,metre,100
+2025,Energy,Power Line Cable,Shefa,North Efate,metre,100
+2025,Energy,Power Line Cable,Shefa,Mele,metre,100
+2025,Energy,Power Line Cable,Shefa,Tanvasoko,metre,100
+2025,Energy,Power Line Cable,Shefa,Ifira,metre,100
+2025,Energy,Power Line Cable,Shefa,Pango,metre,100
+2025,Energy,Power Line Cable,Shefa,Erakor,metre,100
+2025,Energy,Power Line Cable,Shefa,Eratap,metre,100
+2025,Energy,Power Line Cable,Shefa,Eton,metre,100
+2025,Energy,Power Line Cable,Tafea,North Erromango,metre,100
+2025,Energy,Power Line Cable,Tafea,South Erromango,metre,100
+2025,Energy,Power Line Cable,Tafea,Aniwa,metre,100
+2025,Energy,Power Line Cable,Tafea,North Tanna,metre,100
+2025,Energy,Power Line Cable,Tafea,West Tanna,metre,100
+2025,Energy,Power Line Cable,Tafea,Middle Bush Tanna,metre,100
+2025,Energy,Power Line Cable,Tafea,South West Tanna,metre,100
+2025,Energy,Power Line Cable,Tafea,Whitesands,metre,100
+2025,Energy,Power Line Cable,Tafea,South Tanna,metre,100
+2025,Energy,Power Line Cable,Tafea,Futuna,metre,100
+2025,Energy,Power Line Cable,Tafea,Aneityum,metre,100
+2025,Food Security,Island Cabbage Cuttings,Torba,Torres,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,Ureparapara,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,Motalava,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,East Vanualava,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,West Vanualava,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,Mota,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,East Gaua,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,West Gaua,number,20
+2025,Food Security,Island Cabbage Cuttings,Torba,Merelava,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,Luganville,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,North West Santo,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,Big Bay Coast,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,Big Bay Inland,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,West Santo,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,South Santo 1,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,South Santo 2,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,East Santo,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,South East Santo,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,Canal Fanafo,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,West Malo,number,20
+2025,Food Security,Island Cabbage Cuttings,Sanma,East Malo,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,West Ambae,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,North Ambae,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,East Ambae,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,South Ambae,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,North Maewo,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,South Maewo,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,North Pentecost,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,Central Pentecost 1,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,Central Pentecost 2,number,20
+2025,Food Security,Island Cabbage Cuttings,Penama,South Pentecost,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,North West Malekula,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,North East Malekula,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,Central Malekula,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,South West Malekula,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,South East Malekula,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,South Malekula,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,North Ambrym,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,West Ambrym,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,South East Ambrym,number,20
+2025,Food Security,Island Cabbage Cuttings,Malampa,Paama,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Port Vila,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Vermali,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Vermaul,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Varisu,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,South Epi,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,North Tongoa,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Makimae,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Tongariki,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Nguna,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Emau,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Malorua,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,North Efate,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Mele,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Tanvasoko,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Ifira,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Pango,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Erakor,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Eratap,number,20
+2025,Food Security,Island Cabbage Cuttings,Shefa,Eton,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,North Erromango,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,South Erromango,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,Aniwa,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,North Tanna,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,West Tanna,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,Middle Bush Tanna,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,South West Tanna,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,Whitesands,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,South Tanna,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,Futuna,number,20
+2025,Food Security,Island Cabbage Cuttings,Tafea,Aneityum,number,20
+2025,Food Security,Taro Seedlings,Torba,Torres,number,40
+2025,Food Security,Taro Seedlings,Torba,Ureparapara,number,40
+2025,Food Security,Taro Seedlings,Torba,Motalava,number,40
+2025,Food Security,Taro Seedlings,Torba,East Vanualava,number,40
+2025,Food Security,Taro Seedlings,Torba,West Vanualava,number,40
+2025,Food Security,Taro Seedlings,Torba,Mota,number,40
+2025,Food Security,Taro Seedlings,Torba,East Gaua,number,40
+2025,Food Security,Taro Seedlings,Torba,West Gaua,number,40
+2025,Food Security,Taro Seedlings,Torba,Merelava,number,40
+2025,Food Security,Taro Seedlings,Sanma,Luganville,number,40
+2025,Food Security,Taro Seedlings,Sanma,North West Santo,number,40
+2025,Food Security,Taro Seedlings,Sanma,Big Bay Coast,number,40
+2025,Food Security,Taro Seedlings,Sanma,Big Bay Inland,number,40
+2025,Food Security,Taro Seedlings,Sanma,West Santo,number,40
+2025,Food Security,Taro Seedlings,Sanma,South Santo 1,number,40
+2025,Food Security,Taro Seedlings,Sanma,South Santo 2,number,40
+2025,Food Security,Taro Seedlings,Sanma,East Santo,number,40
+2025,Food Security,Taro Seedlings,Sanma,South East Santo,number,40
+2025,Food Security,Taro Seedlings,Sanma,Canal Fanafo,number,40
+2025,Food Security,Taro Seedlings,Sanma,West Malo,number,40
+2025,Food Security,Taro Seedlings,Sanma,East Malo,number,40
+2025,Food Security,Taro Seedlings,Penama,West Ambae,number,40
+2025,Food Security,Taro Seedlings,Penama,North Ambae,number,40
+2025,Food Security,Taro Seedlings,Penama,East Ambae,number,40
+2025,Food Security,Taro Seedlings,Penama,South Ambae,number,40
+2025,Food Security,Taro Seedlings,Penama,North Maewo,number,40
+2025,Food Security,Taro Seedlings,Penama,South Maewo,number,40
+2025,Food Security,Taro Seedlings,Penama,North Pentecost,number,40
+2025,Food Security,Taro Seedlings,Penama,Central Pentecost 1,number,40
+2025,Food Security,Taro Seedlings,Penama,Central Pentecost 2,number,40
+2025,Food Security,Taro Seedlings,Penama,South Pentecost,number,40
+2025,Food Security,Taro Seedlings,Malampa,North West Malekula,number,40
+2025,Food Security,Taro Seedlings,Malampa,North East Malekula,number,40
+2025,Food Security,Taro Seedlings,Malampa,Central Malekula,number,40
+2025,Food Security,Taro Seedlings,Malampa,South West Malekula,number,40
+2025,Food Security,Taro Seedlings,Malampa,South East Malekula,number,40
+2025,Food Security,Taro Seedlings,Malampa,South Malekula,number,40
+2025,Food Security,Taro Seedlings,Malampa,North Ambrym,number,40
+2025,Food Security,Taro Seedlings,Malampa,West Ambrym,number,40
+2025,Food Security,Taro Seedlings,Malampa,South East Ambrym,number,40
+2025,Food Security,Taro Seedlings,Malampa,Paama,number,40
+2025,Food Security,Taro Seedlings,Shefa,Port Vila,number,40
+2025,Food Security,Taro Seedlings,Shefa,Vermali,number,40
+2025,Food Security,Taro Seedlings,Shefa,Vermaul,number,40
+2025,Food Security,Taro Seedlings,Shefa,Varisu,number,40
+2025,Food Security,Taro Seedlings,Shefa,South Epi,number,40
+2025,Food Security,Taro Seedlings,Shefa,North Tongoa,number,40
+2025,Food Security,Taro Seedlings,Shefa,Makimae,number,40
+2025,Food Security,Taro Seedlings,Shefa,Tongariki,number,40
+2025,Food Security,Taro Seedlings,Shefa,Nguna,number,40
+2025,Food Security,Taro Seedlings,Shefa,Emau,number,40
+2025,Food Security,Taro Seedlings,Shefa,Malorua,number,40
+2025,Food Security,Taro Seedlings,Shefa,North Efate,number,40
+2025,Food Security,Taro Seedlings,Shefa,Mele,number,40
+2025,Food Security,Taro Seedlings,Shefa,Tanvasoko,number,40
+2025,Food Security,Taro Seedlings,Shefa,Ifira,number,40
+2025,Food Security,Taro Seedlings,Shefa,Pango,number,40
+2025,Food Security,Taro Seedlings,Shefa,Erakor,number,40
+2025,Food Security,Taro Seedlings,Shefa,Eratap,number,40
+2025,Food Security,Taro Seedlings,Shefa,Eton,number,40
+2025,Food Security,Taro Seedlings,Tafea,North Erromango,number,40
+2025,Food Security,Taro Seedlings,Tafea,South Erromango,number,40
+2025,Food Security,Taro Seedlings,Tafea,Aniwa,number,40
+2025,Food Security,Taro Seedlings,Tafea,North Tanna,number,40
+2025,Food Security,Taro Seedlings,Tafea,West Tanna,number,40
+2025,Food Security,Taro Seedlings,Tafea,Middle Bush Tanna,number,40
+2025,Food Security,Taro Seedlings,Tafea,South West Tanna,number,40
+2025,Food Security,Taro Seedlings,Tafea,Whitesands,number,40
+2025,Food Security,Taro Seedlings,Tafea,South Tanna,number,40
+2025,Food Security,Taro Seedlings,Tafea,Futuna,number,40
+2025,Food Security,Taro Seedlings,Tafea,Aneityum,number,40
+2025,Food Security,Kumala Cuttings,Torba,Torres,number,100
+2025,Food Security,Kumala Cuttings,Torba,Ureparapara,number,100
+2025,Food Security,Kumala Cuttings,Torba,Motalava,number,100
+2025,Food Security,Kumala Cuttings,Torba,East Vanualava,number,100
+2025,Food Security,Kumala Cuttings,Torba,West Vanualava,number,100
+2025,Food Security,Kumala Cuttings,Torba,Mota,number,100
+2025,Food Security,Kumala Cuttings,Torba,East Gaua,number,100
+2025,Food Security,Kumala Cuttings,Torba,West Gaua,number,100
+2025,Food Security,Kumala Cuttings,Torba,Merelava,number,100
+2025,Food Security,Kumala Cuttings,Sanma,Luganville,number,100
+2025,Food Security,Kumala Cuttings,Sanma,North West Santo,number,100
+2025,Food Security,Kumala Cuttings,Sanma,Big Bay Coast,number,100
+2025,Food Security,Kumala Cuttings,Sanma,Big Bay Inland,number,100
+2025,Food Security,Kumala Cuttings,Sanma,West Santo,number,100
+2025,Food Security,Kumala Cuttings,Sanma,South Santo 1,number,100
+2025,Food Security,Kumala Cuttings,Sanma,South Santo 2,number,100
+2025,Food Security,Kumala Cuttings,Sanma,East Santo,number,100
+2025,Food Security,Kumala Cuttings,Sanma,South East Santo,number,100
+2025,Food Security,Kumala Cuttings,Sanma,Canal Fanafo,number,100
+2025,Food Security,Kumala Cuttings,Sanma,West Malo,number,100
+2025,Food Security,Kumala Cuttings,Sanma,East Malo,number,100
+2025,Food Security,Kumala Cuttings,Penama,West Ambae,number,100
+2025,Food Security,Kumala Cuttings,Penama,North Ambae,number,100
+2025,Food Security,Kumala Cuttings,Penama,East Ambae,number,100
+2025,Food Security,Kumala Cuttings,Penama,South Ambae,number,100
+2025,Food Security,Kumala Cuttings,Penama,North Maewo,number,100
+2025,Food Security,Kumala Cuttings,Penama,South Maewo,number,100
+2025,Food Security,Kumala Cuttings,Penama,North Pentecost,number,100
+2025,Food Security,Kumala Cuttings,Penama,Central Pentecost 1,number,100
+2025,Food Security,Kumala Cuttings,Penama,Central Pentecost 2,number,100
+2025,Food Security,Kumala Cuttings,Penama,South Pentecost,number,100
+2025,Food Security,Kumala Cuttings,Malampa,North West Malekula,number,100
+2025,Food Security,Kumala Cuttings,Malampa,North East Malekula,number,100
+2025,Food Security,Kumala Cuttings,Malampa,Central Malekula,number,100
+2025,Food Security,Kumala Cuttings,Malampa,South West Malekula,number,100
+2025,Food Security,Kumala Cuttings,Malampa,South East Malekula,number,100
+2025,Food Security,Kumala Cuttings,Malampa,South Malekula,number,100
+2025,Food Security,Kumala Cuttings,Malampa,North Ambrym,number,100
+2025,Food Security,Kumala Cuttings,Malampa,West Ambrym,number,100
+2025,Food Security,Kumala Cuttings,Malampa,South East Ambrym,number,100
+2025,Food Security,Kumala Cuttings,Malampa,Paama,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Port Vila,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Vermali,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Vermaul,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Varisu,number,100
+2025,Food Security,Kumala Cuttings,Shefa,South Epi,number,100
+2025,Food Security,Kumala Cuttings,Shefa,North Tongoa,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Makimae,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Tongariki,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Nguna,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Emau,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Malorua,number,100
+2025,Food Security,Kumala Cuttings,Shefa,North Efate,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Mele,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Tanvasoko,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Ifira,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Pango,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Erakor,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Eratap,number,100
+2025,Food Security,Kumala Cuttings,Shefa,Eton,number,100
+2025,Food Security,Kumala Cuttings,Tafea,North Erromango,number,100
+2025,Food Security,Kumala Cuttings,Tafea,South Erromango,number,100
+2025,Food Security,Kumala Cuttings,Tafea,Aniwa,number,100
+2025,Food Security,Kumala Cuttings,Tafea,North Tanna,number,100
+2025,Food Security,Kumala Cuttings,Tafea,West Tanna,number,100
+2025,Food Security,Kumala Cuttings,Tafea,Middle Bush Tanna,number,100
+2025,Food Security,Kumala Cuttings,Tafea,South West Tanna,number,100
+2025,Food Security,Kumala Cuttings,Tafea,Whitesands,number,100
+2025,Food Security,Kumala Cuttings,Tafea,South Tanna,number,100
+2025,Food Security,Kumala Cuttings,Tafea,Futuna,number,100
+2025,Food Security,Kumala Cuttings,Tafea,Aneityum,number,100
+2025,Food Security,Manioc Cuttings,Torba,Torres,number,50
+2025,Food Security,Manioc Cuttings,Torba,Ureparapara,number,50
+2025,Food Security,Manioc Cuttings,Torba,Motalava,number,50
+2025,Food Security,Manioc Cuttings,Torba,East Vanualava,number,50
+2025,Food Security,Manioc Cuttings,Torba,West Vanualava,number,50
+2025,Food Security,Manioc Cuttings,Torba,Mota,number,50
+2025,Food Security,Manioc Cuttings,Torba,East Gaua,number,50
+2025,Food Security,Manioc Cuttings,Torba,West Gaua,number,50
+2025,Food Security,Manioc Cuttings,Torba,Merelava,number,50
+2025,Food Security,Manioc Cuttings,Sanma,Luganville,number,50
+2025,Food Security,Manioc Cuttings,Sanma,North West Santo,number,50
+2025,Food Security,Manioc Cuttings,Sanma,Big Bay Coast,number,50
+2025,Food Security,Manioc Cuttings,Sanma,Big Bay Inland,number,50
+2025,Food Security,Manioc Cuttings,Sanma,West Santo,number,50
+2025,Food Security,Manioc Cuttings,Sanma,South Santo 1,number,50
+2025,Food Security,Manioc Cuttings,Sanma,South Santo 2,number,50
+2025,Food Security,Manioc Cuttings,Sanma,East Santo,number,50
+2025,Food Security,Manioc Cuttings,Sanma,South East Santo,number,50
+2025,Food Security,Manioc Cuttings,Sanma,Canal Fanafo,number,50
+2025,Food Security,Manioc Cuttings,Sanma,West Malo,number,50
+2025,Food Security,Manioc Cuttings,Sanma,East Malo,number,50
+2025,Food Security,Manioc Cuttings,Penama,West Ambae,number,50
+2025,Food Security,Manioc Cuttings,Penama,North Ambae,number,50
+2025,Food Security,Manioc Cuttings,Penama,East Ambae,number,50
+2025,Food Security,Manioc Cuttings,Penama,South Ambae,number,50
+2025,Food Security,Manioc Cuttings,Penama,North Maewo,number,50
+2025,Food Security,Manioc Cuttings,Penama,South Maewo,number,50
+2025,Food Security,Manioc Cuttings,Penama,North Pentecost,number,50
+2025,Food Security,Manioc Cuttings,Penama,Central Pentecost 1,number,50
+2025,Food Security,Manioc Cuttings,Penama,Central Pentecost 2,number,50
+2025,Food Security,Manioc Cuttings,Penama,South Pentecost,number,50
+2025,Food Security,Manioc Cuttings,Malampa,North West Malekula,number,50
+2025,Food Security,Manioc Cuttings,Malampa,North East Malekula,number,50
+2025,Food Security,Manioc Cuttings,Malampa,Central Malekula,number,50
+2025,Food Security,Manioc Cuttings,Malampa,South West Malekula,number,50
+2025,Food Security,Manioc Cuttings,Malampa,South East Malekula,number,50
+2025,Food Security,Manioc Cuttings,Malampa,South Malekula,number,50
+2025,Food Security,Manioc Cuttings,Malampa,North Ambrym,number,50
+2025,Food Security,Manioc Cuttings,Malampa,West Ambrym,number,50
+2025,Food Security,Manioc Cuttings,Malampa,South East Ambrym,number,50
+2025,Food Security,Manioc Cuttings,Malampa,Paama,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Port Vila,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Vermali,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Vermaul,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Varisu,number,50
+2025,Food Security,Manioc Cuttings,Shefa,South Epi,number,50
+2025,Food Security,Manioc Cuttings,Shefa,North Tongoa,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Makimae,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Tongariki,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Nguna,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Emau,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Malorua,number,50
+2025,Food Security,Manioc Cuttings,Shefa,North Efate,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Mele,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Tanvasoko,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Ifira,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Pango,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Erakor,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Eratap,number,50
+2025,Food Security,Manioc Cuttings,Shefa,Eton,number,50
+2025,Food Security,Manioc Cuttings,Tafea,North Erromango,number,50
+2025,Food Security,Manioc Cuttings,Tafea,South Erromango,number,50
+2025,Food Security,Manioc Cuttings,Tafea,Aniwa,number,50
+2025,Food Security,Manioc Cuttings,Tafea,North Tanna,number,50
+2025,Food Security,Manioc Cuttings,Tafea,West Tanna,number,50
+2025,Food Security,Manioc Cuttings,Tafea,Middle Bush Tanna,number,50
+2025,Food Security,Manioc Cuttings,Tafea,South West Tanna,number,50
+2025,Food Security,Manioc Cuttings,Tafea,Whitesands,number,50
+2025,Food Security,Manioc Cuttings,Tafea,South Tanna,number,50
+2025,Food Security,Manioc Cuttings,Tafea,Futuna,number,50
+2025,Food Security,Manioc Cuttings,Tafea,Aneityum,number,50
+2025,Food Security,Yam Cuttings,Torba,Torres,number,15
+2025,Food Security,Yam Cuttings,Torba,Ureparapara,number,15
+2025,Food Security,Yam Cuttings,Torba,Motalava,number,15
+2025,Food Security,Yam Cuttings,Torba,East Vanualava,number,15
+2025,Food Security,Yam Cuttings,Torba,West Vanualava,number,15
+2025,Food Security,Yam Cuttings,Torba,Mota,number,15
+2025,Food Security,Yam Cuttings,Torba,East Gaua,number,15
+2025,Food Security,Yam Cuttings,Torba,West Gaua,number,15
+2025,Food Security,Yam Cuttings,Torba,Merelava,number,15
+2025,Food Security,Yam Cuttings,Sanma,Luganville,number,15
+2025,Food Security,Yam Cuttings,Sanma,North West Santo,number,15
+2025,Food Security,Yam Cuttings,Sanma,Big Bay Coast,number,15
+2025,Food Security,Yam Cuttings,Sanma,Big Bay Inland,number,15
+2025,Food Security,Yam Cuttings,Sanma,West Santo,number,15
+2025,Food Security,Yam Cuttings,Sanma,South Santo 1,number,15
+2025,Food Security,Yam Cuttings,Sanma,South Santo 2,number,15
+2025,Food Security,Yam Cuttings,Sanma,East Santo,number,15
+2025,Food Security,Yam Cuttings,Sanma,South East Santo,number,15
+2025,Food Security,Yam Cuttings,Sanma,Canal Fanafo,number,15
+2025,Food Security,Yam Cuttings,Sanma,West Malo,number,15
+2025,Food Security,Yam Cuttings,Sanma,East Malo,number,15
+2025,Food Security,Yam Cuttings,Penama,West Ambae,number,15
+2025,Food Security,Yam Cuttings,Penama,North Ambae,number,15
+2025,Food Security,Yam Cuttings,Penama,East Ambae,number,15
+2025,Food Security,Yam Cuttings,Penama,South Ambae,number,15
+2025,Food Security,Yam Cuttings,Penama,North Maewo,number,15
+2025,Food Security,Yam Cuttings,Penama,South Maewo,number,15
+2025,Food Security,Yam Cuttings,Penama,North Pentecost,number,15
+2025,Food Security,Yam Cuttings,Penama,Central Pentecost 1,number,15
+2025,Food Security,Yam Cuttings,Penama,Central Pentecost 2,number,15
+2025,Food Security,Yam Cuttings,Penama,South Pentecost,number,15
+2025,Food Security,Yam Cuttings,Malampa,North West Malekula,number,15
+2025,Food Security,Yam Cuttings,Malampa,North East Malekula,number,15
+2025,Food Security,Yam Cuttings,Malampa,Central Malekula,number,15
+2025,Food Security,Yam Cuttings,Malampa,South West Malekula,number,15
+2025,Food Security,Yam Cuttings,Malampa,South East Malekula,number,15
+2025,Food Security,Yam Cuttings,Malampa,South Malekula,number,15
+2025,Food Security,Yam Cuttings,Malampa,North Ambrym,number,15
+2025,Food Security,Yam Cuttings,Malampa,West Ambrym,number,15
+2025,Food Security,Yam Cuttings,Malampa,South East Ambrym,number,15
+2025,Food Security,Yam Cuttings,Malampa,Paama,number,15
+2025,Food Security,Yam Cuttings,Shefa,Port Vila,number,15
+2025,Food Security,Yam Cuttings,Shefa,Vermali,number,15
+2025,Food Security,Yam Cuttings,Shefa,Vermaul,number,15
+2025,Food Security,Yam Cuttings,Shefa,Varisu,number,15
+2025,Food Security,Yam Cuttings,Shefa,South Epi,number,15
+2025,Food Security,Yam Cuttings,Shefa,North Tongoa,number,15
+2025,Food Security,Yam Cuttings,Shefa,Makimae,number,15
+2025,Food Security,Yam Cuttings,Shefa,Tongariki,number,15
+2025,Food Security,Yam Cuttings,Shefa,Nguna,number,15
+2025,Food Security,Yam Cuttings,Shefa,Emau,number,15
+2025,Food Security,Yam Cuttings,Shefa,Malorua,number,15
+2025,Food Security,Yam Cuttings,Shefa,North Efate,number,15
+2025,Food Security,Yam Cuttings,Shefa,Mele,number,15
+2025,Food Security,Yam Cuttings,Shefa,Tanvasoko,number,15
+2025,Food Security,Yam Cuttings,Shefa,Ifira,number,15
+2025,Food Security,Yam Cuttings,Shefa,Pango,number,15
+2025,Food Security,Yam Cuttings,Shefa,Erakor,number,15
+2025,Food Security,Yam Cuttings,Shefa,Eratap,number,15
+2025,Food Security,Yam Cuttings,Shefa,Eton,number,15
+2025,Food Security,Yam Cuttings,Tafea,North Erromango,number,15
+2025,Food Security,Yam Cuttings,Tafea,South Erromango,number,15
+2025,Food Security,Yam Cuttings,Tafea,Aniwa,number,15
+2025,Food Security,Yam Cuttings,Tafea,North Tanna,number,15
+2025,Food Security,Yam Cuttings,Tafea,West Tanna,number,15
+2025,Food Security,Yam Cuttings,Tafea,Middle Bush Tanna,number,15
+2025,Food Security,Yam Cuttings,Tafea,South West Tanna,number,15
+2025,Food Security,Yam Cuttings,Tafea,Whitesands,number,15
+2025,Food Security,Yam Cuttings,Tafea,South Tanna,number,15
+2025,Food Security,Yam Cuttings,Tafea,Futuna,number,15
+2025,Food Security,Yam Cuttings,Tafea,Aneityum,number,15
+2025,Gender & Protection,Water,Torba,Torres,litre,0.5
+2025,Gender & Protection,Water,Torba,Ureparapara,litre,0.5
+2025,Gender & Protection,Water,Torba,Motalava,litre,0.5
+2025,Gender & Protection,Water,Torba,East Vanualava,litre,0.5
+2025,Gender & Protection,Water,Torba,West Vanualava,litre,0.5
+2025,Gender & Protection,Water,Torba,Mota,litre,0.5
+2025,Gender & Protection,Water,Torba,East Gaua,litre,0.5
+2025,Gender & Protection,Water,Torba,West Gaua,litre,0.5
+2025,Gender & Protection,Water,Torba,Merelava,litre,0.5
+2025,Gender & Protection,Water,Sanma,Luganville,litre,0.5
+2025,Gender & Protection,Water,Sanma,North West Santo,litre,0.5
+2025,Gender & Protection,Water,Sanma,Big Bay Coast,litre,0.5
+2025,Gender & Protection,Water,Sanma,Big Bay Inland,litre,0.5
+2025,Gender & Protection,Water,Sanma,West Santo,litre,0.5
+2025,Gender & Protection,Water,Sanma,South Santo 1,litre,0.5
+2025,Gender & Protection,Water,Sanma,South Santo 2,litre,0.5
+2025,Gender & Protection,Water,Sanma,East Santo,litre,0.5
+2025,Gender & Protection,Water,Sanma,South East Santo,litre,0.5
+2025,Gender & Protection,Water,Sanma,Canal Fanafo,litre,0.5
+2025,Gender & Protection,Water,Sanma,West Malo,litre,0.5
+2025,Gender & Protection,Water,Sanma,East Malo,litre,0.5
+2025,Gender & Protection,Water,Penama,West Ambae,litre,0.5
+2025,Gender & Protection,Water,Penama,North Ambae,litre,0.5
+2025,Gender & Protection,Water,Penama,East Ambae,litre,0.5
+2025,Gender & Protection,Water,Penama,South Ambae,litre,0.5
+2025,Gender & Protection,Water,Penama,North Maewo,litre,0.5
+2025,Gender & Protection,Water,Penama,South Maewo,litre,0.5
+2025,Gender & Protection,Water,Penama,North Pentecost,litre,0.5
+2025,Gender & Protection,Water,Penama,Central Pentecost 1,litre,0.5
+2025,Gender & Protection,Water,Penama,Central Pentecost 2,litre,0.5
+2025,Gender & Protection,Water,Penama,South Pentecost,litre,0.5
+2025,Gender & Protection,Water,Malampa,North West Malekula,litre,0.5
+2025,Gender & Protection,Water,Malampa,North East Malekula,litre,0.5
+2025,Gender & Protection,Water,Malampa,Central Malekula,litre,0.5
+2025,Gender & Protection,Water,Malampa,South West Malekula,litre,0.5
+2025,Gender & Protection,Water,Malampa,South East Malekula,litre,0.5
+2025,Gender & Protection,Water,Malampa,South Malekula,litre,0.5
+2025,Gender & Protection,Water,Malampa,North Ambrym,litre,0.5
+2025,Gender & Protection,Water,Malampa,West Ambrym,litre,0.5
+2025,Gender & Protection,Water,Malampa,South East Ambrym,litre,0.5
+2025,Gender & Protection,Water,Malampa,Paama,litre,0.5
+2025,Gender & Protection,Water,Shefa,Port Vila,litre,0.5
+2025,Gender & Protection,Water,Shefa,Vermali,litre,0.5
+2025,Gender & Protection,Water,Shefa,Vermaul,litre,0.5
+2025,Gender & Protection,Water,Shefa,Varisu,litre,0.5
+2025,Gender & Protection,Water,Shefa,South Epi,litre,0.5
+2025,Gender & Protection,Water,Shefa,North Tongoa,litre,0.5
+2025,Gender & Protection,Water,Shefa,Makimae,litre,0.5
+2025,Gender & Protection,Water,Shefa,Tongariki,litre,0.5
+2025,Gender & Protection,Water,Shefa,Nguna,litre,0.5
+2025,Gender & Protection,Water,Shefa,Emau,litre,0.5
+2025,Gender & Protection,Water,Shefa,Malorua,litre,0.5
+2025,Gender & Protection,Water,Shefa,North Efate,litre,0.5
+2025,Gender & Protection,Water,Shefa,Mele,litre,0.5
+2025,Gender & Protection,Water,Shefa,Tanvasoko,litre,0.5
+2025,Gender & Protection,Water,Shefa,Ifira,litre,0.5
+2025,Gender & Protection,Water,Shefa,Pango,litre,0.5
+2025,Gender & Protection,Water,Shefa,Erakor,litre,0.5
+2025,Gender & Protection,Water,Shefa,Eratap,litre,0.5
+2025,Gender & Protection,Water,Shefa,Eton,litre,0.5
+2025,Gender & Protection,Water,Tafea,North Erromango,litre,0.5
+2025,Gender & Protection,Water,Tafea,South Erromango,litre,0.5
+2025,Gender & Protection,Water,Tafea,Aniwa,litre,0.5
+2025,Gender & Protection,Water,Tafea,North Tanna,litre,0.5
+2025,Gender & Protection,Water,Tafea,West Tanna,litre,0.5
+2025,Gender & Protection,Water,Tafea,Middle Bush Tanna,litre,0.5
+2025,Gender & Protection,Water,Tafea,South West Tanna,litre,0.5
+2025,Gender & Protection,Water,Tafea,Whitesands,litre,0.5
+2025,Gender & Protection,Water,Tafea,South Tanna,litre,0.5
+2025,Gender & Protection,Water,Tafea,Futuna,litre,0.5
+2025,Gender & Protection,Water,Tafea,Aneityum,litre,0.5
+2025,Gender & Protection,Tin Fish,Torba,Torres,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,Ureparapara,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,Motalava,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,East Vanualava,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,West Vanualava,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,Mota,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,East Gaua,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,West Gaua,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Torba,Merelava,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,Luganville,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,North West Santo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,Big Bay Coast,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,Big Bay Inland,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,West Santo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,South Santo 1,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,South Santo 2,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,East Santo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,South East Santo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,Canal Fanafo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,West Malo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Sanma,East Malo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,West Ambae,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,North Ambae,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,East Ambae,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,South Ambae,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,North Maewo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,South Maewo,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,North Pentecost,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,Central Pentecost 1,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,Central Pentecost 2,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Penama,South Pentecost,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,North West Malekula,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,North East Malekula,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,Central Malekula,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,South West Malekula,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,South East Malekula,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,South Malekula,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,North Ambrym,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,West Ambrym,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,South East Ambrym,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Malampa,Paama,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Port Vila,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Vermali,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Vermaul,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Varisu,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,South Epi,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,North Tongoa,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Makimae,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Tongariki,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Nguna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Emau,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Malorua,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,North Efate,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Mele,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Tanvasoko,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Ifira,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Pango,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Erakor,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Eratap,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Shefa,Eton,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,North Erromango,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,South Erromango,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,Aniwa,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,North Tanna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,West Tanna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,Middle Bush Tanna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,South West Tanna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,Whitesands,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,South Tanna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,Futuna,kilogram,0.4
+2025,Gender & Protection,Tin Fish,Tafea,Aneityum,kilogram,0.4
+2025,Gender & Protection,Rice,Torba,Torres,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,Ureparapara,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,Motalava,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,East Vanualava,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,West Vanualava,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,Mota,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,East Gaua,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,West Gaua,kilogram,0.2
+2025,Gender & Protection,Rice,Torba,Merelava,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,Luganville,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,North West Santo,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,Big Bay Coast,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,Big Bay Inland,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,West Santo,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,South Santo 1,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,South Santo 2,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,East Santo,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,South East Santo,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,Canal Fanafo,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,West Malo,kilogram,0.2
+2025,Gender & Protection,Rice,Sanma,East Malo,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,West Ambae,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,North Ambae,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,East Ambae,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,South Ambae,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,North Maewo,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,South Maewo,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,North Pentecost,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,Central Pentecost 1,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,Central Pentecost 2,kilogram,0.2
+2025,Gender & Protection,Rice,Penama,South Pentecost,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,North West Malekula,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,North East Malekula,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,Central Malekula,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,South West Malekula,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,South East Malekula,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,South Malekula,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,North Ambrym,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,West Ambrym,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,South East Ambrym,kilogram,0.2
+2025,Gender & Protection,Rice,Malampa,Paama,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Port Vila,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Vermali,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Vermaul,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Varisu,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,South Epi,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,North Tongoa,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Makimae,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Tongariki,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Nguna,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Emau,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Malorua,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,North Efate,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Mele,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Tanvasoko,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Ifira,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Pango,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Erakor,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Eratap,kilogram,0.2
+2025,Gender & Protection,Rice,Shefa,Eton,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,North Erromango,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,South Erromango,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,Aniwa,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,North Tanna,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,West Tanna,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,Middle Bush Tanna,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,South West Tanna,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,Whitesands,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,South Tanna,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,Futuna,kilogram,0.2
+2025,Gender & Protection,Rice,Tafea,Aneityum,kilogram,0.2
+2025,Health,Medical Tent,Torba,Torres,number,1
+2025,Health,Medical Tent,Torba,Ureparapara,number,1
+2025,Health,Medical Tent,Torba,Motalava,number,1
+2025,Health,Medical Tent,Torba,East Vanualava,number,1
+2025,Health,Medical Tent,Torba,West Vanualava,number,1
+2025,Health,Medical Tent,Torba,Mota,number,1
+2025,Health,Medical Tent,Torba,East Gaua,number,1
+2025,Health,Medical Tent,Torba,West Gaua,number,1
+2025,Health,Medical Tent,Torba,Merelava,number,1
+2025,Health,Medical Tent,Sanma,Luganville,number,1
+2025,Health,Medical Tent,Sanma,North West Santo,number,1
+2025,Health,Medical Tent,Sanma,Big Bay Coast,number,1
+2025,Health,Medical Tent,Sanma,Big Bay Inland,number,1
+2025,Health,Medical Tent,Sanma,West Santo,number,1
+2025,Health,Medical Tent,Sanma,South Santo 1,number,1
+2025,Health,Medical Tent,Sanma,South Santo 2,number,1
+2025,Health,Medical Tent,Sanma,East Santo,number,1
+2025,Health,Medical Tent,Sanma,South East Santo,number,1
+2025,Health,Medical Tent,Sanma,Canal Fanafo,number,1
+2025,Health,Medical Tent,Sanma,West Malo,number,1
+2025,Health,Medical Tent,Sanma,East Malo,number,1
+2025,Health,Medical Tent,Penama,West Ambae,number,1
+2025,Health,Medical Tent,Penama,North Ambae,number,1
+2025,Health,Medical Tent,Penama,East Ambae,number,1
+2025,Health,Medical Tent,Penama,South Ambae,number,1
+2025,Health,Medical Tent,Penama,North Maewo,number,1
+2025,Health,Medical Tent,Penama,South Maewo,number,1
+2025,Health,Medical Tent,Penama,North Pentecost,number,1
+2025,Health,Medical Tent,Penama,Central Pentecost 1,number,1
+2025,Health,Medical Tent,Penama,Central Pentecost 2,number,1
+2025,Health,Medical Tent,Penama,South Pentecost,number,1
+2025,Health,Medical Tent,Malampa,North West Malekula,number,1
+2025,Health,Medical Tent,Malampa,North East Malekula,number,1
+2025,Health,Medical Tent,Malampa,Central Malekula,number,1
+2025,Health,Medical Tent,Malampa,South West Malekula,number,1
+2025,Health,Medical Tent,Malampa,South East Malekula,number,1
+2025,Health,Medical Tent,Malampa,South Malekula,number,1
+2025,Health,Medical Tent,Malampa,North Ambrym,number,1
+2025,Health,Medical Tent,Malampa,West Ambrym,number,1
+2025,Health,Medical Tent,Malampa,South East Ambrym,number,1
+2025,Health,Medical Tent,Malampa,Paama,number,1
+2025,Health,Medical Tent,Shefa,Port Vila,number,1
+2025,Health,Medical Tent,Shefa,Vermali,number,1
+2025,Health,Medical Tent,Shefa,Vermaul,number,1
+2025,Health,Medical Tent,Shefa,Varisu,number,1
+2025,Health,Medical Tent,Shefa,South Epi,number,1
+2025,Health,Medical Tent,Shefa,North Tongoa,number,1
+2025,Health,Medical Tent,Shefa,Makimae,number,1
+2025,Health,Medical Tent,Shefa,Tongariki,number,1
+2025,Health,Medical Tent,Shefa,Nguna,number,1
+2025,Health,Medical Tent,Shefa,Emau,number,1
+2025,Health,Medical Tent,Shefa,Malorua,number,1
+2025,Health,Medical Tent,Shefa,North Efate,number,1
+2025,Health,Medical Tent,Shefa,Mele,number,1
+2025,Health,Medical Tent,Shefa,Tanvasoko,number,1
+2025,Health,Medical Tent,Shefa,Ifira,number,1
+2025,Health,Medical Tent,Shefa,Pango,number,1
+2025,Health,Medical Tent,Shefa,Erakor,number,1
+2025,Health,Medical Tent,Shefa,Eratap,number,1
+2025,Health,Medical Tent,Shefa,Eton,number,1
+2025,Health,Medical Tent,Tafea,North Erromango,number,1
+2025,Health,Medical Tent,Tafea,South Erromango,number,1
+2025,Health,Medical Tent,Tafea,Aniwa,number,1
+2025,Health,Medical Tent,Tafea,North Tanna,number,1
+2025,Health,Medical Tent,Tafea,West Tanna,number,1
+2025,Health,Medical Tent,Tafea,Middle Bush Tanna,number,1
+2025,Health,Medical Tent,Tafea,South West Tanna,number,1
+2025,Health,Medical Tent,Tafea,Whitesands,number,1
+2025,Health,Medical Tent,Tafea,South Tanna,number,1
+2025,Health,Medical Tent,Tafea,Futuna,number,1
+2025,Health,Medical Tent,Tafea,Aneityum,number,1
+2025,Health,Emergency Health Kits,Torba,Torres,number,5
+2025,Health,Emergency Health Kits,Torba,Ureparapara,number,5
+2025,Health,Emergency Health Kits,Torba,Motalava,number,5
+2025,Health,Emergency Health Kits,Torba,East Vanualava,number,5
+2025,Health,Emergency Health Kits,Torba,West Vanualava,number,5
+2025,Health,Emergency Health Kits,Torba,Mota,number,5
+2025,Health,Emergency Health Kits,Torba,East Gaua,number,5
+2025,Health,Emergency Health Kits,Torba,West Gaua,number,5
+2025,Health,Emergency Health Kits,Torba,Merelava,number,5
+2025,Health,Emergency Health Kits,Sanma,Luganville,number,5
+2025,Health,Emergency Health Kits,Sanma,North West Santo,number,5
+2025,Health,Emergency Health Kits,Sanma,Big Bay Coast,number,5
+2025,Health,Emergency Health Kits,Sanma,Big Bay Inland,number,5
+2025,Health,Emergency Health Kits,Sanma,West Santo,number,5
+2025,Health,Emergency Health Kits,Sanma,South Santo 1,number,5
+2025,Health,Emergency Health Kits,Sanma,South Santo 2,number,5
+2025,Health,Emergency Health Kits,Sanma,East Santo,number,5
+2025,Health,Emergency Health Kits,Sanma,South East Santo,number,5
+2025,Health,Emergency Health Kits,Sanma,Canal Fanafo,number,5
+2025,Health,Emergency Health Kits,Sanma,West Malo,number,5
+2025,Health,Emergency Health Kits,Sanma,East Malo,number,5
+2025,Health,Emergency Health Kits,Penama,West Ambae,number,5
+2025,Health,Emergency Health Kits,Penama,North Ambae,number,5
+2025,Health,Emergency Health Kits,Penama,East Ambae,number,5
+2025,Health,Emergency Health Kits,Penama,South Ambae,number,5
+2025,Health,Emergency Health Kits,Penama,North Maewo,number,5
+2025,Health,Emergency Health Kits,Penama,South Maewo,number,5
+2025,Health,Emergency Health Kits,Penama,North Pentecost,number,5
+2025,Health,Emergency Health Kits,Penama,Central Pentecost 1,number,5
+2025,Health,Emergency Health Kits,Penama,Central Pentecost 2,number,5
+2025,Health,Emergency Health Kits,Penama,South Pentecost,number,5
+2025,Health,Emergency Health Kits,Malampa,North West Malekula,number,5
+2025,Health,Emergency Health Kits,Malampa,North East Malekula,number,5
+2025,Health,Emergency Health Kits,Malampa,Central Malekula,number,5
+2025,Health,Emergency Health Kits,Malampa,South West Malekula,number,5
+2025,Health,Emergency Health Kits,Malampa,South East Malekula,number,5
+2025,Health,Emergency Health Kits,Malampa,South Malekula,number,5
+2025,Health,Emergency Health Kits,Malampa,North Ambrym,number,5
+2025,Health,Emergency Health Kits,Malampa,West Ambrym,number,5
+2025,Health,Emergency Health Kits,Malampa,South East Ambrym,number,5
+2025,Health,Emergency Health Kits,Malampa,Paama,number,5
+2025,Health,Emergency Health Kits,Shefa,Port Vila,number,5
+2025,Health,Emergency Health Kits,Shefa,Vermali,number,5
+2025,Health,Emergency Health Kits,Shefa,Vermaul,number,5
+2025,Health,Emergency Health Kits,Shefa,Varisu,number,5
+2025,Health,Emergency Health Kits,Shefa,South Epi,number,5
+2025,Health,Emergency Health Kits,Shefa,North Tongoa,number,5
+2025,Health,Emergency Health Kits,Shefa,Makimae,number,5
+2025,Health,Emergency Health Kits,Shefa,Tongariki,number,5
+2025,Health,Emergency Health Kits,Shefa,Nguna,number,5
+2025,Health,Emergency Health Kits,Shefa,Emau,number,5
+2025,Health,Emergency Health Kits,Shefa,Malorua,number,5
+2025,Health,Emergency Health Kits,Shefa,North Efate,number,5
+2025,Health,Emergency Health Kits,Shefa,Mele,number,5
+2025,Health,Emergency Health Kits,Shefa,Tanvasoko,number,5
+2025,Health,Emergency Health Kits,Shefa,Ifira,number,5
+2025,Health,Emergency Health Kits,Shefa,Pango,number,5
+2025,Health,Emergency Health Kits,Shefa,Erakor,number,5
+2025,Health,Emergency Health Kits,Shefa,Eratap,number,5
+2025,Health,Emergency Health Kits,Shefa,Eton,number,5
+2025,Health,Emergency Health Kits,Tafea,North Erromango,number,5
+2025,Health,Emergency Health Kits,Tafea,South Erromango,number,5
+2025,Health,Emergency Health Kits,Tafea,Aniwa,number,5
+2025,Health,Emergency Health Kits,Tafea,North Tanna,number,5
+2025,Health,Emergency Health Kits,Tafea,West Tanna,number,5
+2025,Health,Emergency Health Kits,Tafea,Middle Bush Tanna,number,5
+2025,Health,Emergency Health Kits,Tafea,South West Tanna,number,5
+2025,Health,Emergency Health Kits,Tafea,Whitesands,number,5
+2025,Health,Emergency Health Kits,Tafea,South Tanna,number,5
+2025,Health,Emergency Health Kits,Tafea,Futuna,number,5
+2025,Health,Emergency Health Kits,Tafea,Aneityum,number,5
+2025,Health,Trauma and Surgical Kits,Torba,Torres,number,5
+2025,Health,Trauma and Surgical Kits,Torba,Ureparapara,number,5
+2025,Health,Trauma and Surgical Kits,Torba,Motalava,number,5
+2025,Health,Trauma and Surgical Kits,Torba,East Vanualava,number,5
+2025,Health,Trauma and Surgical Kits,Torba,West Vanualava,number,5
+2025,Health,Trauma and Surgical Kits,Torba,Mota,number,5
+2025,Health,Trauma and Surgical Kits,Torba,East Gaua,number,5
+2025,Health,Trauma and Surgical Kits,Torba,West Gaua,number,5
+2025,Health,Trauma and Surgical Kits,Torba,Merelava,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,Luganville,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,North West Santo,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,Big Bay Coast,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,Big Bay Inland,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,West Santo,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,South Santo 1,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,South Santo 2,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,East Santo,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,South East Santo,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,Canal Fanafo,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,West Malo,number,5
+2025,Health,Trauma and Surgical Kits,Sanma,East Malo,number,5
+2025,Health,Trauma and Surgical Kits,Penama,West Ambae,number,5
+2025,Health,Trauma and Surgical Kits,Penama,North Ambae,number,5
+2025,Health,Trauma and Surgical Kits,Penama,East Ambae,number,5
+2025,Health,Trauma and Surgical Kits,Penama,South Ambae,number,5
+2025,Health,Trauma and Surgical Kits,Penama,North Maewo,number,5
+2025,Health,Trauma and Surgical Kits,Penama,South Maewo,number,5
+2025,Health,Trauma and Surgical Kits,Penama,North Pentecost,number,5
+2025,Health,Trauma and Surgical Kits,Penama,Central Pentecost 1,number,5
+2025,Health,Trauma and Surgical Kits,Penama,Central Pentecost 2,number,5
+2025,Health,Trauma and Surgical Kits,Penama,South Pentecost,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,North West Malekula,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,North East Malekula,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,Central Malekula,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,South West Malekula,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,South East Malekula,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,South Malekula,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,North Ambrym,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,West Ambrym,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,South East Ambrym,number,5
+2025,Health,Trauma and Surgical Kits,Malampa,Paama,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Port Vila,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Vermali,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Vermaul,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Varisu,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,South Epi,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,North Tongoa,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Makimae,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Tongariki,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Nguna,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Emau,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Malorua,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,North Efate,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Mele,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Tanvasoko,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Ifira,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Pango,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Erakor,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Eratap,number,5
+2025,Health,Trauma and Surgical Kits,Shefa,Eton,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,North Erromango,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,South Erromango,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,Aniwa,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,North Tanna,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,West Tanna,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,Middle Bush Tanna,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,South West Tanna,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,Whitesands,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,South Tanna,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,Futuna,number,5
+2025,Health,Trauma and Surgical Kits,Tafea,Aneityum,number,5
+2025,Health,Essential NCD Medicines,Torba,Torres,number,1
+2025,Health,Essential NCD Medicines,Torba,Ureparapara,number,1
+2025,Health,Essential NCD Medicines,Torba,Motalava,number,1
+2025,Health,Essential NCD Medicines,Torba,East Vanualava,number,1
+2025,Health,Essential NCD Medicines,Torba,West Vanualava,number,1
+2025,Health,Essential NCD Medicines,Torba,Mota,number,1
+2025,Health,Essential NCD Medicines,Torba,East Gaua,number,1
+2025,Health,Essential NCD Medicines,Torba,West Gaua,number,1
+2025,Health,Essential NCD Medicines,Torba,Merelava,number,1
+2025,Health,Essential NCD Medicines,Sanma,Luganville,number,1
+2025,Health,Essential NCD Medicines,Sanma,North West Santo,number,1
+2025,Health,Essential NCD Medicines,Sanma,Big Bay Coast,number,1
+2025,Health,Essential NCD Medicines,Sanma,Big Bay Inland,number,1
+2025,Health,Essential NCD Medicines,Sanma,West Santo,number,1
+2025,Health,Essential NCD Medicines,Sanma,South Santo 1,number,1
+2025,Health,Essential NCD Medicines,Sanma,South Santo 2,number,1
+2025,Health,Essential NCD Medicines,Sanma,East Santo,number,1
+2025,Health,Essential NCD Medicines,Sanma,South East Santo,number,1
+2025,Health,Essential NCD Medicines,Sanma,Canal Fanafo,number,1
+2025,Health,Essential NCD Medicines,Sanma,West Malo,number,1
+2025,Health,Essential NCD Medicines,Sanma,East Malo,number,1
+2025,Health,Essential NCD Medicines,Penama,West Ambae,number,1
+2025,Health,Essential NCD Medicines,Penama,North Ambae,number,1
+2025,Health,Essential NCD Medicines,Penama,East Ambae,number,1
+2025,Health,Essential NCD Medicines,Penama,South Ambae,number,1
+2025,Health,Essential NCD Medicines,Penama,North Maewo,number,1
+2025,Health,Essential NCD Medicines,Penama,South Maewo,number,1
+2025,Health,Essential NCD Medicines,Penama,North Pentecost,number,1
+2025,Health,Essential NCD Medicines,Penama,Central Pentecost 1,number,1
+2025,Health,Essential NCD Medicines,Penama,Central Pentecost 2,number,1
+2025,Health,Essential NCD Medicines,Penama,South Pentecost,number,1
+2025,Health,Essential NCD Medicines,Malampa,North West Malekula,number,1
+2025,Health,Essential NCD Medicines,Malampa,North East Malekula,number,1
+2025,Health,Essential NCD Medicines,Malampa,Central Malekula,number,1
+2025,Health,Essential NCD Medicines,Malampa,South West Malekula,number,1
+2025,Health,Essential NCD Medicines,Malampa,South East Malekula,number,1
+2025,Health,Essential NCD Medicines,Malampa,South Malekula,number,1
+2025,Health,Essential NCD Medicines,Malampa,North Ambrym,number,1
+2025,Health,Essential NCD Medicines,Malampa,West Ambrym,number,1
+2025,Health,Essential NCD Medicines,Malampa,South East Ambrym,number,1
+2025,Health,Essential NCD Medicines,Malampa,Paama,number,1
+2025,Health,Essential NCD Medicines,Shefa,Port Vila,number,1
+2025,Health,Essential NCD Medicines,Shefa,Vermali,number,1
+2025,Health,Essential NCD Medicines,Shefa,Vermaul,number,1
+2025,Health,Essential NCD Medicines,Shefa,Varisu,number,1
+2025,Health,Essential NCD Medicines,Shefa,South Epi,number,1
+2025,Health,Essential NCD Medicines,Shefa,North Tongoa,number,1
+2025,Health,Essential NCD Medicines,Shefa,Makimae,number,1
+2025,Health,Essential NCD Medicines,Shefa,Tongariki,number,1
+2025,Health,Essential NCD Medicines,Shefa,Nguna,number,1
+2025,Health,Essential NCD Medicines,Shefa,Emau,number,1
+2025,Health,Essential NCD Medicines,Shefa,Malorua,number,1
+2025,Health,Essential NCD Medicines,Shefa,North Efate,number,1
+2025,Health,Essential NCD Medicines,Shefa,Mele,number,1
+2025,Health,Essential NCD Medicines,Shefa,Tanvasoko,number,1
+2025,Health,Essential NCD Medicines,Shefa,Ifira,number,1
+2025,Health,Essential NCD Medicines,Shefa,Pango,number,1
+2025,Health,Essential NCD Medicines,Shefa,Erakor,number,1
+2025,Health,Essential NCD Medicines,Shefa,Eratap,number,1
+2025,Health,Essential NCD Medicines,Shefa,Eton,number,1
+2025,Health,Essential NCD Medicines,Tafea,North Erromango,number,1
+2025,Health,Essential NCD Medicines,Tafea,South Erromango,number,1
+2025,Health,Essential NCD Medicines,Tafea,Aniwa,number,1
+2025,Health,Essential NCD Medicines,Tafea,North Tanna,number,1
+2025,Health,Essential NCD Medicines,Tafea,West Tanna,number,1
+2025,Health,Essential NCD Medicines,Tafea,Middle Bush Tanna,number,1
+2025,Health,Essential NCD Medicines,Tafea,South West Tanna,number,1
+2025,Health,Essential NCD Medicines,Tafea,Whitesands,number,1
+2025,Health,Essential NCD Medicines,Tafea,South Tanna,number,1
+2025,Health,Essential NCD Medicines,Tafea,Futuna,number,1
+2025,Health,Essential NCD Medicines,Tafea,Aneityum,number,1
+2025,Health,Mosquito Nets,Torba,Torres,number,20
+2025,Health,Mosquito Nets,Torba,Ureparapara,number,20
+2025,Health,Mosquito Nets,Torba,Motalava,number,20
+2025,Health,Mosquito Nets,Torba,East Vanualava,number,20
+2025,Health,Mosquito Nets,Torba,West Vanualava,number,20
+2025,Health,Mosquito Nets,Torba,Mota,number,20
+2025,Health,Mosquito Nets,Torba,East Gaua,number,20
+2025,Health,Mosquito Nets,Torba,West Gaua,number,20
+2025,Health,Mosquito Nets,Torba,Merelava,number,20
+2025,Health,Mosquito Nets,Sanma,Luganville,number,20
+2025,Health,Mosquito Nets,Sanma,North West Santo,number,20
+2025,Health,Mosquito Nets,Sanma,Big Bay Coast,number,20
+2025,Health,Mosquito Nets,Sanma,Big Bay Inland,number,20
+2025,Health,Mosquito Nets,Sanma,West Santo,number,20
+2025,Health,Mosquito Nets,Sanma,South Santo 1,number,20
+2025,Health,Mosquito Nets,Sanma,South Santo 2,number,20
+2025,Health,Mosquito Nets,Sanma,East Santo,number,20
+2025,Health,Mosquito Nets,Sanma,South East Santo,number,20
+2025,Health,Mosquito Nets,Sanma,Canal Fanafo,number,20
+2025,Health,Mosquito Nets,Sanma,West Malo,number,20
+2025,Health,Mosquito Nets,Sanma,East Malo,number,20
+2025,Health,Mosquito Nets,Penama,West Ambae,number,20
+2025,Health,Mosquito Nets,Penama,North Ambae,number,20
+2025,Health,Mosquito Nets,Penama,East Ambae,number,20
+2025,Health,Mosquito Nets,Penama,South Ambae,number,20
+2025,Health,Mosquito Nets,Penama,North Maewo,number,20
+2025,Health,Mosquito Nets,Penama,South Maewo,number,20
+2025,Health,Mosquito Nets,Penama,North Pentecost,number,20
+2025,Health,Mosquito Nets,Penama,Central Pentecost 1,number,20
+2025,Health,Mosquito Nets,Penama,Central Pentecost 2,number,20
+2025,Health,Mosquito Nets,Penama,South Pentecost,number,20
+2025,Health,Mosquito Nets,Malampa,North West Malekula,number,20
+2025,Health,Mosquito Nets,Malampa,North East Malekula,number,20
+2025,Health,Mosquito Nets,Malampa,Central Malekula,number,20
+2025,Health,Mosquito Nets,Malampa,South West Malekula,number,20
+2025,Health,Mosquito Nets,Malampa,South East Malekula,number,20
+2025,Health,Mosquito Nets,Malampa,South Malekula,number,20
+2025,Health,Mosquito Nets,Malampa,North Ambrym,number,20
+2025,Health,Mosquito Nets,Malampa,West Ambrym,number,20
+2025,Health,Mosquito Nets,Malampa,South East Ambrym,number,20
+2025,Health,Mosquito Nets,Malampa,Paama,number,20
+2025,Health,Mosquito Nets,Shefa,Port Vila,number,20
+2025,Health,Mosquito Nets,Shefa,Vermali,number,20
+2025,Health,Mosquito Nets,Shefa,Vermaul,number,20
+2025,Health,Mosquito Nets,Shefa,Varisu,number,20
+2025,Health,Mosquito Nets,Shefa,South Epi,number,20
+2025,Health,Mosquito Nets,Shefa,North Tongoa,number,20
+2025,Health,Mosquito Nets,Shefa,Makimae,number,20
+2025,Health,Mosquito Nets,Shefa,Tongariki,number,20
+2025,Health,Mosquito Nets,Shefa,Nguna,number,20
+2025,Health,Mosquito Nets,Shefa,Emau,number,20
+2025,Health,Mosquito Nets,Shefa,Malorua,number,20
+2025,Health,Mosquito Nets,Shefa,North Efate,number,20
+2025,Health,Mosquito Nets,Shefa,Mele,number,20
+2025,Health,Mosquito Nets,Shefa,Tanvasoko,number,20
+2025,Health,Mosquito Nets,Shefa,Ifira,number,20
+2025,Health,Mosquito Nets,Shefa,Pango,number,20
+2025,Health,Mosquito Nets,Shefa,Erakor,number,20
+2025,Health,Mosquito Nets,Shefa,Eratap,number,20
+2025,Health,Mosquito Nets,Shefa,Eton,number,20
+2025,Health,Mosquito Nets,Tafea,North Erromango,number,20
+2025,Health,Mosquito Nets,Tafea,South Erromango,number,20
+2025,Health,Mosquito Nets,Tafea,Aniwa,number,20
+2025,Health,Mosquito Nets,Tafea,North Tanna,number,20
+2025,Health,Mosquito Nets,Tafea,West Tanna,number,20
+2025,Health,Mosquito Nets,Tafea,Middle Bush Tanna,number,20
+2025,Health,Mosquito Nets,Tafea,South West Tanna,number,20
+2025,Health,Mosquito Nets,Tafea,Whitesands,number,20
+2025,Health,Mosquito Nets,Tafea,South Tanna,number,20
+2025,Health,Mosquito Nets,Tafea,Futuna,number,20
+2025,Health,Mosquito Nets,Tafea,Aneityum,number,20
+2025,Logistics,Truck,Torba,Torres,number,1
+2025,Logistics,Truck,Torba,Ureparapara,number,1
+2025,Logistics,Truck,Torba,Motalava,number,1
+2025,Logistics,Truck,Torba,East Vanualava,number,1
+2025,Logistics,Truck,Torba,West Vanualava,number,1
+2025,Logistics,Truck,Torba,Mota,number,1
+2025,Logistics,Truck,Torba,East Gaua,number,1
+2025,Logistics,Truck,Torba,West Gaua,number,1
+2025,Logistics,Truck,Torba,Merelava,number,1
+2025,Logistics,Truck,Sanma,Luganville,number,1
+2025,Logistics,Truck,Sanma,North West Santo,number,1
+2025,Logistics,Truck,Sanma,Big Bay Coast,number,1
+2025,Logistics,Truck,Sanma,Big Bay Inland,number,1
+2025,Logistics,Truck,Sanma,West Santo,number,1
+2025,Logistics,Truck,Sanma,South Santo 1,number,1
+2025,Logistics,Truck,Sanma,South Santo 2,number,1
+2025,Logistics,Truck,Sanma,East Santo,number,1
+2025,Logistics,Truck,Sanma,South East Santo,number,1
+2025,Logistics,Truck,Sanma,Canal Fanafo,number,1
+2025,Logistics,Truck,Sanma,West Malo,number,1
+2025,Logistics,Truck,Sanma,East Malo,number,1
+2025,Logistics,Truck,Penama,West Ambae,number,1
+2025,Logistics,Truck,Penama,North Ambae,number,1
+2025,Logistics,Truck,Penama,East Ambae,number,1
+2025,Logistics,Truck,Penama,South Ambae,number,1
+2025,Logistics,Truck,Penama,North Maewo,number,1
+2025,Logistics,Truck,Penama,South Maewo,number,1
+2025,Logistics,Truck,Penama,North Pentecost,number,1
+2025,Logistics,Truck,Penama,Central Pentecost 1,number,1
+2025,Logistics,Truck,Penama,Central Pentecost 2,number,1
+2025,Logistics,Truck,Penama,South Pentecost,number,1
+2025,Logistics,Truck,Malampa,North West Malekula,number,1
+2025,Logistics,Truck,Malampa,North East Malekula,number,1
+2025,Logistics,Truck,Malampa,Central Malekula,number,1
+2025,Logistics,Truck,Malampa,South West Malekula,number,1
+2025,Logistics,Truck,Malampa,South East Malekula,number,1
+2025,Logistics,Truck,Malampa,South Malekula,number,1
+2025,Logistics,Truck,Malampa,North Ambrym,number,1
+2025,Logistics,Truck,Malampa,West Ambrym,number,1
+2025,Logistics,Truck,Malampa,South East Ambrym,number,1
+2025,Logistics,Truck,Malampa,Paama,number,1
+2025,Logistics,Truck,Shefa,Port Vila,number,1
+2025,Logistics,Truck,Shefa,Vermali,number,1
+2025,Logistics,Truck,Shefa,Vermaul,number,1
+2025,Logistics,Truck,Shefa,Varisu,number,1
+2025,Logistics,Truck,Shefa,South Epi,number,1
+2025,Logistics,Truck,Shefa,North Tongoa,number,1
+2025,Logistics,Truck,Shefa,Makimae,number,1
+2025,Logistics,Truck,Shefa,Tongariki,number,1
+2025,Logistics,Truck,Shefa,Nguna,number,1
+2025,Logistics,Truck,Shefa,Emau,number,1
+2025,Logistics,Truck,Shefa,Malorua,number,1
+2025,Logistics,Truck,Shefa,North Efate,number,1
+2025,Logistics,Truck,Shefa,Mele,number,1
+2025,Logistics,Truck,Shefa,Tanvasoko,number,1
+2025,Logistics,Truck,Shefa,Ifira,number,1
+2025,Logistics,Truck,Shefa,Pango,number,1
+2025,Logistics,Truck,Shefa,Erakor,number,1
+2025,Logistics,Truck,Shefa,Eratap,number,1
+2025,Logistics,Truck,Shefa,Eton,number,1
+2025,Logistics,Truck,Tafea,North Erromango,number,1
+2025,Logistics,Truck,Tafea,South Erromango,number,1
+2025,Logistics,Truck,Tafea,Aniwa,number,1
+2025,Logistics,Truck,Tafea,North Tanna,number,1
+2025,Logistics,Truck,Tafea,West Tanna,number,1
+2025,Logistics,Truck,Tafea,Middle Bush Tanna,number,1
+2025,Logistics,Truck,Tafea,South West Tanna,number,1
+2025,Logistics,Truck,Tafea,Whitesands,number,1
+2025,Logistics,Truck,Tafea,South Tanna,number,1
+2025,Logistics,Truck,Tafea,Futuna,number,1
+2025,Logistics,Truck,Tafea,Aneityum,number,1
+2025,Logistics,Fibreglass Boat,Torba,Torres,number,10
+2025,Logistics,Fibreglass Boat,Torba,Ureparapara,number,10
+2025,Logistics,Fibreglass Boat,Torba,Motalava,number,10
+2025,Logistics,Fibreglass Boat,Torba,East Vanualava,number,10
+2025,Logistics,Fibreglass Boat,Torba,West Vanualava,number,10
+2025,Logistics,Fibreglass Boat,Torba,Mota,number,10
+2025,Logistics,Fibreglass Boat,Torba,East Gaua,number,10
+2025,Logistics,Fibreglass Boat,Torba,West Gaua,number,10
+2025,Logistics,Fibreglass Boat,Torba,Merelava,number,10
+2025,Logistics,Fibreglass Boat,Sanma,Luganville,number,10
+2025,Logistics,Fibreglass Boat,Sanma,North West Santo,number,10
+2025,Logistics,Fibreglass Boat,Sanma,Big Bay Coast,number,10
+2025,Logistics,Fibreglass Boat,Sanma,Big Bay Inland,number,10
+2025,Logistics,Fibreglass Boat,Sanma,West Santo,number,10
+2025,Logistics,Fibreglass Boat,Sanma,South Santo 1,number,10
+2025,Logistics,Fibreglass Boat,Sanma,South Santo 2,number,10
+2025,Logistics,Fibreglass Boat,Sanma,East Santo,number,10
+2025,Logistics,Fibreglass Boat,Sanma,South East Santo,number,10
+2025,Logistics,Fibreglass Boat,Sanma,Canal Fanafo,number,10
+2025,Logistics,Fibreglass Boat,Sanma,West Malo,number,10
+2025,Logistics,Fibreglass Boat,Sanma,East Malo,number,10
+2025,Logistics,Fibreglass Boat,Penama,West Ambae,number,10
+2025,Logistics,Fibreglass Boat,Penama,North Ambae,number,10
+2025,Logistics,Fibreglass Boat,Penama,East Ambae,number,10
+2025,Logistics,Fibreglass Boat,Penama,South Ambae,number,10
+2025,Logistics,Fibreglass Boat,Penama,North Maewo,number,10
+2025,Logistics,Fibreglass Boat,Penama,South Maewo,number,10
+2025,Logistics,Fibreglass Boat,Penama,North Pentecost,number,10
+2025,Logistics,Fibreglass Boat,Penama,Central Pentecost 1,number,10
+2025,Logistics,Fibreglass Boat,Penama,Central Pentecost 2,number,10
+2025,Logistics,Fibreglass Boat,Penama,South Pentecost,number,10
+2025,Logistics,Fibreglass Boat,Malampa,North West Malekula,number,10
+2025,Logistics,Fibreglass Boat,Malampa,North East Malekula,number,10
+2025,Logistics,Fibreglass Boat,Malampa,Central Malekula,number,10
+2025,Logistics,Fibreglass Boat,Malampa,South West Malekula,number,10
+2025,Logistics,Fibreglass Boat,Malampa,South East Malekula,number,10
+2025,Logistics,Fibreglass Boat,Malampa,South Malekula,number,10
+2025,Logistics,Fibreglass Boat,Malampa,North Ambrym,number,10
+2025,Logistics,Fibreglass Boat,Malampa,West Ambrym,number,10
+2025,Logistics,Fibreglass Boat,Malampa,South East Ambrym,number,10
+2025,Logistics,Fibreglass Boat,Malampa,Paama,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Port Vila,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Vermali,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Vermaul,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Varisu,number,10
+2025,Logistics,Fibreglass Boat,Shefa,South Epi,number,10
+2025,Logistics,Fibreglass Boat,Shefa,North Tongoa,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Makimae,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Tongariki,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Nguna,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Emau,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Malorua,number,10
+2025,Logistics,Fibreglass Boat,Shefa,North Efate,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Mele,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Tanvasoko,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Ifira,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Pango,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Erakor,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Eratap,number,10
+2025,Logistics,Fibreglass Boat,Shefa,Eton,number,10
+2025,Logistics,Fibreglass Boat,Tafea,North Erromango,number,10
+2025,Logistics,Fibreglass Boat,Tafea,South Erromango,number,10
+2025,Logistics,Fibreglass Boat,Tafea,Aniwa,number,10
+2025,Logistics,Fibreglass Boat,Tafea,North Tanna,number,10
+2025,Logistics,Fibreglass Boat,Tafea,West Tanna,number,10
+2025,Logistics,Fibreglass Boat,Tafea,Middle Bush Tanna,number,10
+2025,Logistics,Fibreglass Boat,Tafea,South West Tanna,number,10
+2025,Logistics,Fibreglass Boat,Tafea,Whitesands,number,10
+2025,Logistics,Fibreglass Boat,Tafea,South Tanna,number,10
+2025,Logistics,Fibreglass Boat,Tafea,Futuna,number,10
+2025,Logistics,Fibreglass Boat,Tafea,Aneityum,number,10
+2025,Logistics,Ship,Torba,Torres,number,1
+2025,Logistics,Ship,Torba,Ureparapara,number,1
+2025,Logistics,Ship,Torba,Motalava,number,1
+2025,Logistics,Ship,Torba,East Vanualava,number,1
+2025,Logistics,Ship,Torba,West Vanualava,number,1
+2025,Logistics,Ship,Torba,Mota,number,1
+2025,Logistics,Ship,Torba,East Gaua,number,1
+2025,Logistics,Ship,Torba,West Gaua,number,1
+2025,Logistics,Ship,Torba,Merelava,number,1
+2025,Logistics,Ship,Sanma,Luganville,number,1
+2025,Logistics,Ship,Sanma,North West Santo,number,1
+2025,Logistics,Ship,Sanma,Big Bay Coast,number,1
+2025,Logistics,Ship,Sanma,Big Bay Inland,number,1
+2025,Logistics,Ship,Sanma,West Santo,number,1
+2025,Logistics,Ship,Sanma,South Santo 1,number,1
+2025,Logistics,Ship,Sanma,South Santo 2,number,1
+2025,Logistics,Ship,Sanma,East Santo,number,1
+2025,Logistics,Ship,Sanma,South East Santo,number,1
+2025,Logistics,Ship,Sanma,Canal Fanafo,number,1
+2025,Logistics,Ship,Sanma,West Malo,number,1
+2025,Logistics,Ship,Sanma,East Malo,number,1
+2025,Logistics,Ship,Penama,West Ambae,number,1
+2025,Logistics,Ship,Penama,North Ambae,number,1
+2025,Logistics,Ship,Penama,East Ambae,number,1
+2025,Logistics,Ship,Penama,South Ambae,number,1
+2025,Logistics,Ship,Penama,North Maewo,number,1
+2025,Logistics,Ship,Penama,South Maewo,number,1
+2025,Logistics,Ship,Penama,North Pentecost,number,1
+2025,Logistics,Ship,Penama,Central Pentecost 1,number,1
+2025,Logistics,Ship,Penama,Central Pentecost 2,number,1
+2025,Logistics,Ship,Penama,South Pentecost,number,1
+2025,Logistics,Ship,Malampa,North West Malekula,number,1
+2025,Logistics,Ship,Malampa,North East Malekula,number,1
+2025,Logistics,Ship,Malampa,Central Malekula,number,1
+2025,Logistics,Ship,Malampa,South West Malekula,number,1
+2025,Logistics,Ship,Malampa,South East Malekula,number,1
+2025,Logistics,Ship,Malampa,South Malekula,number,1
+2025,Logistics,Ship,Malampa,North Ambrym,number,1
+2025,Logistics,Ship,Malampa,West Ambrym,number,1
+2025,Logistics,Ship,Malampa,South East Ambrym,number,1
+2025,Logistics,Ship,Malampa,Paama,number,1
+2025,Logistics,Ship,Shefa,Port Vila,number,1
+2025,Logistics,Ship,Shefa,Vermali,number,1
+2025,Logistics,Ship,Shefa,Vermaul,number,1
+2025,Logistics,Ship,Shefa,Varisu,number,1
+2025,Logistics,Ship,Shefa,South Epi,number,1
+2025,Logistics,Ship,Shefa,North Tongoa,number,1
+2025,Logistics,Ship,Shefa,Makimae,number,1
+2025,Logistics,Ship,Shefa,Tongariki,number,1
+2025,Logistics,Ship,Shefa,Nguna,number,1
+2025,Logistics,Ship,Shefa,Emau,number,1
+2025,Logistics,Ship,Shefa,Malorua,number,1
+2025,Logistics,Ship,Shefa,North Efate,number,1
+2025,Logistics,Ship,Shefa,Mele,number,1
+2025,Logistics,Ship,Shefa,Tanvasoko,number,1
+2025,Logistics,Ship,Shefa,Ifira,number,1
+2025,Logistics,Ship,Shefa,Pango,number,1
+2025,Logistics,Ship,Shefa,Erakor,number,1
+2025,Logistics,Ship,Shefa,Eratap,number,1
+2025,Logistics,Ship,Shefa,Eton,number,1
+2025,Logistics,Ship,Tafea,North Erromango,number,1
+2025,Logistics,Ship,Tafea,South Erromango,number,1
+2025,Logistics,Ship,Tafea,Aniwa,number,1
+2025,Logistics,Ship,Tafea,North Tanna,number,1
+2025,Logistics,Ship,Tafea,West Tanna,number,1
+2025,Logistics,Ship,Tafea,Middle Bush Tanna,number,1
+2025,Logistics,Ship,Tafea,South West Tanna,number,1
+2025,Logistics,Ship,Tafea,Whitesands,number,1
+2025,Logistics,Ship,Tafea,South Tanna,number,1
+2025,Logistics,Ship,Tafea,Futuna,number,1
+2025,Logistics,Ship,Tafea,Aneityum,number,1
+2025,Logistics,Fuel,Torba,Torres,number,100
+2025,Logistics,Fuel,Torba,Ureparapara,number,100
+2025,Logistics,Fuel,Torba,Motalava,number,100
+2025,Logistics,Fuel,Torba,East Vanualava,number,100
+2025,Logistics,Fuel,Torba,West Vanualava,number,100
+2025,Logistics,Fuel,Torba,Mota,number,100
+2025,Logistics,Fuel,Torba,East Gaua,number,100
+2025,Logistics,Fuel,Torba,West Gaua,number,100
+2025,Logistics,Fuel,Torba,Merelava,number,100
+2025,Logistics,Fuel,Sanma,Luganville,number,100
+2025,Logistics,Fuel,Sanma,North West Santo,number,100
+2025,Logistics,Fuel,Sanma,Big Bay Coast,number,100
+2025,Logistics,Fuel,Sanma,Big Bay Inland,number,100
+2025,Logistics,Fuel,Sanma,West Santo,number,100
+2025,Logistics,Fuel,Sanma,South Santo 1,number,100
+2025,Logistics,Fuel,Sanma,South Santo 2,number,100
+2025,Logistics,Fuel,Sanma,East Santo,number,100
+2025,Logistics,Fuel,Sanma,South East Santo,number,100
+2025,Logistics,Fuel,Sanma,Canal Fanafo,number,100
+2025,Logistics,Fuel,Sanma,West Malo,number,100
+2025,Logistics,Fuel,Sanma,East Malo,number,100
+2025,Logistics,Fuel,Penama,West Ambae,number,100
+2025,Logistics,Fuel,Penama,North Ambae,number,100
+2025,Logistics,Fuel,Penama,East Ambae,number,100
+2025,Logistics,Fuel,Penama,South Ambae,number,100
+2025,Logistics,Fuel,Penama,North Maewo,number,100
+2025,Logistics,Fuel,Penama,South Maewo,number,100
+2025,Logistics,Fuel,Penama,North Pentecost,number,100
+2025,Logistics,Fuel,Penama,Central Pentecost 1,number,100
+2025,Logistics,Fuel,Penama,Central Pentecost 2,number,100
+2025,Logistics,Fuel,Penama,South Pentecost,number,100
+2025,Logistics,Fuel,Malampa,North West Malekula,number,100
+2025,Logistics,Fuel,Malampa,North East Malekula,number,100
+2025,Logistics,Fuel,Malampa,Central Malekula,number,100
+2025,Logistics,Fuel,Malampa,South West Malekula,number,100
+2025,Logistics,Fuel,Malampa,South East Malekula,number,100
+2025,Logistics,Fuel,Malampa,South Malekula,number,100
+2025,Logistics,Fuel,Malampa,North Ambrym,number,100
+2025,Logistics,Fuel,Malampa,West Ambrym,number,100
+2025,Logistics,Fuel,Malampa,South East Ambrym,number,100
+2025,Logistics,Fuel,Malampa,Paama,number,100
+2025,Logistics,Fuel,Shefa,Port Vila,number,100
+2025,Logistics,Fuel,Shefa,Vermali,number,100
+2025,Logistics,Fuel,Shefa,Vermaul,number,100
+2025,Logistics,Fuel,Shefa,Varisu,number,100
+2025,Logistics,Fuel,Shefa,South Epi,number,100
+2025,Logistics,Fuel,Shefa,North Tongoa,number,100
+2025,Logistics,Fuel,Shefa,Makimae,number,100
+2025,Logistics,Fuel,Shefa,Tongariki,number,100
+2025,Logistics,Fuel,Shefa,Nguna,number,100
+2025,Logistics,Fuel,Shefa,Emau,number,100
+2025,Logistics,Fuel,Shefa,Malorua,number,100
+2025,Logistics,Fuel,Shefa,North Efate,number,100
+2025,Logistics,Fuel,Shefa,Mele,number,100
+2025,Logistics,Fuel,Shefa,Tanvasoko,number,100
+2025,Logistics,Fuel,Shefa,Ifira,number,100
+2025,Logistics,Fuel,Shefa,Pango,number,100
+2025,Logistics,Fuel,Shefa,Erakor,number,100
+2025,Logistics,Fuel,Shefa,Eratap,number,100
+2025,Logistics,Fuel,Shefa,Eton,number,100
+2025,Logistics,Fuel,Tafea,North Erromango,number,100
+2025,Logistics,Fuel,Tafea,South Erromango,number,100
+2025,Logistics,Fuel,Tafea,Aniwa,number,100
+2025,Logistics,Fuel,Tafea,North Tanna,number,100
+2025,Logistics,Fuel,Tafea,West Tanna,number,100
+2025,Logistics,Fuel,Tafea,Middle Bush Tanna,number,100
+2025,Logistics,Fuel,Tafea,South West Tanna,number,100
+2025,Logistics,Fuel,Tafea,Whitesands,number,100
+2025,Logistics,Fuel,Tafea,South Tanna,number,100
+2025,Logistics,Fuel,Tafea,Futuna,number,100
+2025,Logistics,Fuel,Tafea,Aneityum,number,100
+2025,Logistics,Chainsaw,Torba,Torres,number,2
+2025,Logistics,Chainsaw,Torba,Ureparapara,number,2
+2025,Logistics,Chainsaw,Torba,Motalava,number,2
+2025,Logistics,Chainsaw,Torba,East Vanualava,number,2
+2025,Logistics,Chainsaw,Torba,West Vanualava,number,2
+2025,Logistics,Chainsaw,Torba,Mota,number,2
+2025,Logistics,Chainsaw,Torba,East Gaua,number,2
+2025,Logistics,Chainsaw,Torba,West Gaua,number,2
+2025,Logistics,Chainsaw,Torba,Merelava,number,2
+2025,Logistics,Chainsaw,Sanma,Luganville,number,2
+2025,Logistics,Chainsaw,Sanma,North West Santo,number,2
+2025,Logistics,Chainsaw,Sanma,Big Bay Coast,number,2
+2025,Logistics,Chainsaw,Sanma,Big Bay Inland,number,2
+2025,Logistics,Chainsaw,Sanma,West Santo,number,2
+2025,Logistics,Chainsaw,Sanma,South Santo 1,number,2
+2025,Logistics,Chainsaw,Sanma,South Santo 2,number,2
+2025,Logistics,Chainsaw,Sanma,East Santo,number,2
+2025,Logistics,Chainsaw,Sanma,South East Santo,number,2
+2025,Logistics,Chainsaw,Sanma,Canal Fanafo,number,2
+2025,Logistics,Chainsaw,Sanma,West Malo,number,2
+2025,Logistics,Chainsaw,Sanma,East Malo,number,2
+2025,Logistics,Chainsaw,Penama,West Ambae,number,2
+2025,Logistics,Chainsaw,Penama,North Ambae,number,2
+2025,Logistics,Chainsaw,Penama,East Ambae,number,2
+2025,Logistics,Chainsaw,Penama,South Ambae,number,2
+2025,Logistics,Chainsaw,Penama,North Maewo,number,2
+2025,Logistics,Chainsaw,Penama,South Maewo,number,2
+2025,Logistics,Chainsaw,Penama,North Pentecost,number,2
+2025,Logistics,Chainsaw,Penama,Central Pentecost 1,number,2
+2025,Logistics,Chainsaw,Penama,Central Pentecost 2,number,2
+2025,Logistics,Chainsaw,Penama,South Pentecost,number,2
+2025,Logistics,Chainsaw,Malampa,North West Malekula,number,2
+2025,Logistics,Chainsaw,Malampa,North East Malekula,number,2
+2025,Logistics,Chainsaw,Malampa,Central Malekula,number,2
+2025,Logistics,Chainsaw,Malampa,South West Malekula,number,2
+2025,Logistics,Chainsaw,Malampa,South East Malekula,number,2
+2025,Logistics,Chainsaw,Malampa,South Malekula,number,2
+2025,Logistics,Chainsaw,Malampa,North Ambrym,number,2
+2025,Logistics,Chainsaw,Malampa,West Ambrym,number,2
+2025,Logistics,Chainsaw,Malampa,South East Ambrym,number,2
+2025,Logistics,Chainsaw,Malampa,Paama,number,2
+2025,Logistics,Chainsaw,Shefa,Port Vila,number,2
+2025,Logistics,Chainsaw,Shefa,Vermali,number,2
+2025,Logistics,Chainsaw,Shefa,Vermaul,number,2
+2025,Logistics,Chainsaw,Shefa,Varisu,number,2
+2025,Logistics,Chainsaw,Shefa,South Epi,number,2
+2025,Logistics,Chainsaw,Shefa,North Tongoa,number,2
+2025,Logistics,Chainsaw,Shefa,Makimae,number,2
+2025,Logistics,Chainsaw,Shefa,Tongariki,number,2
+2025,Logistics,Chainsaw,Shefa,Nguna,number,2
+2025,Logistics,Chainsaw,Shefa,Emau,number,2
+2025,Logistics,Chainsaw,Shefa,Malorua,number,2
+2025,Logistics,Chainsaw,Shefa,North Efate,number,2
+2025,Logistics,Chainsaw,Shefa,Mele,number,2
+2025,Logistics,Chainsaw,Shefa,Tanvasoko,number,2
+2025,Logistics,Chainsaw,Shefa,Ifira,number,2
+2025,Logistics,Chainsaw,Shefa,Pango,number,2
+2025,Logistics,Chainsaw,Shefa,Erakor,number,2
+2025,Logistics,Chainsaw,Shefa,Eratap,number,2
+2025,Logistics,Chainsaw,Shefa,Eton,number,2
+2025,Logistics,Chainsaw,Tafea,North Erromango,number,2
+2025,Logistics,Chainsaw,Tafea,South Erromango,number,2
+2025,Logistics,Chainsaw,Tafea,Aniwa,number,2
+2025,Logistics,Chainsaw,Tafea,North Tanna,number,2
+2025,Logistics,Chainsaw,Tafea,West Tanna,number,2
+2025,Logistics,Chainsaw,Tafea,Middle Bush Tanna,number,2
+2025,Logistics,Chainsaw,Tafea,South West Tanna,number,2
+2025,Logistics,Chainsaw,Tafea,Whitesands,number,2
+2025,Logistics,Chainsaw,Tafea,South Tanna,number,2
+2025,Logistics,Chainsaw,Tafea,Futuna,number,2
+2025,Logistics,Chainsaw,Tafea,Aneityum,number,2
+2025,Shelter,Tent,Torba,Torres,number,1
+2025,Shelter,Tent,Torba,Ureparapara,number,1
+2025,Shelter,Tent,Torba,Motalava,number,1
+2025,Shelter,Tent,Torba,East Vanualava,number,1
+2025,Shelter,Tent,Torba,West Vanualava,number,1
+2025,Shelter,Tent,Torba,Mota,number,1
+2025,Shelter,Tent,Torba,East Gaua,number,1
+2025,Shelter,Tent,Torba,West Gaua,number,1
+2025,Shelter,Tent,Torba,Merelava,number,1
+2025,Shelter,Tent,Sanma,Luganville,number,1
+2025,Shelter,Tent,Sanma,North West Santo,number,1
+2025,Shelter,Tent,Sanma,Big Bay Coast,number,1
+2025,Shelter,Tent,Sanma,Big Bay Inland,number,1
+2025,Shelter,Tent,Sanma,West Santo,number,1
+2025,Shelter,Tent,Sanma,South Santo 1,number,1
+2025,Shelter,Tent,Sanma,South Santo 2,number,1
+2025,Shelter,Tent,Sanma,East Santo,number,1
+2025,Shelter,Tent,Sanma,South East Santo,number,1
+2025,Shelter,Tent,Sanma,Canal Fanafo,number,1
+2025,Shelter,Tent,Sanma,West Malo,number,1
+2025,Shelter,Tent,Sanma,East Malo,number,1
+2025,Shelter,Tent,Penama,West Ambae,number,1
+2025,Shelter,Tent,Penama,North Ambae,number,1
+2025,Shelter,Tent,Penama,East Ambae,number,1
+2025,Shelter,Tent,Penama,South Ambae,number,1
+2025,Shelter,Tent,Penama,North Maewo,number,1
+2025,Shelter,Tent,Penama,South Maewo,number,1
+2025,Shelter,Tent,Penama,North Pentecost,number,1
+2025,Shelter,Tent,Penama,Central Pentecost 1,number,1
+2025,Shelter,Tent,Penama,Central Pentecost 2,number,1
+2025,Shelter,Tent,Penama,South Pentecost,number,1
+2025,Shelter,Tent,Malampa,North West Malekula,number,1
+2025,Shelter,Tent,Malampa,North East Malekula,number,1
+2025,Shelter,Tent,Malampa,Central Malekula,number,1
+2025,Shelter,Tent,Malampa,South West Malekula,number,1
+2025,Shelter,Tent,Malampa,South East Malekula,number,1
+2025,Shelter,Tent,Malampa,South Malekula,number,1
+2025,Shelter,Tent,Malampa,North Ambrym,number,1
+2025,Shelter,Tent,Malampa,West Ambrym,number,1
+2025,Shelter,Tent,Malampa,South East Ambrym,number,1
+2025,Shelter,Tent,Malampa,Paama,number,1
+2025,Shelter,Tent,Shefa,Port Vila,number,1
+2025,Shelter,Tent,Shefa,Vermali,number,1
+2025,Shelter,Tent,Shefa,Vermaul,number,1
+2025,Shelter,Tent,Shefa,Varisu,number,1
+2025,Shelter,Tent,Shefa,South Epi,number,1
+2025,Shelter,Tent,Shefa,North Tongoa,number,1
+2025,Shelter,Tent,Shefa,Makimae,number,1
+2025,Shelter,Tent,Shefa,Tongariki,number,1
+2025,Shelter,Tent,Shefa,Nguna,number,1
+2025,Shelter,Tent,Shefa,Emau,number,1
+2025,Shelter,Tent,Shefa,Malorua,number,1
+2025,Shelter,Tent,Shefa,North Efate,number,1
+2025,Shelter,Tent,Shefa,Mele,number,1
+2025,Shelter,Tent,Shefa,Tanvasoko,number,1
+2025,Shelter,Tent,Shefa,Ifira,number,1
+2025,Shelter,Tent,Shefa,Pango,number,1
+2025,Shelter,Tent,Shefa,Erakor,number,1
+2025,Shelter,Tent,Shefa,Eratap,number,1
+2025,Shelter,Tent,Shefa,Eton,number,1
+2025,Shelter,Tent,Tafea,North Erromango,number,1
+2025,Shelter,Tent,Tafea,South Erromango,number,1
+2025,Shelter,Tent,Tafea,Aniwa,number,1
+2025,Shelter,Tent,Tafea,North Tanna,number,1
+2025,Shelter,Tent,Tafea,West Tanna,number,1
+2025,Shelter,Tent,Tafea,Middle Bush Tanna,number,1
+2025,Shelter,Tent,Tafea,South West Tanna,number,1
+2025,Shelter,Tent,Tafea,Whitesands,number,1
+2025,Shelter,Tent,Tafea,South Tanna,number,1
+2025,Shelter,Tent,Tafea,Futuna,number,1
+2025,Shelter,Tent,Tafea,Aneityum,number,1
+2025,Shelter,Solar Lamp,Torba,Torres,number,1
+2025,Shelter,Solar Lamp,Torba,Ureparapara,number,1
+2025,Shelter,Solar Lamp,Torba,Motalava,number,1
+2025,Shelter,Solar Lamp,Torba,East Vanualava,number,1
+2025,Shelter,Solar Lamp,Torba,West Vanualava,number,1
+2025,Shelter,Solar Lamp,Torba,Mota,number,1
+2025,Shelter,Solar Lamp,Torba,East Gaua,number,1
+2025,Shelter,Solar Lamp,Torba,West Gaua,number,1
+2025,Shelter,Solar Lamp,Torba,Merelava,number,1
+2025,Shelter,Solar Lamp,Sanma,Luganville,number,1
+2025,Shelter,Solar Lamp,Sanma,North West Santo,number,1
+2025,Shelter,Solar Lamp,Sanma,Big Bay Coast,number,1
+2025,Shelter,Solar Lamp,Sanma,Big Bay Inland,number,1
+2025,Shelter,Solar Lamp,Sanma,West Santo,number,1
+2025,Shelter,Solar Lamp,Sanma,South Santo 1,number,1
+2025,Shelter,Solar Lamp,Sanma,South Santo 2,number,1
+2025,Shelter,Solar Lamp,Sanma,East Santo,number,1
+2025,Shelter,Solar Lamp,Sanma,South East Santo,number,1
+2025,Shelter,Solar Lamp,Sanma,Canal Fanafo,number,1
+2025,Shelter,Solar Lamp,Sanma,West Malo,number,1
+2025,Shelter,Solar Lamp,Sanma,East Malo,number,1
+2025,Shelter,Solar Lamp,Penama,West Ambae,number,1
+2025,Shelter,Solar Lamp,Penama,North Ambae,number,1
+2025,Shelter,Solar Lamp,Penama,East Ambae,number,1
+2025,Shelter,Solar Lamp,Penama,South Ambae,number,1
+2025,Shelter,Solar Lamp,Penama,North Maewo,number,1
+2025,Shelter,Solar Lamp,Penama,South Maewo,number,1
+2025,Shelter,Solar Lamp,Penama,North Pentecost,number,1
+2025,Shelter,Solar Lamp,Penama,Central Pentecost 1,number,1
+2025,Shelter,Solar Lamp,Penama,Central Pentecost 2,number,1
+2025,Shelter,Solar Lamp,Penama,South Pentecost,number,1
+2025,Shelter,Solar Lamp,Malampa,North West Malekula,number,1
+2025,Shelter,Solar Lamp,Malampa,North East Malekula,number,1
+2025,Shelter,Solar Lamp,Malampa,Central Malekula,number,1
+2025,Shelter,Solar Lamp,Malampa,South West Malekula,number,1
+2025,Shelter,Solar Lamp,Malampa,South East Malekula,number,1
+2025,Shelter,Solar Lamp,Malampa,South Malekula,number,1
+2025,Shelter,Solar Lamp,Malampa,North Ambrym,number,1
+2025,Shelter,Solar Lamp,Malampa,West Ambrym,number,1
+2025,Shelter,Solar Lamp,Malampa,South East Ambrym,number,1
+2025,Shelter,Solar Lamp,Malampa,Paama,number,1
+2025,Shelter,Solar Lamp,Shefa,Port Vila,number,1
+2025,Shelter,Solar Lamp,Shefa,Vermali,number,1
+2025,Shelter,Solar Lamp,Shefa,Vermaul,number,1
+2025,Shelter,Solar Lamp,Shefa,Varisu,number,1
+2025,Shelter,Solar Lamp,Shefa,South Epi,number,1
+2025,Shelter,Solar Lamp,Shefa,North Tongoa,number,1
+2025,Shelter,Solar Lamp,Shefa,Makimae,number,1
+2025,Shelter,Solar Lamp,Shefa,Tongariki,number,1
+2025,Shelter,Solar Lamp,Shefa,Nguna,number,1
+2025,Shelter,Solar Lamp,Shefa,Emau,number,1
+2025,Shelter,Solar Lamp,Shefa,Malorua,number,1
+2025,Shelter,Solar Lamp,Shefa,North Efate,number,1
+2025,Shelter,Solar Lamp,Shefa,Mele,number,1
+2025,Shelter,Solar Lamp,Shefa,Tanvasoko,number,1
+2025,Shelter,Solar Lamp,Shefa,Ifira,number,1
+2025,Shelter,Solar Lamp,Shefa,Pango,number,1
+2025,Shelter,Solar Lamp,Shefa,Erakor,number,1
+2025,Shelter,Solar Lamp,Shefa,Eratap,number,1
+2025,Shelter,Solar Lamp,Shefa,Eton,number,1
+2025,Shelter,Solar Lamp,Tafea,North Erromango,number,1
+2025,Shelter,Solar Lamp,Tafea,South Erromango,number,1
+2025,Shelter,Solar Lamp,Tafea,Aniwa,number,1
+2025,Shelter,Solar Lamp,Tafea,North Tanna,number,1
+2025,Shelter,Solar Lamp,Tafea,West Tanna,number,1
+2025,Shelter,Solar Lamp,Tafea,Middle Bush Tanna,number,1
+2025,Shelter,Solar Lamp,Tafea,South West Tanna,number,1
+2025,Shelter,Solar Lamp,Tafea,Whitesands,number,1
+2025,Shelter,Solar Lamp,Tafea,South Tanna,number,1
+2025,Shelter,Solar Lamp,Tafea,Futuna,number,1
+2025,Shelter,Solar Lamp,Tafea,Aneityum,number,1
+2025,Shelter,Kitchen Set,Torba,Torres,number,1
+2025,Shelter,Kitchen Set,Torba,Ureparapara,number,1
+2025,Shelter,Kitchen Set,Torba,Motalava,number,1
+2025,Shelter,Kitchen Set,Torba,East Vanualava,number,1
+2025,Shelter,Kitchen Set,Torba,West Vanualava,number,1
+2025,Shelter,Kitchen Set,Torba,Mota,number,1
+2025,Shelter,Kitchen Set,Torba,East Gaua,number,1
+2025,Shelter,Kitchen Set,Torba,West Gaua,number,1
+2025,Shelter,Kitchen Set,Torba,Merelava,number,1
+2025,Shelter,Kitchen Set,Sanma,Luganville,number,1
+2025,Shelter,Kitchen Set,Sanma,North West Santo,number,1
+2025,Shelter,Kitchen Set,Sanma,Big Bay Coast,number,1
+2025,Shelter,Kitchen Set,Sanma,Big Bay Inland,number,1
+2025,Shelter,Kitchen Set,Sanma,West Santo,number,1
+2025,Shelter,Kitchen Set,Sanma,South Santo 1,number,1
+2025,Shelter,Kitchen Set,Sanma,South Santo 2,number,1
+2025,Shelter,Kitchen Set,Sanma,East Santo,number,1
+2025,Shelter,Kitchen Set,Sanma,South East Santo,number,1
+2025,Shelter,Kitchen Set,Sanma,Canal Fanafo,number,1
+2025,Shelter,Kitchen Set,Sanma,West Malo,number,1
+2025,Shelter,Kitchen Set,Sanma,East Malo,number,1
+2025,Shelter,Kitchen Set,Penama,West Ambae,number,1
+2025,Shelter,Kitchen Set,Penama,North Ambae,number,1
+2025,Shelter,Kitchen Set,Penama,East Ambae,number,1
+2025,Shelter,Kitchen Set,Penama,South Ambae,number,1
+2025,Shelter,Kitchen Set,Penama,North Maewo,number,1
+2025,Shelter,Kitchen Set,Penama,South Maewo,number,1
+2025,Shelter,Kitchen Set,Penama,North Pentecost,number,1
+2025,Shelter,Kitchen Set,Penama,Central Pentecost 1,number,1
+2025,Shelter,Kitchen Set,Penama,Central Pentecost 2,number,1
+2025,Shelter,Kitchen Set,Penama,South Pentecost,number,1
+2025,Shelter,Kitchen Set,Malampa,North West Malekula,number,1
+2025,Shelter,Kitchen Set,Malampa,North East Malekula,number,1
+2025,Shelter,Kitchen Set,Malampa,Central Malekula,number,1
+2025,Shelter,Kitchen Set,Malampa,South West Malekula,number,1
+2025,Shelter,Kitchen Set,Malampa,South East Malekula,number,1
+2025,Shelter,Kitchen Set,Malampa,South Malekula,number,1
+2025,Shelter,Kitchen Set,Malampa,North Ambrym,number,1
+2025,Shelter,Kitchen Set,Malampa,West Ambrym,number,1
+2025,Shelter,Kitchen Set,Malampa,South East Ambrym,number,1
+2025,Shelter,Kitchen Set,Malampa,Paama,number,1
+2025,Shelter,Kitchen Set,Shefa,Port Vila,number,1
+2025,Shelter,Kitchen Set,Shefa,Vermali,number,1
+2025,Shelter,Kitchen Set,Shefa,Vermaul,number,1
+2025,Shelter,Kitchen Set,Shefa,Varisu,number,1
+2025,Shelter,Kitchen Set,Shefa,South Epi,number,1
+2025,Shelter,Kitchen Set,Shefa,North Tongoa,number,1
+2025,Shelter,Kitchen Set,Shefa,Makimae,number,1
+2025,Shelter,Kitchen Set,Shefa,Tongariki,number,1
+2025,Shelter,Kitchen Set,Shefa,Nguna,number,1
+2025,Shelter,Kitchen Set,Shefa,Emau,number,1
+2025,Shelter,Kitchen Set,Shefa,Malorua,number,1
+2025,Shelter,Kitchen Set,Shefa,North Efate,number,1
+2025,Shelter,Kitchen Set,Shefa,Mele,number,1
+2025,Shelter,Kitchen Set,Shefa,Tanvasoko,number,1
+2025,Shelter,Kitchen Set,Shefa,Ifira,number,1
+2025,Shelter,Kitchen Set,Shefa,Pango,number,1
+2025,Shelter,Kitchen Set,Shefa,Erakor,number,1
+2025,Shelter,Kitchen Set,Shefa,Eratap,number,1
+2025,Shelter,Kitchen Set,Shefa,Eton,number,1
+2025,Shelter,Kitchen Set,Tafea,North Erromango,number,1
+2025,Shelter,Kitchen Set,Tafea,South Erromango,number,1
+2025,Shelter,Kitchen Set,Tafea,Aniwa,number,1
+2025,Shelter,Kitchen Set,Tafea,North Tanna,number,1
+2025,Shelter,Kitchen Set,Tafea,West Tanna,number,1
+2025,Shelter,Kitchen Set,Tafea,Middle Bush Tanna,number,1
+2025,Shelter,Kitchen Set,Tafea,South West Tanna,number,1
+2025,Shelter,Kitchen Set,Tafea,Whitesands,number,1
+2025,Shelter,Kitchen Set,Tafea,South Tanna,number,1
+2025,Shelter,Kitchen Set,Tafea,Futuna,number,1
+2025,Shelter,Kitchen Set,Tafea,Aneityum,number,1
+2025,Shelter,Jerrycan 10L,Torba,Torres,number,1
+2025,Shelter,Jerrycan 10L,Torba,Ureparapara,number,1
+2025,Shelter,Jerrycan 10L,Torba,Motalava,number,1
+2025,Shelter,Jerrycan 10L,Torba,East Vanualava,number,1
+2025,Shelter,Jerrycan 10L,Torba,West Vanualava,number,1
+2025,Shelter,Jerrycan 10L,Torba,Mota,number,1
+2025,Shelter,Jerrycan 10L,Torba,East Gaua,number,1
+2025,Shelter,Jerrycan 10L,Torba,West Gaua,number,1
+2025,Shelter,Jerrycan 10L,Torba,Merelava,number,1
+2025,Shelter,Jerrycan 10L,Sanma,Luganville,number,1
+2025,Shelter,Jerrycan 10L,Sanma,North West Santo,number,1
+2025,Shelter,Jerrycan 10L,Sanma,Big Bay Coast,number,1
+2025,Shelter,Jerrycan 10L,Sanma,Big Bay Inland,number,1
+2025,Shelter,Jerrycan 10L,Sanma,West Santo,number,1
+2025,Shelter,Jerrycan 10L,Sanma,South Santo 1,number,1
+2025,Shelter,Jerrycan 10L,Sanma,South Santo 2,number,1
+2025,Shelter,Jerrycan 10L,Sanma,East Santo,number,1
+2025,Shelter,Jerrycan 10L,Sanma,South East Santo,number,1
+2025,Shelter,Jerrycan 10L,Sanma,Canal Fanafo,number,1
+2025,Shelter,Jerrycan 10L,Sanma,West Malo,number,1
+2025,Shelter,Jerrycan 10L,Sanma,East Malo,number,1
+2025,Shelter,Jerrycan 10L,Penama,West Ambae,number,1
+2025,Shelter,Jerrycan 10L,Penama,North Ambae,number,1
+2025,Shelter,Jerrycan 10L,Penama,East Ambae,number,1
+2025,Shelter,Jerrycan 10L,Penama,South Ambae,number,1
+2025,Shelter,Jerrycan 10L,Penama,North Maewo,number,1
+2025,Shelter,Jerrycan 10L,Penama,South Maewo,number,1
+2025,Shelter,Jerrycan 10L,Penama,North Pentecost,number,1
+2025,Shelter,Jerrycan 10L,Penama,Central Pentecost 1,number,1
+2025,Shelter,Jerrycan 10L,Penama,Central Pentecost 2,number,1
+2025,Shelter,Jerrycan 10L,Penama,South Pentecost,number,1
+2025,Shelter,Jerrycan 10L,Malampa,North West Malekula,number,1
+2025,Shelter,Jerrycan 10L,Malampa,North East Malekula,number,1
+2025,Shelter,Jerrycan 10L,Malampa,Central Malekula,number,1
+2025,Shelter,Jerrycan 10L,Malampa,South West Malekula,number,1
+2025,Shelter,Jerrycan 10L,Malampa,South East Malekula,number,1
+2025,Shelter,Jerrycan 10L,Malampa,South Malekula,number,1
+2025,Shelter,Jerrycan 10L,Malampa,North Ambrym,number,1
+2025,Shelter,Jerrycan 10L,Malampa,West Ambrym,number,1
+2025,Shelter,Jerrycan 10L,Malampa,South East Ambrym,number,1
+2025,Shelter,Jerrycan 10L,Malampa,Paama,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Port Vila,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Vermali,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Vermaul,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Varisu,number,1
+2025,Shelter,Jerrycan 10L,Shefa,South Epi,number,1
+2025,Shelter,Jerrycan 10L,Shefa,North Tongoa,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Makimae,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Tongariki,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Nguna,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Emau,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Malorua,number,1
+2025,Shelter,Jerrycan 10L,Shefa,North Efate,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Mele,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Tanvasoko,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Ifira,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Pango,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Erakor,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Eratap,number,1
+2025,Shelter,Jerrycan 10L,Shefa,Eton,number,1
+2025,Shelter,Jerrycan 10L,Tafea,North Erromango,number,1
+2025,Shelter,Jerrycan 10L,Tafea,South Erromango,number,1
+2025,Shelter,Jerrycan 10L,Tafea,Aniwa,number,1
+2025,Shelter,Jerrycan 10L,Tafea,North Tanna,number,1
+2025,Shelter,Jerrycan 10L,Tafea,West Tanna,number,1
+2025,Shelter,Jerrycan 10L,Tafea,Middle Bush Tanna,number,1
+2025,Shelter,Jerrycan 10L,Tafea,South West Tanna,number,1
+2025,Shelter,Jerrycan 10L,Tafea,Whitesands,number,1
+2025,Shelter,Jerrycan 10L,Tafea,South Tanna,number,1
+2025,Shelter,Jerrycan 10L,Tafea,Futuna,number,1
+2025,Shelter,Jerrycan 10L,Tafea,Aneityum,number,1
+2025,Shelter,Sleeping Mat,Torba,Torres,number,1
+2025,Shelter,Sleeping Mat,Torba,Ureparapara,number,1
+2025,Shelter,Sleeping Mat,Torba,Motalava,number,1
+2025,Shelter,Sleeping Mat,Torba,East Vanualava,number,1
+2025,Shelter,Sleeping Mat,Torba,West Vanualava,number,1
+2025,Shelter,Sleeping Mat,Torba,Mota,number,1
+2025,Shelter,Sleeping Mat,Torba,East Gaua,number,1
+2025,Shelter,Sleeping Mat,Torba,West Gaua,number,1
+2025,Shelter,Sleeping Mat,Torba,Merelava,number,1
+2025,Shelter,Sleeping Mat,Sanma,Luganville,number,1
+2025,Shelter,Sleeping Mat,Sanma,North West Santo,number,1
+2025,Shelter,Sleeping Mat,Sanma,Big Bay Coast,number,1
+2025,Shelter,Sleeping Mat,Sanma,Big Bay Inland,number,1
+2025,Shelter,Sleeping Mat,Sanma,West Santo,number,1
+2025,Shelter,Sleeping Mat,Sanma,South Santo 1,number,1
+2025,Shelter,Sleeping Mat,Sanma,South Santo 2,number,1
+2025,Shelter,Sleeping Mat,Sanma,East Santo,number,1
+2025,Shelter,Sleeping Mat,Sanma,South East Santo,number,1
+2025,Shelter,Sleeping Mat,Sanma,Canal Fanafo,number,1
+2025,Shelter,Sleeping Mat,Sanma,West Malo,number,1
+2025,Shelter,Sleeping Mat,Sanma,East Malo,number,1
+2025,Shelter,Sleeping Mat,Penama,West Ambae,number,1
+2025,Shelter,Sleeping Mat,Penama,North Ambae,number,1
+2025,Shelter,Sleeping Mat,Penama,East Ambae,number,1
+2025,Shelter,Sleeping Mat,Penama,South Ambae,number,1
+2025,Shelter,Sleeping Mat,Penama,North Maewo,number,1
+2025,Shelter,Sleeping Mat,Penama,South Maewo,number,1
+2025,Shelter,Sleeping Mat,Penama,North Pentecost,number,1
+2025,Shelter,Sleeping Mat,Penama,Central Pentecost 1,number,1
+2025,Shelter,Sleeping Mat,Penama,Central Pentecost 2,number,1
+2025,Shelter,Sleeping Mat,Penama,South Pentecost,number,1
+2025,Shelter,Sleeping Mat,Malampa,North West Malekula,number,1
+2025,Shelter,Sleeping Mat,Malampa,North East Malekula,number,1
+2025,Shelter,Sleeping Mat,Malampa,Central Malekula,number,1
+2025,Shelter,Sleeping Mat,Malampa,South West Malekula,number,1
+2025,Shelter,Sleeping Mat,Malampa,South East Malekula,number,1
+2025,Shelter,Sleeping Mat,Malampa,South Malekula,number,1
+2025,Shelter,Sleeping Mat,Malampa,North Ambrym,number,1
+2025,Shelter,Sleeping Mat,Malampa,West Ambrym,number,1
+2025,Shelter,Sleeping Mat,Malampa,South East Ambrym,number,1
+2025,Shelter,Sleeping Mat,Malampa,Paama,number,1
+2025,Shelter,Sleeping Mat,Shefa,Port Vila,number,1
+2025,Shelter,Sleeping Mat,Shefa,Vermali,number,1
+2025,Shelter,Sleeping Mat,Shefa,Vermaul,number,1
+2025,Shelter,Sleeping Mat,Shefa,Varisu,number,1
+2025,Shelter,Sleeping Mat,Shefa,South Epi,number,1
+2025,Shelter,Sleeping Mat,Shefa,North Tongoa,number,1
+2025,Shelter,Sleeping Mat,Shefa,Makimae,number,1
+2025,Shelter,Sleeping Mat,Shefa,Tongariki,number,1
+2025,Shelter,Sleeping Mat,Shefa,Nguna,number,1
+2025,Shelter,Sleeping Mat,Shefa,Emau,number,1
+2025,Shelter,Sleeping Mat,Shefa,Malorua,number,1
+2025,Shelter,Sleeping Mat,Shefa,North Efate,number,1
+2025,Shelter,Sleeping Mat,Shefa,Mele,number,1
+2025,Shelter,Sleeping Mat,Shefa,Tanvasoko,number,1
+2025,Shelter,Sleeping Mat,Shefa,Ifira,number,1
+2025,Shelter,Sleeping Mat,Shefa,Pango,number,1
+2025,Shelter,Sleeping Mat,Shefa,Erakor,number,1
+2025,Shelter,Sleeping Mat,Shefa,Eratap,number,1
+2025,Shelter,Sleeping Mat,Shefa,Eton,number,1
+2025,Shelter,Sleeping Mat,Tafea,North Erromango,number,1
+2025,Shelter,Sleeping Mat,Tafea,South Erromango,number,1
+2025,Shelter,Sleeping Mat,Tafea,Aniwa,number,1
+2025,Shelter,Sleeping Mat,Tafea,North Tanna,number,1
+2025,Shelter,Sleeping Mat,Tafea,West Tanna,number,1
+2025,Shelter,Sleeping Mat,Tafea,Middle Bush Tanna,number,1
+2025,Shelter,Sleeping Mat,Tafea,South West Tanna,number,1
+2025,Shelter,Sleeping Mat,Tafea,Whitesands,number,1
+2025,Shelter,Sleeping Mat,Tafea,South Tanna,number,1
+2025,Shelter,Sleeping Mat,Tafea,Futuna,number,1
+2025,Shelter,Sleeping Mat,Tafea,Aneityum,number,1
+2025,Shelter,Blanket,Torba,Torres,number,1
+2025,Shelter,Blanket,Torba,Ureparapara,number,1
+2025,Shelter,Blanket,Torba,Motalava,number,1
+2025,Shelter,Blanket,Torba,East Vanualava,number,1
+2025,Shelter,Blanket,Torba,West Vanualava,number,1
+2025,Shelter,Blanket,Torba,Mota,number,1
+2025,Shelter,Blanket,Torba,East Gaua,number,1
+2025,Shelter,Blanket,Torba,West Gaua,number,1
+2025,Shelter,Blanket,Torba,Merelava,number,1
+2025,Shelter,Blanket,Sanma,Luganville,number,1
+2025,Shelter,Blanket,Sanma,North West Santo,number,1
+2025,Shelter,Blanket,Sanma,Big Bay Coast,number,1
+2025,Shelter,Blanket,Sanma,Big Bay Inland,number,1
+2025,Shelter,Blanket,Sanma,West Santo,number,1
+2025,Shelter,Blanket,Sanma,South Santo 1,number,1
+2025,Shelter,Blanket,Sanma,South Santo 2,number,1
+2025,Shelter,Blanket,Sanma,East Santo,number,1
+2025,Shelter,Blanket,Sanma,South East Santo,number,1
+2025,Shelter,Blanket,Sanma,Canal Fanafo,number,1
+2025,Shelter,Blanket,Sanma,West Malo,number,1
+2025,Shelter,Blanket,Sanma,East Malo,number,1
+2025,Shelter,Blanket,Penama,West Ambae,number,1
+2025,Shelter,Blanket,Penama,North Ambae,number,1
+2025,Shelter,Blanket,Penama,East Ambae,number,1
+2025,Shelter,Blanket,Penama,South Ambae,number,1
+2025,Shelter,Blanket,Penama,North Maewo,number,1
+2025,Shelter,Blanket,Penama,South Maewo,number,1
+2025,Shelter,Blanket,Penama,North Pentecost,number,1
+2025,Shelter,Blanket,Penama,Central Pentecost 1,number,1
+2025,Shelter,Blanket,Penama,Central Pentecost 2,number,1
+2025,Shelter,Blanket,Penama,South Pentecost,number,1
+2025,Shelter,Blanket,Malampa,North West Malekula,number,1
+2025,Shelter,Blanket,Malampa,North East Malekula,number,1
+2025,Shelter,Blanket,Malampa,Central Malekula,number,1
+2025,Shelter,Blanket,Malampa,South West Malekula,number,1
+2025,Shelter,Blanket,Malampa,South East Malekula,number,1
+2025,Shelter,Blanket,Malampa,South Malekula,number,1
+2025,Shelter,Blanket,Malampa,North Ambrym,number,1
+2025,Shelter,Blanket,Malampa,West Ambrym,number,1
+2025,Shelter,Blanket,Malampa,South East Ambrym,number,1
+2025,Shelter,Blanket,Malampa,Paama,number,1
+2025,Shelter,Blanket,Shefa,Port Vila,number,1
+2025,Shelter,Blanket,Shefa,Vermali,number,1
+2025,Shelter,Blanket,Shefa,Vermaul,number,1
+2025,Shelter,Blanket,Shefa,Varisu,number,1
+2025,Shelter,Blanket,Shefa,South Epi,number,1
+2025,Shelter,Blanket,Shefa,North Tongoa,number,1
+2025,Shelter,Blanket,Shefa,Makimae,number,1
+2025,Shelter,Blanket,Shefa,Tongariki,number,1
+2025,Shelter,Blanket,Shefa,Nguna,number,1
+2025,Shelter,Blanket,Shefa,Emau,number,1
+2025,Shelter,Blanket,Shefa,Malorua,number,1
+2025,Shelter,Blanket,Shefa,North Efate,number,1
+2025,Shelter,Blanket,Shefa,Mele,number,1
+2025,Shelter,Blanket,Shefa,Tanvasoko,number,1
+2025,Shelter,Blanket,Shefa,Ifira,number,1
+2025,Shelter,Blanket,Shefa,Pango,number,1
+2025,Shelter,Blanket,Shefa,Erakor,number,1
+2025,Shelter,Blanket,Shefa,Eratap,number,1
+2025,Shelter,Blanket,Shefa,Eton,number,1
+2025,Shelter,Blanket,Tafea,North Erromango,number,1
+2025,Shelter,Blanket,Tafea,South Erromango,number,1
+2025,Shelter,Blanket,Tafea,Aniwa,number,1
+2025,Shelter,Blanket,Tafea,North Tanna,number,1
+2025,Shelter,Blanket,Tafea,West Tanna,number,1
+2025,Shelter,Blanket,Tafea,Middle Bush Tanna,number,1
+2025,Shelter,Blanket,Tafea,South West Tanna,number,1
+2025,Shelter,Blanket,Tafea,Whitesands,number,1
+2025,Shelter,Blanket,Tafea,South Tanna,number,1
+2025,Shelter,Blanket,Tafea,Futuna,number,1
+2025,Shelter,Blanket,Tafea,Aneityum,number,1
+2025,WASH,Water,Torba,Torres,litre,0.5
+2025,WASH,Water,Torba,Ureparapara,litre,0.5
+2025,WASH,Water,Torba,Motalava,litre,0.5
+2025,WASH,Water,Torba,East Vanualava,litre,0.5
+2025,WASH,Water,Torba,West Vanualava,litre,0.5
+2025,WASH,Water,Torba,Mota,litre,0.5
+2025,WASH,Water,Torba,East Gaua,litre,0.5
+2025,WASH,Water,Torba,West Gaua,litre,0.5
+2025,WASH,Water,Torba,Merelava,litre,0.5
+2025,WASH,Water,Sanma,Luganville,litre,0.5
+2025,WASH,Water,Sanma,North West Santo,litre,0.5
+2025,WASH,Water,Sanma,Big Bay Coast,litre,0.5
+2025,WASH,Water,Sanma,Big Bay Inland,litre,0.5
+2025,WASH,Water,Sanma,West Santo,litre,0.5
+2025,WASH,Water,Sanma,South Santo 1,litre,0.5
+2025,WASH,Water,Sanma,South Santo 2,litre,0.5
+2025,WASH,Water,Sanma,East Santo,litre,0.5
+2025,WASH,Water,Sanma,South East Santo,litre,0.5
+2025,WASH,Water,Sanma,Canal Fanafo,litre,0.5
+2025,WASH,Water,Sanma,West Malo,litre,0.5
+2025,WASH,Water,Sanma,East Malo,litre,0.5
+2025,WASH,Water,Penama,West Ambae,litre,0.5
+2025,WASH,Water,Penama,North Ambae,litre,0.5
+2025,WASH,Water,Penama,East Ambae,litre,0.5
+2025,WASH,Water,Penama,South Ambae,litre,0.5
+2025,WASH,Water,Penama,North Maewo,litre,0.5
+2025,WASH,Water,Penama,South Maewo,litre,0.5
+2025,WASH,Water,Penama,North Pentecost,litre,0.5
+2025,WASH,Water,Penama,Central Pentecost 1,litre,0.5
+2025,WASH,Water,Penama,Central Pentecost 2,litre,0.5
+2025,WASH,Water,Penama,South Pentecost,litre,0.5
+2025,WASH,Water,Malampa,North West Malekula,litre,0.5
+2025,WASH,Water,Malampa,North East Malekula,litre,0.5
+2025,WASH,Water,Malampa,Central Malekula,litre,0.5
+2025,WASH,Water,Malampa,South West Malekula,litre,0.5
+2025,WASH,Water,Malampa,South East Malekula,litre,0.5
+2025,WASH,Water,Malampa,South Malekula,litre,0.5
+2025,WASH,Water,Malampa,North Ambrym,litre,0.5
+2025,WASH,Water,Malampa,West Ambrym,litre,0.5
+2025,WASH,Water,Malampa,South East Ambrym,litre,0.5
+2025,WASH,Water,Malampa,Paama,litre,0.5
+2025,WASH,Water,Shefa,Port Vila,litre,0.5
+2025,WASH,Water,Shefa,Vermali,litre,0.5
+2025,WASH,Water,Shefa,Vermaul,litre,0.5
+2025,WASH,Water,Shefa,Varisu,litre,0.5
+2025,WASH,Water,Shefa,South Epi,litre,0.5
+2025,WASH,Water,Shefa,North Tongoa,litre,0.5
+2025,WASH,Water,Shefa,Makimae,litre,0.5
+2025,WASH,Water,Shefa,Tongariki,litre,0.5
+2025,WASH,Water,Shefa,Nguna,litre,0.5
+2025,WASH,Water,Shefa,Emau,litre,0.5
+2025,WASH,Water,Shefa,Malorua,litre,0.5
+2025,WASH,Water,Shefa,North Efate,litre,0.5
+2025,WASH,Water,Shefa,Mele,litre,0.5
+2025,WASH,Water,Shefa,Tanvasoko,litre,0.5
+2025,WASH,Water,Shefa,Ifira,litre,0.5
+2025,WASH,Water,Shefa,Pango,litre,0.5
+2025,WASH,Water,Shefa,Erakor,litre,0.5
+2025,WASH,Water,Shefa,Eratap,litre,0.5
+2025,WASH,Water,Shefa,Eton,litre,0.5
+2025,WASH,Water,Tafea,North Erromango,litre,0.5
+2025,WASH,Water,Tafea,South Erromango,litre,0.5
+2025,WASH,Water,Tafea,Aniwa,litre,0.5
+2025,WASH,Water,Tafea,North Tanna,litre,0.5
+2025,WASH,Water,Tafea,West Tanna,litre,0.5
+2025,WASH,Water,Tafea,Middle Bush Tanna,litre,0.5
+2025,WASH,Water,Tafea,South West Tanna,litre,0.5
+2025,WASH,Water,Tafea,Whitesands,litre,0.5
+2025,WASH,Water,Tafea,South Tanna,litre,0.5
+2025,WASH,Water,Tafea,Futuna,litre,0.5
+2025,WASH,Water,Tafea,Aneityum,litre,0.5
+2025,WASH,Tank,Torba,Torres,number,10
+2025,WASH,Tank,Torba,Ureparapara,number,10
+2025,WASH,Tank,Torba,Motalava,number,10
+2025,WASH,Tank,Torba,East Vanualava,number,10
+2025,WASH,Tank,Torba,West Vanualava,number,10
+2025,WASH,Tank,Torba,Mota,number,10
+2025,WASH,Tank,Torba,East Gaua,number,10
+2025,WASH,Tank,Torba,West Gaua,number,10
+2025,WASH,Tank,Torba,Merelava,number,10
+2025,WASH,Tank,Sanma,Luganville,number,10
+2025,WASH,Tank,Sanma,North West Santo,number,10
+2025,WASH,Tank,Sanma,Big Bay Coast,number,10
+2025,WASH,Tank,Sanma,Big Bay Inland,number,10
+2025,WASH,Tank,Sanma,West Santo,number,10
+2025,WASH,Tank,Sanma,South Santo 1,number,10
+2025,WASH,Tank,Sanma,South Santo 2,number,10
+2025,WASH,Tank,Sanma,East Santo,number,10
+2025,WASH,Tank,Sanma,South East Santo,number,10
+2025,WASH,Tank,Sanma,Canal Fanafo,number,10
+2025,WASH,Tank,Sanma,West Malo,number,10
+2025,WASH,Tank,Sanma,East Malo,number,10
+2025,WASH,Tank,Penama,West Ambae,number,10
+2025,WASH,Tank,Penama,North Ambae,number,10
+2025,WASH,Tank,Penama,East Ambae,number,10
+2025,WASH,Tank,Penama,South Ambae,number,10
+2025,WASH,Tank,Penama,North Maewo,number,10
+2025,WASH,Tank,Penama,South Maewo,number,10
+2025,WASH,Tank,Penama,North Pentecost,number,10
+2025,WASH,Tank,Penama,Central Pentecost 1,number,10
+2025,WASH,Tank,Penama,Central Pentecost 2,number,10
+2025,WASH,Tank,Penama,South Pentecost,number,10
+2025,WASH,Tank,Malampa,North West Malekula,number,10
+2025,WASH,Tank,Malampa,North East Malekula,number,10
+2025,WASH,Tank,Malampa,Central Malekula,number,10
+2025,WASH,Tank,Malampa,South West Malekula,number,10
+2025,WASH,Tank,Malampa,South East Malekula,number,10
+2025,WASH,Tank,Malampa,South Malekula,number,10
+2025,WASH,Tank,Malampa,North Ambrym,number,10
+2025,WASH,Tank,Malampa,West Ambrym,number,10
+2025,WASH,Tank,Malampa,South East Ambrym,number,10
+2025,WASH,Tank,Malampa,Paama,number,10
+2025,WASH,Tank,Shefa,Port Vila,number,10
+2025,WASH,Tank,Shefa,Vermali,number,10
+2025,WASH,Tank,Shefa,Vermaul,number,10
+2025,WASH,Tank,Shefa,Varisu,number,10
+2025,WASH,Tank,Shefa,South Epi,number,10
+2025,WASH,Tank,Shefa,North Tongoa,number,10
+2025,WASH,Tank,Shefa,Makimae,number,10
+2025,WASH,Tank,Shefa,Tongariki,number,10
+2025,WASH,Tank,Shefa,Nguna,number,10
+2025,WASH,Tank,Shefa,Emau,number,10
+2025,WASH,Tank,Shefa,Malorua,number,10
+2025,WASH,Tank,Shefa,North Efate,number,10
+2025,WASH,Tank,Shefa,Mele,number,10
+2025,WASH,Tank,Shefa,Tanvasoko,number,10
+2025,WASH,Tank,Shefa,Ifira,number,10
+2025,WASH,Tank,Shefa,Pango,number,10
+2025,WASH,Tank,Shefa,Erakor,number,10
+2025,WASH,Tank,Shefa,Eratap,number,10
+2025,WASH,Tank,Shefa,Eton,number,10
+2025,WASH,Tank,Tafea,North Erromango,number,10
+2025,WASH,Tank,Tafea,South Erromango,number,10
+2025,WASH,Tank,Tafea,Aniwa,number,10
+2025,WASH,Tank,Tafea,North Tanna,number,10
+2025,WASH,Tank,Tafea,West Tanna,number,10
+2025,WASH,Tank,Tafea,Middle Bush Tanna,number,10
+2025,WASH,Tank,Tafea,South West Tanna,number,10
+2025,WASH,Tank,Tafea,Whitesands,number,10
+2025,WASH,Tank,Tafea,South Tanna,number,10
+2025,WASH,Tank,Tafea,Futuna,number,10
+2025,WASH,Tank,Tafea,Aneityum,number,10
+2025,WASH,Water Purifier Tablets,Torba,Torres,packet,1
+2025,WASH,Water Purifier Tablets,Torba,Ureparapara,packet,1
+2025,WASH,Water Purifier Tablets,Torba,Motalava,packet,1
+2025,WASH,Water Purifier Tablets,Torba,East Vanualava,packet,1
+2025,WASH,Water Purifier Tablets,Torba,West Vanualava,packet,1
+2025,WASH,Water Purifier Tablets,Torba,Mota,packet,1
+2025,WASH,Water Purifier Tablets,Torba,East Gaua,packet,1
+2025,WASH,Water Purifier Tablets,Torba,West Gaua,packet,1
+2025,WASH,Water Purifier Tablets,Torba,Merelava,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,Luganville,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,North West Santo,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,Big Bay Coast,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,Big Bay Inland,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,West Santo,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,South Santo 1,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,South Santo 2,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,East Santo,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,South East Santo,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,Canal Fanafo,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,West Malo,packet,1
+2025,WASH,Water Purifier Tablets,Sanma,East Malo,packet,1
+2025,WASH,Water Purifier Tablets,Penama,West Ambae,packet,1
+2025,WASH,Water Purifier Tablets,Penama,North Ambae,packet,1
+2025,WASH,Water Purifier Tablets,Penama,East Ambae,packet,1
+2025,WASH,Water Purifier Tablets,Penama,South Ambae,packet,1
+2025,WASH,Water Purifier Tablets,Penama,North Maewo,packet,1
+2025,WASH,Water Purifier Tablets,Penama,South Maewo,packet,1
+2025,WASH,Water Purifier Tablets,Penama,North Pentecost,packet,1
+2025,WASH,Water Purifier Tablets,Penama,Central Pentecost 1,packet,1
+2025,WASH,Water Purifier Tablets,Penama,Central Pentecost 2,packet,1
+2025,WASH,Water Purifier Tablets,Penama,South Pentecost,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,North West Malekula,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,North East Malekula,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,Central Malekula,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,South West Malekula,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,South East Malekula,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,South Malekula,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,North Ambrym,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,West Ambrym,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,South East Ambrym,packet,1
+2025,WASH,Water Purifier Tablets,Malampa,Paama,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Port Vila,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Vermali,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Vermaul,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Varisu,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,South Epi,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,North Tongoa,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Makimae,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Tongariki,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Nguna,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Emau,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Malorua,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,North Efate,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Mele,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Tanvasoko,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Ifira,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Pango,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Erakor,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Eratap,packet,1
+2025,WASH,Water Purifier Tablets,Shefa,Eton,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,North Erromango,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,South Erromango,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,Aniwa,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,North Tanna,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,West Tanna,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,Middle Bush Tanna,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,South West Tanna,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,Whitesands,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,South Tanna,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,Futuna,packet,1
+2025,WASH,Water Purifier Tablets,Tafea,Aneityum,packet,1
+2025,WASH,Hygiene Kit,Torba,Torres,number,1
+2025,WASH,Hygiene Kit,Torba,Ureparapara,number,1
+2025,WASH,Hygiene Kit,Torba,Motalava,number,1
+2025,WASH,Hygiene Kit,Torba,East Vanualava,number,1
+2025,WASH,Hygiene Kit,Torba,West Vanualava,number,1
+2025,WASH,Hygiene Kit,Torba,Mota,number,1
+2025,WASH,Hygiene Kit,Torba,East Gaua,number,1
+2025,WASH,Hygiene Kit,Torba,West Gaua,number,1
+2025,WASH,Hygiene Kit,Torba,Merelava,number,1
+2025,WASH,Hygiene Kit,Sanma,Luganville,number,1
+2025,WASH,Hygiene Kit,Sanma,North West Santo,number,1
+2025,WASH,Hygiene Kit,Sanma,Big Bay Coast,number,1
+2025,WASH,Hygiene Kit,Sanma,Big Bay Inland,number,1
+2025,WASH,Hygiene Kit,Sanma,West Santo,number,1
+2025,WASH,Hygiene Kit,Sanma,South Santo 1,number,1
+2025,WASH,Hygiene Kit,Sanma,South Santo 2,number,1
+2025,WASH,Hygiene Kit,Sanma,East Santo,number,1
+2025,WASH,Hygiene Kit,Sanma,South East Santo,number,1
+2025,WASH,Hygiene Kit,Sanma,Canal Fanafo,number,1
+2025,WASH,Hygiene Kit,Sanma,West Malo,number,1
+2025,WASH,Hygiene Kit,Sanma,East Malo,number,1
+2025,WASH,Hygiene Kit,Penama,West Ambae,number,1
+2025,WASH,Hygiene Kit,Penama,North Ambae,number,1
+2025,WASH,Hygiene Kit,Penama,East Ambae,number,1
+2025,WASH,Hygiene Kit,Penama,South Ambae,number,1
+2025,WASH,Hygiene Kit,Penama,North Maewo,number,1
+2025,WASH,Hygiene Kit,Penama,South Maewo,number,1
+2025,WASH,Hygiene Kit,Penama,North Pentecost,number,1
+2025,WASH,Hygiene Kit,Penama,Central Pentecost 1,number,1
+2025,WASH,Hygiene Kit,Penama,Central Pentecost 2,number,1
+2025,WASH,Hygiene Kit,Penama,South Pentecost,number,1
+2025,WASH,Hygiene Kit,Malampa,North West Malekula,number,1
+2025,WASH,Hygiene Kit,Malampa,North East Malekula,number,1
+2025,WASH,Hygiene Kit,Malampa,Central Malekula,number,1
+2025,WASH,Hygiene Kit,Malampa,South West Malekula,number,1
+2025,WASH,Hygiene Kit,Malampa,South East Malekula,number,1
+2025,WASH,Hygiene Kit,Malampa,South Malekula,number,1
+2025,WASH,Hygiene Kit,Malampa,North Ambrym,number,1
+2025,WASH,Hygiene Kit,Malampa,West Ambrym,number,1
+2025,WASH,Hygiene Kit,Malampa,South East Ambrym,number,1
+2025,WASH,Hygiene Kit,Malampa,Paama,number,1
+2025,WASH,Hygiene Kit,Shefa,Port Vila,number,1
+2025,WASH,Hygiene Kit,Shefa,Vermali,number,1
+2025,WASH,Hygiene Kit,Shefa,Vermaul,number,1
+2025,WASH,Hygiene Kit,Shefa,Varisu,number,1
+2025,WASH,Hygiene Kit,Shefa,South Epi,number,1
+2025,WASH,Hygiene Kit,Shefa,North Tongoa,number,1
+2025,WASH,Hygiene Kit,Shefa,Makimae,number,1
+2025,WASH,Hygiene Kit,Shefa,Tongariki,number,1
+2025,WASH,Hygiene Kit,Shefa,Nguna,number,1
+2025,WASH,Hygiene Kit,Shefa,Emau,number,1
+2025,WASH,Hygiene Kit,Shefa,Malorua,number,1
+2025,WASH,Hygiene Kit,Shefa,North Efate,number,1
+2025,WASH,Hygiene Kit,Shefa,Mele,number,1
+2025,WASH,Hygiene Kit,Shefa,Tanvasoko,number,1
+2025,WASH,Hygiene Kit,Shefa,Ifira,number,1
+2025,WASH,Hygiene Kit,Shefa,Pango,number,1
+2025,WASH,Hygiene Kit,Shefa,Erakor,number,1
+2025,WASH,Hygiene Kit,Shefa,Eratap,number,1
+2025,WASH,Hygiene Kit,Shefa,Eton,number,1
+2025,WASH,Hygiene Kit,Tafea,North Erromango,number,1
+2025,WASH,Hygiene Kit,Tafea,South Erromango,number,1
+2025,WASH,Hygiene Kit,Tafea,Aniwa,number,1
+2025,WASH,Hygiene Kit,Tafea,North Tanna,number,1
+2025,WASH,Hygiene Kit,Tafea,West Tanna,number,1
+2025,WASH,Hygiene Kit,Tafea,Middle Bush Tanna,number,1
+2025,WASH,Hygiene Kit,Tafea,South West Tanna,number,1
+2025,WASH,Hygiene Kit,Tafea,Whitesands,number,1
+2025,WASH,Hygiene Kit,Tafea,South Tanna,number,1
+2025,WASH,Hygiene Kit,Tafea,Futuna,number,1
+2025,WASH,Hygiene Kit,Tafea,Aneityum,number,1

@@ -30,7 +30,8 @@ execute:
 
 # Intro
 
-This file runs based on an excel sheet `1b Input- Ex Hazard Areas`, which is the sheet 2 of `11d. Full Data Pipeline.xlsx` and will serve as our config file for later analyses. This file provides the cyclone intensity applied to each council in Vanuatu. It has 5 columns:
+This report runs based on a config file which provides the cyclone intensity applied to each council in Vanuatu. It has 5 columns:
+
 - National
 - Province
 - Area Council
@@ -40,13 +41,18 @@ This file runs based on an excel sheet `1b Input- Ex Hazard Areas`, which is the
 Let's load this file to use it later in our analysis:
 
 ```{r}
-config <- read_excel(here::here("Data", "11d. Full Data Pipeline.xlsx"), sheet = 2)
+config <- read.csv(here::here("Data", "Ex_hazard_areas.csv"), check.names = FALSE)
 ```
+
+
+
 
 Another file that will be useful: a 2 columns dataframe that provides the list of councils with their Province
 ```{r}
 council_province_lookup <- read.csv("data/council_province_lookup.csv")
 ```
+
+
 
 
 And load the required libs
@@ -59,6 +65,9 @@ library(htmltools)
 library(readxl)
 library(here)
 ```
+
+
+
 
 
 Order of councils and provinces in the final tables:
@@ -88,6 +97,10 @@ region_order <- c(
 # Provincial levels (to be bolded)
 provinces <- c("National", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")
 ```
+
+
+
+
 
 A function to aggregate a table with one row per council. It adds value per province and for the whole country
 ```{r}
@@ -138,8 +151,7 @@ format_table <- function(data){
 ## Baseline: Number of Schools, Students, and Teachers
 
 ```{r}
-# Read the Excel sheet called "1c Input - Baseline"
-full_data <- read_excel(here("data", "11d. Full Data Pipeline.xlsx"), sheet = 3)
+full_data <- read.csv(here::here("Data", "1c_input_baseline.csv"), check.names = FALSE)
 
 # === DATA WRANGLING ===
 # Filter for Education in Baseline column and Area Council level data
@@ -237,10 +249,16 @@ reactable(
 # === DATA WRANGLING ===
 # Add cyclone strength to baseline values
 education_with_config <- education_wide %>%
-  left_join(config, by = c("Region" = "Area Council"))
+  left_join(config, by = c("Region" = "Area Council")) %>%
+  # Extract the cyclone category number from Intensity (e.g., "Category 5" -> "5")
+  mutate(category = as.character(gsub("Category ", "", Intensity)))
 
-# Load the baseline multiplying factors
-baseline_factors <- read_excel(here("data", "12. Baseline_Multiplying_Factors.xlsx"))
+# Load the baseline multiplying factors: 2a Input- Damage Multiplier (sheet 6)
+# Read CSV while preserving column names with spaces
+baseline_factors <- read.csv(
+  here::here("Data", "2a Input- Damage Multiplier.csv"),
+  check.names = FALSE
+)
 
 # Helper function for damage multipliers
 get_damage_multiplier <- function(cyclone_category, education_level, measure_type) {
@@ -250,14 +268,14 @@ get_damage_multiplier <- function(cyclone_category, education_level, measure_typ
       Attribute == education_level,  # Now both are lowercase
       grepl(measure_type, Indicator, ignore.case = TRUE)
     ) %>%
-    pull(!!paste0("Category ", cyclone_category))
+    pull(!!paste0("Intensity ", cyclone_category))
   
   return(ifelse(length(multiplier) > 0, multiplier, 0))
 }
 
 # Calculate damage estimates
 damage_estimates <- education_with_config %>%
-  filter(!is.na(category)) %>%
+  filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
     # Changed from ECCE_Schools to ecce_schools (lowercase)
@@ -332,14 +350,14 @@ reactable(
 
 
 
-
-
 ## Resources needed to be sent to those affected
 
 ```{r}
 # === DATA WRANGLING ===
-# Load the resource response configuration
-resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
+# Load the resource response configuration "3aii Input- Resources Sent" (sheet 10)
+#resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
+
+resource_config <- read.csv(here::here("Data", "3aii Input- Resources Sent.csv"))
 
 # Helper function to get resource multipliers from config
 get_resource_multiplier <- function(resource_type) {
@@ -355,15 +373,15 @@ days_of_support <- 14  # Number of days to provide resources
 
 # Add cyclone categories from config file to education baseline data
 education_with_config_resources <- education_wide %>%
-  left_join(config, by = c("Region" = "council"))
+  left_join(config, by = c("Region" = "Area Council"))
 
 # Calculate resources needed using council-specific cyclone categories
 resources_needed <- education_with_config_resources %>%
-  filter(!is.na(category)) %>%  # Only calculate for councils with assigned categories
+  filter(!is.na(Intensity)) %>%  # Only calculate for councils with assigned categories
   rowwise() %>%
   mutate(
     # Get damage multiplier for this council's specific cyclone category
-    damage_multiplier = get_damage_multiplier(category, "ecce", "schools"),
+    damage_multiplier = get_damage_multiplier(Intensity, "ecce", "schools"),
     
     # ECCE Resources
     ecce_tents = round(ecce_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
@@ -474,8 +492,12 @@ reactable(
 ```{r}
 
 # === DATA WRANGLING ===
-# Load the financial damage estimation config
-financial_config <- read_excel(here("data", "14. Estimation_Financial_Damage.xlsx"))
+# Load the financial damage estimation config (4a Input- Finance Estimates, sheet 13)
+# Read CSV while preserving column names with spaces
+financial_config <- read.csv(
+  here::here("Data", "4a Input- Finance Estimates.csv"),
+  check.names = FALSE
+)
 
 # Clean column names to remove any extra spaces
 names(financial_config) <- trimws(names(financial_config))
@@ -495,15 +517,15 @@ get_unit_cost <- function(school_type) {
 
 # Add cyclone categories from config file to education baseline data
 education_with_config_financial <- education_wide %>%
-  left_join(config, by = c("Region" = "council"))
+  left_join(config, by = c("Region" = "Area Council"))
 
 # Calculate financial damage using council-specific cyclone categories
 financial_damage <- education_with_config_financial %>%
-  filter(!is.na(category)) %>%  # Only calculate for councils with assigned categories
+  filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
-    # Get damage multiplier for this council's specific cyclone category
-    damage_multiplier = get_damage_multiplier(category, "ecce", "schools"),
+    # Use Intensity directly (it's already just a number: 2, 3, 4, or 5)
+    damage_multiplier = get_damage_multiplier(Intensity, "ecce", "schools"),
     
     # Calculate financial damage per education level (in VT)
     ecce_financial_damage = ecce_schools * get_unit_cost("ecce") * damage_multiplier,
