@@ -258,15 +258,16 @@ baseline_factors <- read.csv(
   check.names = FALSE
 )
 
-# Helper function for damage multipliers
-get_damage_multiplier <- function(cyclone_category, education_level, measure_type) {
+# Helper function for damage multipliers (now considers council-specific values)
+get_damage_multiplier <- function(cyclone_category, education_level, measure_type, area_council) {
   intensity_col <- paste0("Intensity ", cyclone_category)
   
   multiplier <- baseline_factors %>%
     filter(
       Cluster == "Education",
       Attribute == education_level,
-      grepl(measure_type, Indicator, ignore.case = TRUE)
+      grepl(measure_type, Indicator, ignore.case = TRUE),
+      `Area Council` == area_council  # Add council-specific filter
     )
   
   # Check if we got any results
@@ -285,17 +286,17 @@ damage_estimates <- education_with_config %>%
   filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
-    # ECCE
-    ecce_schools_damaged = round(ecce_schools * get_damage_multiplier(Intensity, "ecce", "schools")),
-    ecce_students_affected = round(ecce_students * get_damage_multiplier(Intensity, "ecce", "students")),
+    # ECCE - now passing Region to get council-specific multipliers
+    ecce_schools_damaged = round(ecce_schools * get_damage_multiplier(Intensity, "ecce", "schools", Region)),
+    ecce_students_affected = round(ecce_students * get_damage_multiplier(Intensity, "ecce", "students", Region)),
     
     # Primary
-    primary_schools_damaged = round(primary_schools * get_damage_multiplier(Intensity, "primary", "schools")),
-    primary_students_affected = round(primary_students * get_damage_multiplier(Intensity, "primary", "students")),
+    primary_schools_damaged = round(primary_schools * get_damage_multiplier(Intensity, "primary", "schools", Region)),
+    primary_students_affected = round(primary_students * get_damage_multiplier(Intensity, "primary", "students", Region)),
     
     # Secondary
-    secondary_schools_damaged = round(secondary_schools * get_damage_multiplier(Intensity, "secondary", "schools")),
-    secondary_students_affected = round(secondary_students * get_damage_multiplier(Intensity, "secondary", "students"))
+    secondary_schools_damaged = round(secondary_schools * get_damage_multiplier(Intensity, "secondary", "schools", Region)),
+    secondary_students_affected = round(secondary_students * get_damage_multiplier(Intensity, "secondary", "students", Region))
   ) %>%
   ungroup() %>%
   select(Region, contains("_damaged"), contains("_affected"))
