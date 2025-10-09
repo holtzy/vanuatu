@@ -249,9 +249,7 @@ reactable(
 # === DATA WRANGLING ===
 # Add cyclone strength to baseline values
 education_with_config <- education_wide %>%
-  left_join(config, by = c("Region" = "Area Council")) %>%
-  # Extract the cyclone category number from Intensity (e.g., "Category 5" -> "5")
-  mutate(category = as.character(gsub("Category ", "", Intensity)))
+  left_join(config, by = c("Region" = "Area Council"))
 
 # Load the baseline multiplying factors: 2a Input- Damage Multiplier (sheet 6)
 # Read CSV while preserving column names with spaces
@@ -262,15 +260,24 @@ baseline_factors <- read.csv(
 
 # Helper function for damage multipliers
 get_damage_multiplier <- function(cyclone_category, education_level, measure_type) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
   multiplier <- baseline_factors %>%
     filter(
       Cluster == "Education",
-      Attribute == education_level,  # Now both are lowercase
+      Attribute == education_level,
       grepl(measure_type, Indicator, ignore.case = TRUE)
-    ) %>%
-    pull(!!paste0("Intensity ", cyclone_category))
+    )
   
-  return(ifelse(length(multiplier) > 0, multiplier, 0))
+  # Check if we got any results
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  # Extract the value from the intensity column
+  result <- multiplier[[intensity_col]][1]
+  
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
 }
 
 # Calculate damage estimates
@@ -278,17 +285,17 @@ damage_estimates <- education_with_config %>%
   filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
-    # Changed from ECCE_Schools to ecce_schools (lowercase)
-    ecce_schools_damaged = round(ecce_schools * get_damage_multiplier(category, "ecce", "schools")),
-    ecce_students_affected = round(ecce_students * get_damage_multiplier(category, "ecce", "students")),
+    # ECCE
+    ecce_schools_damaged = round(ecce_schools * get_damage_multiplier(Intensity, "ecce", "schools")),
+    ecce_students_affected = round(ecce_students * get_damage_multiplier(Intensity, "ecce", "students")),
     
-    # Changed from Primary_Schools to primary_schools (lowercase)
-    primary_schools_damaged = round(primary_schools * get_damage_multiplier(category, "primary", "schools")),
-    primary_students_affected = round(primary_students * get_damage_multiplier(category, "primary", "students")),
+    # Primary
+    primary_schools_damaged = round(primary_schools * get_damage_multiplier(Intensity, "primary", "schools")),
+    primary_students_affected = round(primary_students * get_damage_multiplier(Intensity, "primary", "students")),
     
-    # Changed from Secondary_Schools to secondary_schools (lowercase)
-    secondary_schools_damaged = round(secondary_schools * get_damage_multiplier(category, "secondary", "schools")),
-    secondary_students_affected = round(secondary_students * get_damage_multiplier(category, "secondary", "students"))
+    # Secondary
+    secondary_schools_damaged = round(secondary_schools * get_damage_multiplier(Intensity, "secondary", "schools")),
+    secondary_students_affected = round(secondary_students * get_damage_multiplier(Intensity, "secondary", "students"))
   ) %>%
   ungroup() %>%
   select(Region, contains("_damaged"), contains("_affected"))
