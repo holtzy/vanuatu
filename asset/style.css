@@ -4,11 +4,21 @@ Green: #3ab54b;
 LightBlue: #0d81c4; */
 
 h1,
-.h1,
 h2,
-.h2,
-h3,
-.h3 {
+h3 {
   margin-top: 84px;
   color: #0c55a4;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+.header-logo {
+  width: 200px;
+  transform: translateX(-18px);
+}
+
+.header-container {
+  /* background-color: #0d81c4; */
 }

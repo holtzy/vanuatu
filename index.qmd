@@ -20,7 +20,7 @@ format:
     fig-width: 8
     fig-height: 6
     fig-dpi: 300
-    self-contained: true
+    self-contained: false
 execute:
   echo: true
   warning: false
