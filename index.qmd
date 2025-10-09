@@ -30,14 +30,17 @@ execute:
 
 # Intro
 
-This file runs based on a file called `config.csv`. This file provides the cyclone category applied to each council in Vanuatu. It has just 2 columns:
-- council name
-- cyclone category (number from 3 to 5)
+This file runs based on an excel sheet `1b Input- Ex Hazard Areas`, which is the sheet 2 of `11d. Full Data Pipeline.xlsx` and will serve as our config file for later analyses. This file provides the cyclone intensity applied to each council in Vanuatu. It has 5 columns:
+- National
+- Province
+- Area Council
+- Hazard
+- Intensity (number from 2 to 3)
 
 Let's load this file to use it later in our analysis:
 
 ```{r}
-config <- read.csv("data/config.csv")
+config <- read_excel(here::here("Data", "11d. Full Data Pipeline.xlsx"), sheet = 2)
 ```
 
 Another file that will be useful: a 2 columns dataframe that provides the list of councils with their Province
@@ -130,24 +133,19 @@ format_table <- function(data){
 }
 ```
 
-
-
-
-
-
-
 # Education
 
 ## Baseline: Number of Schools, Students, and Teachers
 
 ```{r}
-# Read the Excel file
-full_data <- read_excel(here("data", "11b. Full Data Set.xlsx"))
+# Read the Excel sheet called "1c Input - Baseline"
+full_data <- read_excel(here("data", "11d. Full Data Pipeline.xlsx"), sheet = 3)
 
 # === DATA WRANGLING ===
-# Filter for Education cluster and Area Council level data
+# Filter for Education in Baseline column and Area Council level data
 education_data <- full_data %>%
-  filter(Cluster == "Education") %>%
+  filter(Baseline == "Education") %>%  # Changed to filter Baseline column
+  filter(Year == max(Year, na.rm = TRUE)) %>%  # Filter for the latest year
   filter(!is.na(`Area Council`)) %>%
   mutate(Region = `Area Council`)
 
@@ -239,7 +237,7 @@ reactable(
 # === DATA WRANGLING ===
 # Add cyclone strength to baseline values
 education_with_config <- education_wide %>%
-  left_join(config, by = c("Region" = "council"))
+  left_join(config, by = c("Region" = "Area Council"))
 
 # Load the baseline multiplying factors
 baseline_factors <- read_excel(here("data", "12. Baseline_Multiplying_Factors.xlsx"))
