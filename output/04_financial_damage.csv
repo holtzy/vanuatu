@@ -1,45 +1,45 @@
-"ecce_financial_damage","primary_financial_damage","secondary_financial_damage","total_financial_damage","Region"
-269600000,1.119e+09,8.64e+08,2252600000,"National"
-23600000,8.6e+07,5e+07,159600000,"Malampa"
-4e+06,1.7e+07,8e+06,2.9e+07,"North West Malekula"
-3600000,8e+06,8e+06,19600000,"North East Malekula"
-3400000,1.1e+07,4e+06,18400000,"Central Malekula"
-2200000,6e+06,2e+06,10200000,"South West Malekula"
-2600000,8e+06,4e+06,14600000,"South East Malekula"
-2e+06,7e+06,6e+06,1.5e+07,"South Malekula"
-1800000,9e+06,6e+06,16800000,"North Ambrym"
-1400000,8e+06,6e+06,15400000,"West Ambrym"
-1600000,6e+06,2e+06,9600000,"South East Ambrym"
-1e+06,6e+06,4e+06,1.1e+07,"Paama"
-1.33e+08,6.58e+08,5.74e+08,1.365e+09,"Shefa"
-4.2e+07,1.82e+08,2.24e+08,4.48e+08,"Port Vila"
-1400000,2.1e+07,1.4e+07,36400000,"Vermali"
-5600000,3.5e+07,1.4e+07,54600000,"Vermaul"
-7e+06,3.5e+07,1.4e+07,5.6e+07,"Varisu"
-4200000,2.8e+07,1.4e+07,46200000,"South Epi"
-8400000,4.2e+07,2.8e+07,78400000,"North Tongoa"
-1400000,1.4e+07,1.4e+07,29400000,"Tongariki"
-2800000,2.8e+07,1.4e+07,44800000,"Makimae"
-8400000,2.8e+07,1.4e+07,50400000,"Nguna"
-4200000,1.4e+07,1.4e+07,32200000,"Emau"
-2800000,2.8e+07,1.4e+07,44800000,"Malorua"
-5600000,3.5e+07,2.8e+07,68600000,"North Efate"
-11200000,2.8e+07,4.2e+07,81200000,"Mele"
-2800000,7e+06,1.4e+07,23800000,"Tanvasoko"
-1400000,7e+06,1.4e+07,22400000,"Ifira"
-4200000,1.4e+07,2.8e+07,46200000,"Pango"
-4200000,2.1e+07,2.8e+07,53200000,"Erakor"
-12600000,7e+07,2.8e+07,110600000,"Eratap"
-2800000,2.1e+07,1.4e+07,37800000,"Eton"
-1.13e+08,3.75e+08,2.4e+08,7.28e+08,"Tafea"
-4e+06,12500000,1e+07,26500000,"North Erromango"
-3e+06,22500000,1e+07,35500000,"South Erromango"
-2e+06,5e+06,1e+07,1.7e+07,"Aniwa"
-1.3e+07,4.5e+07,3e+07,8.8e+07,"North Tanna"
-2.2e+07,7e+07,6e+07,1.52e+08,"West Tanna"
-1.4e+07,6e+07,2e+07,9.4e+07,"Middle Bush Tanna"
-9e+06,2.5e+07,1e+07,4.4e+07,"South West Tanna"
-2.8e+07,9e+07,4e+07,1.58e+08,"Whitesands"
-9e+06,2.5e+07,2e+07,5.4e+07,"South Tanna"
-3e+06,5e+06,1e+07,1.8e+07,"Futuna"
-6e+06,1.5e+07,2e+07,4.1e+07,"Aneityum"
+"Region","ecce_financial_damage","primary_financial_damage","secondary_financial_damage","total_financial_damage"
+"National",269600000,1.119e+09,8.64e+08,2252600000
+"Malampa",23600000,8.6e+07,5e+07,159600000
+"North West Malekula",4e+06,1.7e+07,8e+06,2.9e+07
+"North East Malekula",3600000,8e+06,8e+06,19600000
+"Central Malekula",3400000,1.1e+07,4e+06,18400000
+"South West Malekula",2200000,6e+06,2e+06,10200000
+"South East Malekula",2600000,8e+06,4e+06,14600000
+"South Malekula",2e+06,7e+06,6e+06,1.5e+07
+"North Ambrym",1800000,9e+06,6e+06,16800000
+"West Ambrym",1400000,8e+06,6e+06,15400000
+"South East Ambrym",1600000,6e+06,2e+06,9600000
+"Paama",1e+06,6e+06,4e+06,1.1e+07
+"Shefa",1.33e+08,6.58e+08,5.74e+08,1.365e+09
+"Port Vila",4.2e+07,1.82e+08,2.24e+08,4.48e+08
+"Vermali",1400000,2.1e+07,1.4e+07,36400000
+"Vermaul",5600000,3.5e+07,1.4e+07,54600000
+"Varisu",7e+06,3.5e+07,1.4e+07,5.6e+07
+"South Epi",4200000,2.8e+07,1.4e+07,46200000
+"North Tongoa",8400000,4.2e+07,2.8e+07,78400000
+"Tongariki",1400000,1.4e+07,1.4e+07,29400000
+"Makimae",2800000,2.8e+07,1.4e+07,44800000
+"Nguna",8400000,2.8e+07,1.4e+07,50400000
+"Emau",4200000,1.4e+07,1.4e+07,32200000
+"Malorua",2800000,2.8e+07,1.4e+07,44800000
+"North Efate",5600000,3.5e+07,2.8e+07,68600000
+"Mele",11200000,2.8e+07,4.2e+07,81200000
+"Tanvasoko",2800000,7e+06,1.4e+07,23800000
+"Ifira",1400000,7e+06,1.4e+07,22400000
+"Pango",4200000,1.4e+07,2.8e+07,46200000
+"Erakor",4200000,2.1e+07,2.8e+07,53200000
+"Eratap",12600000,7e+07,2.8e+07,110600000
+"Eton",2800000,2.1e+07,1.4e+07,37800000
+"Tafea",1.13e+08,3.75e+08,2.4e+08,7.28e+08
+"North Erromango",4e+06,12500000,1e+07,26500000
+"South Erromango",3e+06,22500000,1e+07,35500000
+"Aniwa",2e+06,5e+06,1e+07,1.7e+07
+"North Tanna",1.3e+07,4.5e+07,3e+07,8.8e+07
+"West Tanna",2.2e+07,7e+07,6e+07,1.52e+08
+"Middle Bush Tanna",1.4e+07,6e+07,2e+07,9.4e+07
+"South West Tanna",9e+06,2.5e+07,1e+07,4.4e+07
+"Whitesands",2.8e+07,9e+07,4e+07,1.58e+08
+"South Tanna",9e+06,2.5e+07,2e+07,5.4e+07
+"Futuna",3e+06,5e+06,1e+07,1.8e+07
+"Aneityum",6e+06,1.5e+07,2e+07,4.1e+07
