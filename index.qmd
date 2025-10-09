@@ -363,9 +363,8 @@ reactable(
 ```{r}
 # === DATA WRANGLING ===
 # Load the resource response configuration "3aii Input- Resources Sent" (sheet 10)
-#resource_config <- read_excel(here("data", "13. Resource_Sent_Response.xlsx"))
 
-resource_config <- read.csv(here::here("Data", "3aii Input- Resources Sent.csv"))
+resource_config <- read.csv(here::here("Data", "3aii Input- Resources Sent.csv"), check.names = FALSE)
 
 # Helper function to get resource multipliers from config
 get_resource_multiplier <- function(resource_type) {
@@ -389,7 +388,7 @@ resources_needed <- education_with_config_resources %>%
   rowwise() %>%
   mutate(
     # Get damage multiplier for this council's specific cyclone category
-    damage_multiplier = get_damage_multiplier(Intensity, "ecce", "schools"),
+    damage_multiplier = get_damage_multiplier(Intensity, "ecce", "schools", Region),
     
     # ECCE Resources
     ecce_tents = round(ecce_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
