@@ -384,7 +384,7 @@ education_with_config_resources <- education_wide %>%
 
 # Calculate resources needed using council-specific cyclone categories
 resources_needed <- education_with_config_resources %>%
-  filter(!is.na(Intensity)) %>%  # Only calculate for councils with assigned categories
+  filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
     # Get damage multiplier for this council's specific cyclone category
@@ -394,32 +394,28 @@ resources_needed <- education_with_config_resources %>%
     ecce_tents = round(ecce_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
     ecce_solar_lamps = round(ecce_schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
     ecce_water = ceiling(ecce_students * damage_multiplier * get_resource_multiplier("Water") * days_of_support),
-    ecce_rice = round(ecce_students * damage_multiplier * get_resource_multiplier("Rice") * days_of_support, 1),
-    ecce_tin_fish = round(ecce_students * damage_multiplier * get_resource_multiplier("Tin fish") * days_of_support, 0),
+    ecce_tin_fish = round(ecce_students * damage_multiplier * get_resource_multiplier("Tin Fish") * days_of_support, 0),  # Changed to "Tin Fish"
     
     # Primary Resources
     primary_tents = round(primary_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
     primary_solar_lamps = round(primary_schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
     primary_water = ceiling(primary_students * damage_multiplier * get_resource_multiplier("Water") * days_of_support),
-    primary_rice = round(primary_students * damage_multiplier * get_resource_multiplier("Rice") * days_of_support, 1),
-    primary_tin_fish = round(primary_students * damage_multiplier * get_resource_multiplier("Tin fish") * days_of_support, 0),
+    primary_tin_fish = round(primary_students * damage_multiplier * get_resource_multiplier("Tin Fish") * days_of_support, 0),  # Changed to "Tin Fish"
     
     # Secondary Resources
     secondary_tents = round(secondary_schools * damage_multiplier * get_resource_multiplier("Tent"), 0),
     secondary_solar_lamps = round(secondary_schools * damage_multiplier * get_resource_multiplier("Solar Lamp"), 0),
     secondary_water = ceiling(secondary_students * damage_multiplier * get_resource_multiplier("Water") * days_of_support),
-    secondary_rice = round(secondary_students * damage_multiplier * get_resource_multiplier("Rice") * days_of_support, 1),
-    secondary_tin_fish = round(secondary_students * damage_multiplier * get_resource_multiplier("Tin fish") * days_of_support, 0),
+    secondary_tin_fish = round(secondary_students * damage_multiplier * get_resource_multiplier("Tin Fish") * days_of_support, 0),  # Changed to "Tin Fish"
     
     # Total Resources (sum across all education levels)
     total_tents = ecce_tents + primary_tents + secondary_tents,
     total_solar_lamps = ecce_solar_lamps + primary_solar_lamps + secondary_solar_lamps,
     total_water = ecce_water + primary_water + secondary_water,
-    total_rice = round(ecce_rice + primary_rice + secondary_rice, 1),
     total_tin_fish = ecce_tin_fish + primary_tin_fish + secondary_tin_fish
   ) %>%
   ungroup() %>%
-  select(Region, contains("tents"), contains("solar_lamps"), contains("water"), contains("rice"), contains("tin_fish"))
+  select(Region, contains("tents"), contains("solar_lamps"), contains("water"), contains("tin_fish"))
 
 # Aggregate to province and national levels
 resources_needed_full <- compute_council_aggregates(resources_needed)
@@ -443,36 +439,32 @@ reactable(
     ecce_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
     ecce_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
     ecce_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    ecce_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
     ecce_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
     
     # Primary columns  
     primary_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
     primary_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
     primary_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    primary_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
     primary_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
     
     # Secondary columns
     secondary_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
     secondary_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
     secondary_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    secondary_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
     secondary_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0)),
     
     # Total columns
     total_tents = colDef(name = "Tents", format = colFormat(digits = 0)),
     total_solar_lamps = colDef(name = "Solar Lamps", format = colFormat(digits = 0)),
     total_water = colDef(name = "Water (1L bottles)", format = colFormat(digits = 0)),
-    total_rice = colDef(name = "Rice (kg)", format = colFormat(digits = 1)),
     total_tin_fish = colDef(name = "Tinned Fish", format = colFormat(digits = 0))
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "ECCE", columns = c("ecce_tents", "ecce_solar_lamps", "ecce_water", "ecce_rice", "ecce_tin_fish")),
-    colGroup(name = "Primary", columns = c("primary_tents", "primary_solar_lamps", "primary_water", "primary_rice", "primary_tin_fish")),
-    colGroup(name = "Secondary", columns = c("secondary_tents", "secondary_solar_lamps", "secondary_water", "secondary_rice", "secondary_tin_fish")),
-    colGroup(name = "Totals", columns = c("total_tents", "total_solar_lamps", "total_water", "total_rice", "total_tin_fish"))
+    colGroup(name = "ECCE", columns = c("ecce_tents", "ecce_solar_lamps", "ecce_water", "ecce_tin_fish")),
+    colGroup(name = "Primary", columns = c("primary_tents", "primary_solar_lamps", "primary_water", "primary_tin_fish")),
+    colGroup(name = "Secondary", columns = c("secondary_tents", "secondary_solar_lamps", "secondary_water", "secondary_tin_fish")),
+    colGroup(name = "Totals", columns = c("total_tents", "total_solar_lamps", "total_water", "total_tin_fish"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -506,16 +498,22 @@ financial_config <- read.csv(
   check.names = FALSE
 )
 
+# Remove empty column if exists
+if("" %in% names(financial_config)) {
+  financial_config <- financial_config %>% select(-1)
+}
+
 # Clean column names to remove any extra spaces
 names(financial_config) <- trimws(names(financial_config))
 
-# Helper function to get unit costs from config
-get_unit_cost <- function(school_type) {
+# Helper function to get unit costs from config (now council-specific)
+get_unit_cost <- function(school_type, area_council) {
   unit_cost <- financial_config %>%
     filter(
       trimws(Cluster) == "Education", 
       trimws(tolower(Attribute)) == tolower(school_type),
-      grepl("Number Schools", trimws(Indicator), ignore.case = TRUE)
+      grepl("Number Schools", trimws(Indicator), ignore.case = TRUE),
+      `Area Council` == area_council  # Add council-specific filter
     ) %>%
     pull(Value)
   
@@ -531,13 +529,15 @@ financial_damage <- education_with_config_financial %>%
   filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
-    # Use Intensity directly (it's already just a number: 2, 3, 4, or 5)
-    damage_multiplier = get_damage_multiplier(Intensity, "ecce", "schools"),
+    # Get council-specific damage multipliers for each education level
+    ecce_damage_multiplier = get_damage_multiplier(Intensity, "ecce", "schools", Region),
+    primary_damage_multiplier = get_damage_multiplier(Intensity, "primary", "schools", Region),
+    secondary_damage_multiplier = get_damage_multiplier(Intensity, "secondary", "schools", Region),
     
-    # Calculate financial damage per education level (in VT)
-    ecce_financial_damage = ecce_schools * get_unit_cost("ecce") * damage_multiplier,
-    primary_financial_damage = primary_schools * get_unit_cost("primary") * damage_multiplier,
-    secondary_financial_damage = secondary_schools * get_unit_cost("secondary") * damage_multiplier,
+    # Calculate financial damage per education level (in VT) using council-specific values
+    ecce_financial_damage = ecce_schools * get_unit_cost("ecce", Region) * ecce_damage_multiplier,
+    primary_financial_damage = primary_schools * get_unit_cost("primary", Region) * primary_damage_multiplier,
+    secondary_financial_damage = secondary_schools * get_unit_cost("secondary", Region) * secondary_damage_multiplier,
     
     # Calculate total financial damage
     total_financial_damage = ecce_financial_damage + primary_financial_damage + secondary_financial_damage
