@@ -184,6 +184,13 @@ education_wide <- education_data %>%
 # Compute aggregates (province and national levels)
 education_aggregated <- compute_council_aggregates(education_wide)
 
+# === EXPORT TO CSV ===
+write.csv(
+  education_aggregated,
+  here::here("output", "01_baseline_education.csv"),
+  row.names = FALSE
+)
+
 # === PRESENTATION ===
 # Format for display
 formatted <- format_table(education_aggregated)
@@ -304,6 +311,13 @@ damage_estimates <- education_with_config %>%
 # Aggregate to province and national levels
 damage_estimates_full <- compute_council_aggregates(damage_estimates)
 
+# === EXPORT TO CSV ===
+write.csv(
+  damage_estimates_full,
+  here::here("output", "02_damage_estimates.csv"),
+  row.names = FALSE
+)
+
 # === PRESENTATION ===
 # Format for display
 formatted <- format_table(damage_estimates_full)
@@ -419,6 +433,13 @@ resources_needed <- education_with_config_resources %>%
 
 # Aggregate to province and national levels
 resources_needed_full <- compute_council_aggregates(resources_needed)
+
+# === EXPORT TO CSV ===
+write.csv(
+  resources_needed_full,
+  here::here("output", "03_resources_needed.csv"),
+  row.names = FALSE
+)
 
 # === PRESENTATION ===
 # Format for display
@@ -547,6 +568,13 @@ financial_damage <- education_with_config_financial %>%
 
 # Aggregate to province and national levels
 financial_damage_full <- compute_council_aggregates(financial_damage)
+
+# === EXPORT TO CSV ===
+write.csv(
+  financial_damage_full,
+  here::here("output", "04_financial_damage.csv"),
+  row.names = FALSE
+)
 
 # === PRESENTATION ===
 # Format for display
