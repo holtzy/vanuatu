@@ -1521,3 +1521,317 @@ reactable(
 )
 ```
 
+
+
+# Food security 
+
+## Baseline: Food Security
+
+### Table 1: Staple crops
+
+```{r}
+# === DATA WRANGLING ===
+
+# Get total households from Shelter baseline (for both tables)
+total_households <- full_data %>%
+  filter(Baseline == "Shelter") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Household Type", Attribute == "number households") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Value) %>%
+  rename(total_households = Value)
+
+# === TABLE 1: STAPLE CROPS ===
+
+# Get staple crop data
+staple_crop_data <- full_data %>%
+  filter(Baseline == "Food Security") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator %in% c("Stable Crop Households", "Staple Crop Production")) %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Indicator, Attribute, Value)
+
+# Reshape staple crop data
+staple_crop_wide <- staple_crop_data %>%
+  mutate(
+    crop = tolower(trimws(Attribute)),
+    metric = case_when(
+      grepl("Households", Indicator) ~ "households",
+      grepl("Production", Indicator) ~ "production",
+      TRUE ~ "other"
+    )
+  ) %>%
+  group_by(Region, crop, metric) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = c(crop, metric),
+    values_from = Value,
+    names_sep = "_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine with total households
+staple_crop_full <- total_households %>%
+  left_join(staple_crop_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+staple_crop_aggregated <- compute_council_aggregates(staple_crop_full)
+
+# Reorder columns according to client's specification
+staple_crop_ordered <- staple_crop_aggregated %>%
+  select(
+    Region,
+    total_households,
+    # Island Cabbage
+    `island cabbage_households`,
+    `island cabbage_production`,
+    # Banana
+    banana_households,
+    banana_production,
+    # Taro
+    taro_households,
+    taro_production,
+    # Kumala
+    kumala_households,
+    kumala_production,
+    # Manioc
+    manioc_households,
+    manioc_production,
+    # Yam
+    yam_households,
+    yam_production
+  )
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  staple_crop_ordered,
+  here::here("output", "FoodSecurity_01_baseline_staple_crops.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(staple_crop_ordered)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_households = colDef(name = "Total", format = colFormat(digits = 0)),
+    
+    # Island Cabbage
+    `island cabbage_households` = colDef(name = "Households", format = colFormat(digits = 0)),
+    `island cabbage_production` = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Banana
+    banana_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    banana_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Taro
+    taro_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    taro_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Kumala
+    kumala_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    kumala_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Manioc
+    manioc_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    manioc_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Yam
+    yam_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    yam_production = colDef(name = "Production", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Households", columns = c("total_households")),
+    colGroup(name = "Island Cabbage", columns = c("island cabbage_households", "island cabbage_production")),
+    colGroup(name = "Banana", columns = c("banana_households", "banana_production")),
+    colGroup(name = "Taro", columns = c("taro_households", "taro_production")),
+    colGroup(name = "Kumala", columns = c("kumala_households", "kumala_production")),
+    colGroup(name = "Manioc", columns = c("manioc_households", "manioc_production")),
+    colGroup(name = "Yam", columns = c("yam_households", "yam_production"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+
+```
+
+### Table 2: Cash Crops
+
+```{r}
+# Get cash crop data
+cash_crop_data <- full_data %>%
+  filter(Baseline == "Food Security") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator %in% c("Cash Crop Households", "Cash Crop Production")) %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Indicator, Attribute, Value)
+
+# Reshape cash crop data
+cash_crop_wide <- cash_crop_data %>%
+  mutate(
+    crop = tolower(trimws(Attribute)),
+    metric = case_when(
+      grepl("Households", Indicator) ~ "households",
+      grepl("Production", Indicator) ~ "production",
+      TRUE ~ "other"
+    )
+  ) %>%
+  group_by(Region, crop, metric) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = c(crop, metric),
+    values_from = Value,
+    names_sep = "_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine with total households
+cash_crop_full <- total_households %>%
+  left_join(cash_crop_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+cash_crop_aggregated <- compute_council_aggregates(cash_crop_full)
+
+# Reorder columns according to client's specification
+cash_crop_ordered <- cash_crop_aggregated %>%
+  select(
+    Region,
+    total_households,
+    # Kava
+    kava_households,
+    kava_production,
+    # Coconut
+    coconut_households,
+    coconut_production,
+    # Cocoa
+    cocoa_households,
+    cocoa_production,
+    # Coffee
+    coffee_households,
+    coffee_production,
+    # Vanilla
+    vanilla_households,
+    vanilla_production,
+    # Tahitian Lime
+    `tahitian lime_households`,
+    `tahitian lime_production`,
+    # Pepper
+    pepper_households,
+    pepper_production,
+    # Noni
+    noni_households,
+    noni_production
+  )
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  cash_crop_ordered,
+  here::here("output", "FoodSecurity_02_baseline_cash_crops.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(cash_crop_ordered)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_households = colDef(name = "Total", format = colFormat(digits = 0)),
+    
+    # Kava
+    kava_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    kava_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Coconut
+    coconut_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    coconut_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Cocoa
+    cocoa_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    cocoa_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Coffee
+    coffee_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    coffee_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Vanilla
+    vanilla_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    vanilla_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Tahitian Lime
+    `tahitian lime_households` = colDef(name = "Households", format = colFormat(digits = 0)),
+    `tahitian lime_production` = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Pepper
+    pepper_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    pepper_production = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Noni
+    noni_households = colDef(name = "Households", format = colFormat(digits = 0)),
+    noni_production = colDef(name = "Production", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Households", columns = c("total_households")),
+    colGroup(name = "Kava", columns = c("kava_households", "kava_production")),
+    colGroup(name = "Coconut", columns = c("coconut_households", "coconut_production")),
+    colGroup(name = "Cocoa", columns = c("cocoa_households", "cocoa_production")),
+    colGroup(name = "Coffee", columns = c("coffee_households", "coffee_production")),
+    colGroup(name = "Vanilla", columns = c("vanilla_households", "vanilla_production")),
+    colGroup(name = "Tahitian Lime", columns = c("tahitian lime_households", "tahitian lime_production")),
+    colGroup(name = "Pepper", columns = c("pepper_households", "pepper_production")),
+    colGroup(name = "Noni", columns = c("noni_households", "noni_production"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+
+## Estimated Hazard Damage 
+
+
+```{r}
+
+```
