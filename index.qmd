@@ -1142,3 +1142,382 @@ reactable(
   showSortable = TRUE
 )
 ```
+
+
+
+## Immediate Response Resources 
+
+
+```{r}
+# === DATA WRANGLING ===
+
+# First, we need to get infrastructure baseline data and calculate damage
+energy_infra_data <- full_data %>%
+  filter(Baseline == "Energy") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Energy Infrastructure") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape infrastructure data
+energy_infra_wide <- energy_infra_data %>%
+  mutate(attribute_clean = tolower(trimws(Attribute))) %>%
+  group_by(Region, attribute_clean) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = attribute_clean,
+    values_from = Value,
+    names_prefix = "infra_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Add cyclone config to infrastructure data
+energy_infra_with_config <- energy_infra_wide %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Helper function for infrastructure damage multipliers
+get_infra_damage_multiplier <- function(cyclone_category, attribute_type, area_council) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Energy",
+      Indicator == "Energy Infrastructure",
+      tolower(trimws(Attribute)) == tolower(trimws(attribute_type)),
+      `Area Council` == area_council
+    )
+  
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  result <- multiplier[[intensity_col]][1]
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
+}
+
+# Calculate damaged infrastructure
+infra_damage <- energy_infra_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Calculate damaged poles
+    `infra_low voltage poles_damaged` = `infra_low voltage poles` * get_infra_damage_multiplier(Intensity, "low voltage poles", Region),
+    `infra_high voltage poles_damaged` = `infra_high voltage poles` * get_infra_damage_multiplier(Intensity, "high voltage poles", Region),
+    
+    # Total damaged poles for power line cable calculation
+    total_poles_damaged = `infra_low voltage poles_damaged` + `infra_high voltage poles_damaged`
+  ) %>%
+  ungroup() %>%
+  select(Region, contains("_damaged"), total_poles_damaged)
+
+# Now calculate resources needed
+# Join household damage data with infrastructure damage data
+resources_base <- damage_estimates %>%
+  left_join(infra_damage, by = "Region")
+
+# Calculate total electricity households affected
+resources_needed <- resources_base %>%
+  mutate(
+    # Total households with electricity affected (for solar lamps)
+    total_elec_affected = `elec_battery lamp_damaged` + elec_generator_damaged + 
+                          `elec_main grid_damaged` + `elec_no access_damaged` + 
+                          `elec_solar system_damaged`,
+    
+    # Resource calculations based on specifications
+    solar_lamp = round(1 * total_elec_affected, 0),
+    low_voltage_poles_support = round(0.2 * `infra_low voltage poles_damaged`, 0),
+    high_voltage_pole_support = round(0.2 * `infra_high voltage poles_damaged`, 0),
+    power_line_cable = round(100 * total_poles_damaged, 0)
+  ) %>%
+  select(Region, solar_lamp, low_voltage_poles_support, high_voltage_pole_support, power_line_cable)
+
+# Aggregate to province and national levels
+resources_needed_full <- compute_council_aggregates(resources_needed)
+
+# === EXPORT TO CSV ===
+write.csv(
+  resources_needed_full,
+  here::here("output", "Energy_03_resources_needed.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(resources_needed_full)
+
+# Create the resources needed reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    solar_lamp = colDef(
+      name = "Solar Lamp", 
+      format = colFormat(digits = 0)
+    ),
+    low_voltage_poles_support = colDef(
+      name = "Low Voltage Poles Support", 
+      format = colFormat(digits = 0)
+    ),
+    high_voltage_pole_support = colDef(
+      name = "High Voltage Pole Support", 
+      format = colFormat(digits = 0)
+    ),
+    power_line_cable = colDef(
+      name = "Power Line Cable (metres)", 
+      format = colFormat(digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Household Electricity", columns = c("solar_lamp")),
+    colGroup(name = "Non-renewable", columns = c("low_voltage_poles_support", "high_voltage_pole_support", "power_line_cable"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+
+```
+
+
+## Estimated Financial Damage
+
+### Table 1: Household Electricity Financial Damage
+
+```{r}
+# Helper function to get unit costs for household electricity
+get_household_elec_unit_cost <- function(electricity_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Energy",
+      Indicator == "Household Electricity",
+      tolower(trimws(Attribute)) == tolower(trimws(electricity_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Add cyclone categories from config file
+energy_damage_with_config <- damage_estimates %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Calculate household electricity financial damage
+household_elec_financial <- energy_damage_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each electricity type (in VT)
+    battery_lamp_damage = `elec_battery lamp_damaged` * get_household_elec_unit_cost("battery lamp", Region),
+    generator_damage = elec_generator_damaged * get_household_elec_unit_cost("generator", Region),
+    main_grid_damage = `elec_main grid_damaged` * get_household_elec_unit_cost("electricity poles", Region),  # Using "electricity poles" as proxy for main grid
+    
+    # Total household electricity financial damage
+    total_household_elec_damage = battery_lamp_damage + generator_damage + main_grid_damage
+  ) %>%
+  ungroup() %>%
+  select(Region, battery_lamp_damage, generator_damage, main_grid_damage, total_household_elec_damage)
+
+# Aggregate to province and national levels
+household_elec_financial_full <- compute_council_aggregates(household_elec_financial)
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  household_elec_financial_full,
+  here::here("output", "Energy_04a_financial_damage_household_electricity.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(household_elec_financial_full)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    battery_lamp_damage = colDef(
+      name = "Battery Lamp",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    generator_damage = colDef(
+      name = "Generator",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    main_grid_damage = colDef(
+      name = "Main Grid",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    total_household_elec_damage = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Household Electricity", columns = c("battery_lamp_damage", "generator_damage", "main_grid_damage", "total_household_elec_damage"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+
+### Table 2: Energy Infrastructure Financial Damage
+
+
+```{r}
+# Helper function to get unit costs for infrastructure
+get_infrastructure_unit_cost <- function(infrastructure_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Energy",
+      Indicator == "Energy Infrastructure",
+      tolower(trimws(Attribute)) == tolower(trimws(infrastructure_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Join infrastructure baseline with config
+energy_infra_with_config <- energy_infra_wide %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Calculate infrastructure financial damage
+infrastructure_financial <- energy_infra_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Calculate damaged infrastructure units and their financial cost
+    hydro_damaged = if("infra_hydro" %in% names(.)) infra_hydro * get_infra_damage_multiplier(Intensity, "hydro", Region) else 0,
+    hydro_financial = hydro_damaged * get_infrastructure_unit_cost("hydro", Region),
+    
+    solar_damaged = if("infra_solar" %in% names(.)) infra_solar * get_infra_damage_multiplier(Intensity, "solar", Region) else 0,
+    solar_financial = solar_damaged * get_infrastructure_unit_cost("solar", Region),
+    
+    pole_support_damaged = if("infra_electrcity pole support" %in% names(.)) `infra_electrcity pole support` * get_infra_damage_multiplier(Intensity, "electrcity pole support", Region) else 0,
+    pole_support_financial = pole_support_damaged * get_infrastructure_unit_cost("electrcity pole support", Region),
+    
+    terminals_damaged = if("infra_electrical terminals" %in% names(.)) `infra_electrical terminals` * get_infra_damage_multiplier(Intensity, "electrical terminals", Region) else 0,
+    terminals_financial = terminals_damaged * get_infrastructure_unit_cost("electrical terminals", Region),
+    
+    hv_poles_damaged = if("infra_high voltage poles" %in% names(.)) `infra_high voltage poles` * get_infra_damage_multiplier(Intensity, "high voltage poles", Region) else 0,
+    hv_poles_financial = hv_poles_damaged * get_infrastructure_unit_cost("high voltage poles", Region),
+    
+    hv_support_damaged = if("infra_high voltage support poles" %in% names(.)) `infra_high voltage support poles` * get_infra_damage_multiplier(Intensity, "high voltage support poles", Region) else 0,
+    hv_support_financial = hv_support_damaged * get_infrastructure_unit_cost("high voltage support poles", Region),
+    
+    hv_transformer_damaged = if("infra_high voltage transformer substation" %in% names(.)) `infra_high voltage transformer substation` * get_infra_damage_multiplier(Intensity, "high voltage transformer substation", Region) else 0,
+    hv_transformer_financial = hv_transformer_damaged * get_infrastructure_unit_cost("high voltage transformer substation", Region),
+    
+    lv_poles_damaged = if("infra_low voltage poles" %in% names(.)) `infra_low voltage poles` * get_infra_damage_multiplier(Intensity, "low voltage poles", Region) else 0,
+    lv_poles_financial = lv_poles_damaged * get_infrastructure_unit_cost("low voltage poles", Region),
+    
+    lv_distribution_damaged = if("infra_low voltage street distrbution boxes" %in% names(.)) `infra_low voltage street distrbution boxes` * get_infra_damage_multiplier(Intensity, "low voltage street distrbution boxes", Region) else 0,
+    lv_distribution_financial = lv_distribution_damaged * get_infrastructure_unit_cost("low voltage street distrbution boxes", Region),
+    
+    # Total infrastructure financial damage
+    total_infrastructure_damage = hydro_financial + solar_financial + pole_support_financial + 
+                                  terminals_financial + hv_poles_financial + hv_support_financial +
+                                  hv_transformer_financial + lv_poles_financial + lv_distribution_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, hydro_financial, solar_financial, pole_support_financial, terminals_financial,
+         hv_poles_financial, hv_support_financial, hv_transformer_financial, 
+         lv_poles_financial, lv_distribution_financial, total_infrastructure_damage)
+
+# Aggregate to province and national levels
+infrastructure_financial_full <- compute_council_aggregates(infrastructure_financial)
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  infrastructure_financial_full,
+  here::here("output", "Energy_04b_financial_damage_infrastructure.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(infrastructure_financial_full)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    hydro_financial = colDef(name = "Hydro", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    solar_financial = colDef(name = "Solar", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    pole_support_financial = colDef(name = "Electricity Pole Support", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    terminals_financial = colDef(name = "Electrical Terminals", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    hv_poles_financial = colDef(name = "High Voltage Poles", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    hv_support_financial = colDef(name = "High Voltage Support Poles", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    hv_transformer_financial = colDef(name = "HV Transformer Substation", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    lv_poles_financial = colDef(name = "Low Voltage Poles", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    lv_distribution_financial = colDef(name = "LV Street Distribution Boxes", format = colFormat(suffix = " VT", separators = TRUE, digits = 0)),
+    total_infrastructure_damage = colDef(name = "Total Value", format = colFormat(suffix = " VT", separators = TRUE, digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Renewable", columns = c("hydro_financial", "solar_financial")),
+    colGroup(name = "Non-renewable", columns = c("pole_support_financial", "terminals_financial", 
+                                                   "hv_poles_financial", "hv_support_financial",
+                                                   "hv_transformer_financial", "lv_poles_financial",
+                                                   "lv_distribution_financial")),
+    colGroup(name = "Total", columns = c("total_infrastructure_damage"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
