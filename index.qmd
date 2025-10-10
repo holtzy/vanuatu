@@ -187,7 +187,7 @@ education_aggregated <- compute_council_aggregates(education_wide)
 # === EXPORT TO CSV ===
 write.csv(
   education_aggregated %>% select(Region, everything()),
-  here::here("output", "01_baseline_education.csv"),
+  here::here("output", "Education_01_baseline_education.csv"),
   row.names = FALSE
 )
 
@@ -314,7 +314,7 @@ damage_estimates_full <- compute_council_aggregates(damage_estimates)
 # === EXPORT TO CSV ===
 write.csv(
   damage_estimates_full %>% select(Region, everything()),
-  here::here("output", "02_damage_estimates.csv"),
+  here::here("output", "Education_02_damage_estimates.csv"),
   row.names = FALSE
 )
 # === PRESENTATION ===
@@ -436,7 +436,7 @@ resources_needed_full <- compute_council_aggregates(resources_needed)
 # === EXPORT TO CSV ===
 write.csv(
   resources_needed_full %>% select(Region, everything()),
-  here::here("output", "03_resources_needed.csv"),
+  here::here("output", "Education_03_resources_needed.csv"),
   row.names = FALSE
 )
 
@@ -571,7 +571,7 @@ financial_damage_full <- compute_council_aggregates(financial_damage)
 # === EXPORT TO CSV ===
 write.csv(
   financial_damage_full %>% select(Region, everything()),
-  here::here("output", "04_financial_damage.csv"),
+  here::here("output", "Education_04_financial_damage.csv"),
   row.names = FALSE
 )
 
