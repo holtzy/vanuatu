@@ -630,3 +630,515 @@ reactable(
 )
 
 ```
+
+
+
+# Emergency Telecommunications
+
+## Baseline: Number of Telecommunication Towers
+
+```{r}
+# === DATA WRANGLING ===
+# Filter for Emergency Telecommunications in Baseline column and Area Council level data
+telecom_data <- full_data %>%
+  filter(Baseline == "Emergency Telecommunications") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`)
+
+# Reshape the data to get Digicel and Vodafone as separate columns
+telecom_wide <- telecom_data %>%
+  mutate(
+    provider = tolower(Attribute)  # digicel or vodafone
+  ) %>%
+  filter(provider %in% c("digicel", "vodafone")) %>%
+  select(Region, provider, Value) %>%
+  # Group and sum to handle duplicates (4 councils have duplicate entries)
+  group_by(Region, provider) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = provider,
+    values_from = Value,
+    names_prefix = "towers_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+telecom_aggregated <- compute_council_aggregates(telecom_wide)
+
+# === EXPORT TO CSV ===
+write.csv(
+  telecom_aggregated %>% select(Region, everything()),
+  here::here("output", "Telecom_01_baseline_towers.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(telecom_aggregated)
+
+# Create the reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    towers_digicel = colDef(
+      name = "Digicel", 
+      format = colFormat(digits = 0)
+    ),
+    towers_vodafone = colDef(
+      name = "Vodafone", 
+      format = colFormat(digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Number of Towers", columns = c("towers_digicel", "towers_vodafone"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+
+## Estimating Damage: Number of Damaged Towers
+
+
+```{r}
+# === DATA WRANGLING ===
+# Add cyclone strength to baseline values
+telecom_with_config <- telecom_wide %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Helper function for damage multipliers (council and provider-specific)
+get_damage_multiplier <- function(cyclone_category, provider, area_council) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Emergency Telecommunications",
+      Attribute == provider,
+      grepl("Number Towers", Indicator, ignore.case = TRUE),
+      `Area Council` == area_council
+    )
+  
+  # Check if we got any results
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  # Extract the value from the intensity column
+  result <- multiplier[[intensity_col]][1]
+  
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
+}
+
+# Calculate damage estimates
+damage_estimates <- telecom_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Digicel towers damaged
+    towers_digicel_damaged = towers_digicel * get_damage_multiplier(Intensity, "digicel", Region),
+    
+    # Vodafone towers damaged
+    towers_vodafone_damaged = towers_vodafone * get_damage_multiplier(Intensity, "vodafone", Region),
+    
+    # Total towers damaged
+    total_towers_damaged = towers_digicel_damaged + towers_vodafone_damaged
+  ) %>%
+  ungroup() %>%
+  select(Region, towers_digicel_damaged, towers_vodafone_damaged, total_towers_damaged)
+
+# Aggregate to province and national levels
+damage_estimates_full <- compute_council_aggregates(damage_estimates)
+
+# === EXPORT TO CSV ===
+write.csv(
+  damage_estimates_full %>% select(Region, everything()),
+  here::here("output", "Telecom_02_damage_estimates.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(damage_estimates_full)
+
+# Create the damage estimation reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    towers_digicel_damaged = colDef(
+      name = "Digicel", 
+      format = colFormat(digits = 1)
+    ),
+    towers_vodafone_damaged = colDef(
+      name = "Vodafone", 
+      format = colFormat(digits = 1)
+    ),
+    total_towers_damaged = colDef(
+      name = "Total", 
+      format = colFormat(digits = 1)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Damaged Towers", columns = c("towers_digicel_damaged", "towers_vodafone_damaged", "total_towers_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+
+```
+
+
+
+
+# Energy 
+
+
+## Baseline: Household Energy Access and Usage
+
+
+
+```{r}
+# === DATA WRANGLING ===
+
+# Get total households from Shelter baseline
+total_households <- full_data %>%
+  filter(Baseline == "Shelter") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Household Type", Attribute == "number households") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Value) %>%
+  rename(total_households = Value)
+
+# Get household electricity data
+electricity_data <- full_data %>%
+  filter(Baseline == "Energy") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Household Electricity") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape electricity data
+electricity_wide <- electricity_data %>%
+  mutate(attribute_clean = tolower(trimws(Attribute))) %>%
+  group_by(Region, attribute_clean) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = attribute_clean,
+    values_from = Value,
+    names_prefix = "elec_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Get household cooking fuel data
+cooking_data <- full_data %>%
+  filter(Baseline == "Energy") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Household Cooking Fuel") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape cooking data
+cooking_wide <- cooking_data %>%
+  mutate(attribute_clean = tolower(trimws(Attribute))) %>%
+  group_by(Region, attribute_clean) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = attribute_clean,
+    values_from = Value,
+    names_prefix = "cook_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine all energy data
+energy_wide <- total_households %>%
+  left_join(electricity_wide, by = "Region") %>%
+  left_join(cooking_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+energy_aggregated <- compute_council_aggregates(energy_wide)
+
+# === EXPORT TO CSV ===
+# Reorder columns to match client's specification before export
+energy_aggregated_ordered <- energy_aggregated %>%
+  select(
+    Region,
+    total_households,
+    # Household Electricity in client's order
+    `elec_battery lamp`,
+    elec_generator,
+    `elec_main grid`,
+    `elec_no access`,
+    `elec_solar system`,
+    # Household Cooking in client's order
+    `cook_bottle gas`,
+    `cook_open fire`,
+    `cook_solar power`,
+    cook_electricity,
+    `cook_wood stove`
+  )
+
+write.csv(
+  energy_aggregated_ordered,
+  here::here("output", "Energy_01_baseline.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(energy_aggregated)
+
+# Reorder columns to match client's specification
+formatted <- formatted %>%
+  select(
+    Region,
+    total_households,
+    # Household Electricity in client's order
+    `elec_battery lamp`,
+    elec_generator,
+    `elec_main grid`,
+    `elec_no access`,
+    `elec_solar system`,
+    # Household Cooking in client's order
+    `cook_bottle gas`,
+    `cook_open fire`,
+    `cook_solar power`,
+    cook_electricity,
+    `cook_wood stove`
+  )
+
+# Create the reactable with client's specified column order
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    # Total Households
+    total_households = colDef(name = "Total", format = colFormat(digits = 0)),
+    
+    # Household Electricity columns (in client's order)
+    `elec_battery lamp` = colDef(name = "Battery Lamp", format = colFormat(digits = 0)),
+    elec_generator = colDef(name = "Generator", format = colFormat(digits = 0)),
+    `elec_main grid` = colDef(name = "Main Grid", format = colFormat(digits = 0)),
+    `elec_no access` = colDef(name = "No Access", format = colFormat(digits = 0)),
+    `elec_solar system` = colDef(name = "Solar System", format = colFormat(digits = 0)),
+    
+    # Household Cooking columns (in client's order)
+    `cook_bottle gas` = colDef(name = "Bottle Gas", format = colFormat(digits = 0)),
+    `cook_open fire` = colDef(name = "Open Fire", format = colFormat(digits = 0)),
+    `cook_solar power` = colDef(name = "Solar Power", format = colFormat(digits = 0)),
+    cook_electricity = colDef(name = "Electricity", format = colFormat(digits = 0)),
+    `cook_wood stove` = colDef(name = "Wood Stove", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Households", columns = c("total_households")),
+    colGroup(name = "Household Electricity", columns = c("elec_battery lamp", "elec_generator", "elec_main grid", "elec_no access", "elec_solar system")),
+    colGroup(name = "Household Cooking", columns = c("cook_bottle gas", "cook_open fire", "cook_solar power", "cook_electricity", "cook_wood stove"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+
+```
+
+
+## Estimating damage: Households affected by electricity disruption
+
+
+```{r}
+# === DATA WRANGLING ===
+# Add cyclone strength to baseline values
+energy_with_config <- energy_wide %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Helper function for damage multipliers (council-specific, for both electricity and cooking)
+get_energy_damage_multiplier <- function(cyclone_category, indicator_type, attribute_type, area_council) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Energy",
+      Indicator == indicator_type,
+      tolower(trimws(Attribute)) == tolower(trimws(attribute_type)),
+      `Area Council` == area_council
+    )
+  
+  # Check if we got any results
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  # Extract the value from the intensity column
+  result <- multiplier[[intensity_col]][1]
+  
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
+}
+
+# Calculate damage estimates
+damage_estimates <- energy_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Total households affected (same as baseline - no damage applied)
+    total_households_affected = total_households,
+    
+    # Damaged households for each electricity type
+    `elec_battery lamp_damaged` = `elec_battery lamp` * get_energy_damage_multiplier(Intensity, "Household Electricity", "battery lamp", Region),
+    elec_generator_damaged = elec_generator * get_energy_damage_multiplier(Intensity, "Household Electricity", "generator", Region),
+    `elec_main grid_damaged` = `elec_main grid` * get_energy_damage_multiplier(Intensity, "Household Electricity", "main grid", Region),
+    `elec_no access_damaged` = `elec_no access` * get_energy_damage_multiplier(Intensity, "Household Electricity", "no access", Region),
+    `elec_solar system_damaged` = `elec_solar system` * get_energy_damage_multiplier(Intensity, "Household Electricity", "solar system", Region),
+    
+    # Damaged households for each cooking fuel type
+    `cook_bottle gas_damaged` = `cook_bottle gas` * get_energy_damage_multiplier(Intensity, "Household Cooking Fuel", "bottle gas", Region),
+    `cook_open fire_damaged` = `cook_open fire` * get_energy_damage_multiplier(Intensity, "Household Cooking Fuel", "open fire", Region),
+    `cook_solar power_damaged` = `cook_solar power` * get_energy_damage_multiplier(Intensity, "Household Cooking Fuel", "solar power", Region),
+    cook_electricity_damaged = cook_electricity * get_energy_damage_multiplier(Intensity, "Household Cooking Fuel", "electricity", Region),
+    `cook_wood stove_damaged` = `cook_wood stove` * get_energy_damage_multiplier(Intensity, "Household Cooking Fuel", "wood stove", Region)
+  ) %>%
+  ungroup() %>%
+  select(Region, total_households_affected, contains("_damaged"))
+
+# Aggregate to province and national levels
+damage_estimates_full <- compute_council_aggregates(damage_estimates)
+
+# === EXPORT TO CSV ===
+# Reorder columns to match client's specification before export
+damage_estimates_ordered <- damage_estimates_full %>%
+  select(
+    Region,
+    total_households_affected,
+    # Household Electricity in client's order
+    `elec_battery lamp_damaged`,
+    elec_generator_damaged,
+    `elec_main grid_damaged`,
+    `elec_no access_damaged`,
+    `elec_solar system_damaged`,
+    # Household Cooking in client's order
+    `cook_bottle gas_damaged`,
+    `cook_open fire_damaged`,
+    `cook_solar power_damaged`,
+    cook_electricity_damaged,
+    `cook_wood stove_damaged`
+  )
+
+write.csv(
+  damage_estimates_ordered,
+  here::here("output", "Energy_02_damage_estimates.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(damage_estimates_ordered)
+
+# Create the damage estimation reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    # Total Households
+    total_households_affected = colDef(name = "Total", format = colFormat(digits = 0)),
+    
+    # Household Electricity columns (in client's order)
+    `elec_battery lamp_damaged` = colDef(name = "Battery Lamp", format = colFormat(digits = 0)),
+    elec_generator_damaged = colDef(name = "Generator", format = colFormat(digits = 0)),
+    `elec_main grid_damaged` = colDef(name = "Main Grid", format = colFormat(digits = 0)),
+    `elec_no access_damaged` = colDef(name = "No Access", format = colFormat(digits = 0)),
+    `elec_solar system_damaged` = colDef(name = "Solar System", format = colFormat(digits = 0)),
+    
+    # Household Cooking columns (in client's order)
+    `cook_bottle gas_damaged` = colDef(name = "Bottle Gas", format = colFormat(digits = 0)),
+    `cook_open fire_damaged` = colDef(name = "Open Fire", format = colFormat(digits = 0)),
+    `cook_solar power_damaged` = colDef(name = "Solar Power", format = colFormat(digits = 0)),
+    cook_electricity_damaged = colDef(name = "Electricity", format = colFormat(digits = 0)),
+    `cook_wood stove_damaged` = colDef(name = "Wood Stove", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Households", columns = c("total_households_affected")),
+    colGroup(name = "Household Electricity Affected", columns = c("elec_battery lamp_damaged", "elec_generator_damaged", "elec_main grid_damaged", "elec_no access_damaged", "elec_solar system_damaged")),
+    colGroup(name = "Household Cooking Affected", columns = c("cook_bottle gas_damaged", "cook_open fire_damaged", "cook_solar power_damaged", "cook_electricity_damaged", "cook_wood stove_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
