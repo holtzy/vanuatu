@@ -2264,7 +2264,7 @@ reactable(
 ```
 
 
-# Estimated Financial Damage 
+## Estimated Financial Damage 
 
 ### Table 1: Staple Crops Financial Damage
 
@@ -2499,9 +2499,324 @@ reactable(
 ```
 
 
+# Gender & Protection 
 
+## Baseline : Gender & Protection 
 
+### Table 1: Population by Sex and Age
 
 ```{r}
+# === DATA WRANGLING ===
 
+# Get total population from the data
+total_population <- full_data %>%
+  filter(Baseline == "Gender & Protection") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Population Sex") %>%
+  mutate(Region = `Area Council`) %>%
+  group_by(Region) %>%
+  summarise(total_population = sum(Value, na.rm = TRUE), .groups = "drop")
+
+# Get population by sex
+population_sex <- full_data %>%
+  filter(Baseline == "Gender & Protection") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Population Sex") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape sex data
+sex_wide <- population_sex %>%
+  mutate(sex = tolower(trimws(Attribute))) %>%
+  group_by(Region, sex) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = sex,
+    values_from = Value,
+    names_prefix = "sex_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Get population by age
+population_age <- full_data %>%
+  filter(Baseline == "Gender & Protection") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Population Age") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape age data
+age_wide <- population_age %>%
+  mutate(age_group = tolower(trimws(Attribute))) %>%
+  group_by(Region, age_group) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = age_group,
+    values_from = Value,
+    names_prefix = "age_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine all population data
+population_full <- total_population %>%
+  left_join(sex_wide, by = "Region") %>%
+  left_join(age_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+population_aggregated <- compute_council_aggregates(population_full)
+
+# Reorder columns
+population_ordered <- population_aggregated %>%
+  select(
+    Region,
+    total_population,
+    sex_male,
+    sex_female,
+    `age_0-4`,
+    `age_5-11`,
+    `age_12-18`,
+    `age_19-35`,
+    `age_36-54`,
+    `age_55+`
+  )
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  population_ordered,
+  here::here("output", "GenderProtection_01a_baseline_population.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(population_ordered)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_population = colDef(name = "Total", format = colFormat(digits = 0)),
+    sex_male = colDef(name = "Male", format = colFormat(digits = 0)),
+    sex_female = colDef(name = "Female", format = colFormat(digits = 0)),
+    `age_0-4` = colDef(name = "0-4", format = colFormat(digits = 0)),
+    `age_5-11` = colDef(name = "5-11", format = colFormat(digits = 0)),
+    `age_12-18` = colDef(name = "12-18", format = colFormat(digits = 0)),
+    `age_19-35` = colDef(name = "19-35", format = colFormat(digits = 0)),
+    `age_36-54` = colDef(name = "36-54", format = colFormat(digits = 0)),
+    `age_55+` = colDef(name = "55+", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Population", columns = c("total_population")),
+    colGroup(name = "Sex", columns = c("sex_male", "sex_female")),
+    colGroup(name = "Age Group", columns = c("age_0-4", "age_5-11", "age_12-18", "age_19-35", "age_36-54", "age_55+"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+### Table 2: Marital Status
+
+```{r}
+# Get marital status data
+marital_data <- full_data %>%
+  filter(Baseline == "Gender & Protection") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Marital Status") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape marital status data
+marital_wide <- marital_data %>%
+  mutate(status = tolower(trimws(Attribute))) %>%
+  group_by(Region, status) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = status,
+    values_from = Value,
+    names_prefix = "marital_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine with total population
+marital_full <- total_population %>%
+  left_join(marital_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+marital_aggregated <- compute_council_aggregates(marital_full)
+
+# Reorder columns
+marital_ordered <- marital_aggregated %>%
+  select(
+    Region,
+    total_population,
+    marital_defacto,
+    marital_married,
+    `marital_never married`,
+    marital_separated,
+    marital_widowed
+  )
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  marital_ordered,
+  here::here("output", "GenderProtection_01b_baseline_marital_status.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(marital_ordered)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_population = colDef(name = "Total", format = colFormat(digits = 0)),
+    marital_defacto = colDef(name = "Defacto", format = colFormat(digits = 0)),
+    marital_married = colDef(name = "Married", format = colFormat(digits = 0)),
+    `marital_never married` = colDef(name = "Never Married", format = colFormat(digits = 0)),
+    marital_separated = colDef(name = "Separated", format = colFormat(digits = 0)),
+    marital_widowed = colDef(name = "Widow", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Marital Status", columns = c("total_population", "marital_defacto", "marital_married", "marital_never married", "marital_separated", "marital_widowed"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+### Table 3: Employment Status
+
+```{r}
+# Get employment status data
+employment_data <- full_data %>%
+  filter(Baseline == "Gender & Protection") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Employment Status") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape employment status data
+employment_wide <- employment_data %>%
+  mutate(status = tolower(trimws(Attribute))) %>%
+  group_by(Region, status) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = status,
+    values_from = Value,
+    names_prefix = "employ_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine with total population
+employment_full <- total_population %>%
+  left_join(employment_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+employment_aggregated <- compute_council_aggregates(employment_full)
+
+# Reorder columns
+employment_ordered <- employment_aggregated %>%
+  select(
+    Region,
+    total_population,
+    employ_government,
+    employ_private,
+    employ_employer,
+    `employ_self-employed`,
+    employ_voluntary,
+    employ_unpaid,
+    `employ_own consumption`
+  )
+
+# === EXPORT TABLE 3 TO CSV ===
+write.csv(
+  employment_ordered,
+  here::here("output", "GenderProtection_01c_baseline_employment_status.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 3 ===
+formatted3 <- format_table(employment_ordered)
+
+reactable(
+  formatted3,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_population = colDef(name = "Total", format = colFormat(digits = 0)),
+    employ_government = colDef(name = "Government", format = colFormat(digits = 0)),
+    employ_private = colDef(name = "Private", format = colFormat(digits = 0)),
+    employ_employer = colDef(name = "Employer", format = colFormat(digits = 0)),
+    `employ_self-employed` = colDef(name = "Self Employed", format = colFormat(digits = 0)),
+    employ_voluntary = colDef(name = "Voluntary", format = colFormat(digits = 0)),
+    employ_unpaid = colDef(name = "Unpaid", format = colFormat(digits = 0)),
+    `employ_own consumption` = colDef(name = "Own Consumption", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Employment Status", columns = c("total_population", "employ_government", "employ_private", "employ_employer", "employ_self-employed", "employ_voluntary", "employ_unpaid", "employ_own consumption"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
 ```
