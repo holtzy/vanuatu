@@ -1608,7 +1608,7 @@ staple_crop_ordered <- staple_crop_aggregated %>%
 # === EXPORT TABLE 1 TO CSV ===
 write.csv(
   staple_crop_ordered,
-  here::here("output", "FoodSecurity_01_baseline_staple_crops.csv"),
+  here::here("output", "FoodSecurity_01a_baseline_staple_crops.csv"),
   row.names = FALSE
 )
 
@@ -1750,7 +1750,7 @@ cash_crop_ordered <- cash_crop_aggregated %>%
 # === EXPORT TABLE 2 TO CSV ===
 write.csv(
   cash_crop_ordered,
-  here::here("output", "FoodSecurity_02_baseline_cash_crops.csv"),
+  here::here("output", "FoodSecurity_01b_baseline_cash_crops.csv"),
   row.names = FALSE
 )
 
@@ -1831,7 +1831,439 @@ reactable(
 
 ## Estimated Hazard Damage 
 
+### Table 1: Staple Crops Damage
 
 ```{r}
+# Helper function for food security damage multipliers
+get_food_security_damage_multiplier <- function(cyclone_category, indicator_type, crop_type, area_council) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Food Security",
+      Indicator == indicator_type,
+      tolower(trimws(Attribute)) == tolower(trimws(crop_type)),
+      `Area Council` == area_council
+    )
+  
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  result <- multiplier[[intensity_col]][1]
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
+}
 
+# Add cyclone categories from config file
+staple_crop_with_config <- staple_crop_full %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Calculate staple crop damage estimates
+staple_damage <- staple_crop_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Total households affected (same as baseline)
+    total_households_affected = total_households,
+    
+    # Island Cabbage
+    `island cabbage_households_damaged` = `island cabbage_households` * get_food_security_damage_multiplier(Intensity, "Stable Crop Households", "island cabbage", Region),
+    `island cabbage_production_damaged` = `island cabbage_production` * get_food_security_damage_multiplier(Intensity, "Stable Crop Production", "island cabbage", Region),
+    
+    # Banana
+    banana_households_damaged = banana_households * get_food_security_damage_multiplier(Intensity, "Stable Crop Households", "banana", Region),
+    banana_production_damaged = banana_production * get_food_security_damage_multiplier(Intensity, "Stable Crop Production", "banana", Region),
+    
+    # Taro
+    taro_households_damaged = taro_households * get_food_security_damage_multiplier(Intensity, "Stable Crop Households", "taro", Region),
+    taro_production_damaged = taro_production * get_food_security_damage_multiplier(Intensity, "Stable Crop Production", "taro", Region),
+    
+    # Kumala
+    kumala_households_damaged = kumala_households * get_food_security_damage_multiplier(Intensity, "Stable Crop Households", "kumala", Region),
+    kumala_production_damaged = kumala_production * get_food_security_damage_multiplier(Intensity, "Stable Crop Production", "kumala", Region),
+    
+    # Manioc
+    manioc_households_damaged = manioc_households * get_food_security_damage_multiplier(Intensity, "Stable Crop Households", "manioc", Region),
+    manioc_production_damaged = manioc_production * get_food_security_damage_multiplier(Intensity, "Stable Crop Production", "manioc", Region),
+    
+    # Yam
+    yam_households_damaged = yam_households * get_food_security_damage_multiplier(Intensity, "Stable Crop Households", "yam", Region),
+    yam_production_damaged = yam_production * get_food_security_damage_multiplier(Intensity, "Stable Crop Production", "yam", Region)
+  ) %>%
+  ungroup() %>%
+  select(Region, total_households_affected, contains("_damaged"))
+
+# Aggregate to province and national levels
+staple_damage_full <- compute_council_aggregates(staple_damage)
+
+# Reorder columns according to client's specification
+staple_damage_ordered <- staple_damage_full %>%
+  select(
+    Region,
+    total_households_affected,
+    # Island Cabbage
+    `island cabbage_households_damaged`,
+    `island cabbage_production_damaged`,
+    # Banana
+    banana_households_damaged,
+    banana_production_damaged,
+    # Taro
+    taro_households_damaged,
+    taro_production_damaged,
+    # Kumala
+    kumala_households_damaged,
+    kumala_production_damaged,
+    # Manioc
+    manioc_households_damaged,
+    manioc_production_damaged,
+    # Yam
+    yam_households_damaged,
+    yam_production_damaged
+  )
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  staple_damage_ordered,
+  here::here("output", "FoodSecurity_02a_damage_staple_crops.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(staple_damage_ordered)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_households_affected = colDef(name = "Total", format = colFormat(digits = 0)),
+    
+    # Island Cabbage
+    `island cabbage_households_damaged` = colDef(name = "Households", format = colFormat(digits = 0)),
+    `island cabbage_production_damaged` = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Banana
+    banana_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    banana_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Taro
+    taro_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    taro_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Kumala
+    kumala_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    kumala_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Manioc
+    manioc_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    manioc_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Yam
+    yam_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    yam_production_damaged = colDef(name = "Production", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Households", columns = c("total_households_affected")),
+    colGroup(name = "Island Cabbage", columns = c("island cabbage_households_damaged", "island cabbage_production_damaged")),
+    colGroup(name = "Banana", columns = c("banana_households_damaged", "banana_production_damaged")),
+    colGroup(name = "Taro", columns = c("taro_households_damaged", "taro_production_damaged")),
+    colGroup(name = "Kumala", columns = c("kumala_households_damaged", "kumala_production_damaged")),
+    colGroup(name = "Manioc", columns = c("manioc_households_damaged", "manioc_production_damaged")),
+    colGroup(name = "Yam", columns = c("yam_households_damaged", "yam_production_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
 ```
+
+### Table 2: Cash Crops Damage
+
+```{r}
+# Add cyclone categories from config file
+cash_crop_with_config <- cash_crop_full %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Calculate cash crop damage estimates
+cash_damage <- cash_crop_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Total households affected (same as baseline)
+    total_households_affected = total_households,
+    
+    # Kava
+    kava_households_damaged = kava_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "kava", Region),
+    kava_production_damaged = kava_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "kava", Region),
+    
+    # Coconut
+    coconut_households_damaged = coconut_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "coconut", Region),
+    coconut_production_damaged = coconut_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "coconut", Region),
+    
+    # Cocoa
+    cocoa_households_damaged = cocoa_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "cocoa", Region),
+    cocoa_production_damaged = cocoa_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "cocoa", Region),
+    
+    # Coffee
+    coffee_households_damaged = coffee_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "coffee", Region),
+    coffee_production_damaged = coffee_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "coffee", Region),
+    
+    # Vanilla
+    vanilla_households_damaged = vanilla_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "vanilla", Region),
+    vanilla_production_damaged = vanilla_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "vanilla", Region),
+    
+    # Tahitian Lime
+    `tahitian lime_households_damaged` = `tahitian lime_households` * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "tahitian lime", Region),
+    `tahitian lime_production_damaged` = `tahitian lime_production` * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "tahitian lime", Region),
+    
+    # Pepper
+    pepper_households_damaged = pepper_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "pepper", Region),
+    pepper_production_damaged = pepper_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "pepper", Region),
+    
+    # Noni
+    noni_households_damaged = noni_households * get_food_security_damage_multiplier(Intensity, "Cash Crop Households", "noni", Region),
+    noni_production_damaged = noni_production * get_food_security_damage_multiplier(Intensity, "Cash Crop Production", "noni", Region)
+  ) %>%
+  ungroup() %>%
+  select(Region, total_households_affected, contains("_damaged"))
+
+# Aggregate to province and national levels
+cash_damage_full <- compute_council_aggregates(cash_damage)
+
+# Reorder columns according to client's specification
+cash_damage_ordered <- cash_damage_full %>%
+  select(
+    Region,
+    total_households_affected,
+    # Kava
+    kava_households_damaged,
+    kava_production_damaged,
+    # Coconut
+    coconut_households_damaged,
+    coconut_production_damaged,
+    # Cocoa
+    cocoa_households_damaged,
+    cocoa_production_damaged,
+    # Coffee
+    coffee_households_damaged,
+    coffee_production_damaged,
+    # Vanilla
+    vanilla_households_damaged,
+    vanilla_production_damaged,
+    # Tahitian Lime
+    `tahitian lime_households_damaged`,
+    `tahitian lime_production_damaged`,
+    # Pepper
+    pepper_households_damaged,
+    pepper_production_damaged,
+    # Noni
+    noni_households_damaged,
+    noni_production_damaged
+  )
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  cash_damage_ordered,
+  here::here("output", "FoodSecurity_02b_damage_cash_crops.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(cash_damage_ordered)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_households_affected = colDef(name = "Total", format = colFormat(digits = 0)),
+    
+    # Kava
+    kava_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    kava_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Coconut
+    coconut_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    coconut_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Cocoa
+    cocoa_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    cocoa_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Coffee
+    coffee_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    coffee_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Vanilla
+    vanilla_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    vanilla_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Tahitian Lime
+    `tahitian lime_households_damaged` = colDef(name = "Households", format = colFormat(digits = 0)),
+    `tahitian lime_production_damaged` = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Pepper
+    pepper_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    pepper_production_damaged = colDef(name = "Production", format = colFormat(digits = 0)),
+    
+    # Noni
+    noni_households_damaged = colDef(name = "Households", format = colFormat(digits = 0)),
+    noni_production_damaged = colDef(name = "Production", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Total Households", columns = c("total_households_affected")),
+    colGroup(name = "Kava", columns = c("kava_households_damaged", "kava_production_damaged")),
+    colGroup(name = "Coconut", columns = c("coconut_households_damaged", "coconut_production_damaged")),
+    colGroup(name = "Cocoa", columns = c("cocoa_households_damaged", "cocoa_production_damaged")),
+    colGroup(name = "Coffee", columns = c("coffee_households_damaged", "coffee_production_damaged")),
+    colGroup(name = "Vanilla", columns = c("vanilla_households_damaged", "vanilla_production_damaged")),
+    colGroup(name = "Tahitian Lime", columns = c("tahitian lime_households_damaged", "tahitian lime_production_damaged")),
+    colGroup(name = "Pepper", columns = c("pepper_households_damaged", "pepper_production_damaged")),
+    colGroup(name = "Noni", columns = c("noni_households_damaged", "noni_production_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+
+## Immediate Response Resources
+
+```{r}
+## Resources needed for Food Security restoration
+
+# === Staple Crops Resources ===
+
+# Helper function to get resource multipliers
+get_food_security_resource_multiplier <- function(resource_type, area_council) {
+  multiplier <- resource_config %>%
+    filter(
+      Cluster == "Food Security",
+      Indicator == resource_type,
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
+# Calculate resources needed based on total affected households
+resources_needed <- staple_damage %>%
+  rowwise() %>%
+  mutate(
+    # Number of affected households (for the first column)
+    num_households_affected = total_households_affected,
+    
+    # Resources = total affected households * resource multiplier
+    island_cabbage_cuttings = round(total_households_affected * get_food_security_resource_multiplier("Island Cabbage Cuttings", Region), 0),
+    taro_seedlings = round(total_households_affected * get_food_security_resource_multiplier("Taro Seedlings", Region), 0),
+    kumala_cuttings = round(total_households_affected * get_food_security_resource_multiplier("Kumala Cuttings", Region), 0),
+    manioc_cuttings = round(total_households_affected * get_food_security_resource_multiplier("Manioc Cuttings", Region), 0),
+    yam_cuttings = round(total_households_affected * get_food_security_resource_multiplier("Yam Cuttings", Region), 0)
+  ) %>%
+  ungroup() %>%
+  select(Region, num_households_affected, island_cabbage_cuttings, taro_seedlings, kumala_cuttings, manioc_cuttings, yam_cuttings)
+
+# Aggregate to province and national levels
+resources_needed_full <- compute_council_aggregates(resources_needed)
+
+# === EXPORT TO CSV ===
+write.csv(
+  resources_needed_full,
+  here::here("output", "FoodSecurity_03_resources_needed.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(resources_needed_full)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    num_households_affected = colDef(
+      name = "Number of Households", 
+      format = colFormat(digits = 0)
+    ),
+    island_cabbage_cuttings = colDef(
+      name = "Island Cabbage Cuttings", 
+      format = colFormat(digits = 0)
+    ),
+    taro_seedlings = colDef(
+      name = "Taro Seedlings", 
+      format = colFormat(digits = 0)
+    ),
+    kumala_cuttings = colDef(
+      name = "Kumala Cuttings", 
+      format = colFormat(digits = 0)
+    ),
+    manioc_cuttings = colDef(
+      name = "Manioc Cuttings", 
+      format = colFormat(digits = 0)
+    ),
+    yam_cuttings = colDef(
+      name = "Yam Cuttings", 
+      format = colFormat(digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Staple Crops Resources", columns = c("num_households_affected", "island_cabbage_cuttings", "taro_seedlings", "kumala_cuttings", "manioc_cuttings", "yam_cuttings"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+
+
+
+
