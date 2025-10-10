@@ -2820,3 +2820,108 @@ reactable(
   showSortable = TRUE
 )
 ```
+
+
+## Immediate Response Resources
+
+
+```{r}
+## Resources needed for Gender & Protection
+
+# === DATA WRANGLING ===
+
+# Configuration parameters
+days_of_support <- 14  # Number of days to provide resources (adjust as needed)
+
+# Helper function to get resource multipliers
+get_gender_protection_resource_multiplier <- function(resource_type, area_council) {
+  multiplier <- resource_config %>%
+    filter(
+      Cluster == "Gender & Protection",
+      Indicator == resource_type,
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
+# Add cyclone categories to population data
+population_with_config <- population_full %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Calculate resources needed based on total population in affected areas
+resources_needed <- population_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Total population affected
+    population_affected = total_population,
+    
+    # Resources = population * resource multiplier * days of support
+    water = ceiling(total_population * get_gender_protection_resource_multiplier("Water", Region) * days_of_support),
+    tin_fish = round(total_population * get_gender_protection_resource_multiplier("Tin Fish", Region) * days_of_support, 0),
+    rice = round(total_population * get_gender_protection_resource_multiplier("Rice", Region) * days_of_support, 0)
+  ) %>%
+  ungroup() %>%
+  select(Region, population_affected, water, tin_fish, rice)
+
+# Aggregate to province and national levels
+resources_needed_full <- compute_council_aggregates(resources_needed)
+
+# === EXPORT TO CSV ===
+write.csv(
+  resources_needed_full,
+  here::here("output", "GenderProtection_02_resources_needed.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(resources_needed_full)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    population_affected = colDef(
+      name = "Total Population", 
+      format = colFormat(digits = 0)
+    ),
+    water = colDef(
+      name = "Water (litres)", 
+      format = colFormat(digits = 0)
+    ),
+    tin_fish = colDef(
+      name = "Tin Fish (kg)", 
+      format = colFormat(digits = 0)
+    ),
+    rice = colDef(
+      name = "Rice (kg)", 
+      format = colFormat(digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Resources Needed", columns = c("population_affected", "water", "tin_fish", "rice"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
