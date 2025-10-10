@@ -2264,6 +2264,244 @@ reactable(
 ```
 
 
+# Estimated Financial Damage 
+
+### Table 1: Staple Crops Financial Damage
+
+```{r}
+# Helper function to get unit costs for food security
+get_food_security_unit_cost <- function(indicator_type, crop_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Food Security",
+      Indicator == indicator_type,
+      tolower(trimws(Attribute)) == tolower(trimws(crop_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Calculate staple crops financial damage
+staple_financial <- staple_damage %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each crop (damaged production * unit cost)
+    island_cabbage_financial = `island cabbage_production_damaged` * get_food_security_unit_cost("Staple Crop Production", "island cabbage", Region),
+    banana_financial = banana_production_damaged * get_food_security_unit_cost("Staple Crop Production", "banana", Region),
+    taro_financial = taro_production_damaged * get_food_security_unit_cost("Staple Crop Production", "taro", Region),
+    kumala_financial = kumala_production_damaged * get_food_security_unit_cost("Staple Crop Production", "kumala", Region),
+    manioc_financial = manioc_production_damaged * get_food_security_unit_cost("Staple Crop Production", "manioc", Region),
+    yam_financial = yam_production_damaged * get_food_security_unit_cost("Staple Crop Production", "yam", Region),
+    
+    # Total staple crops financial damage
+    total_staple_financial = island_cabbage_financial + banana_financial + taro_financial + 
+                             kumala_financial + manioc_financial + yam_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_staple_financial, island_cabbage_financial, banana_financial, 
+         taro_financial, kumala_financial, manioc_financial, yam_financial)
+
+# Aggregate to province and national levels
+staple_financial_full <- compute_council_aggregates(staple_financial)
+
+# Reorder columns
+staple_financial_ordered <- staple_financial_full %>%
+  select(Region, total_staple_financial, island_cabbage_financial, banana_financial, 
+         taro_financial, kumala_financial, manioc_financial, yam_financial)
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  staple_financial_ordered,
+  here::here("output", "FoodSecurity_04a_financial_damage_staple_crops.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(staple_financial_ordered)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_staple_financial = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    island_cabbage_financial = colDef(
+      name = "Island Cabbage",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    banana_financial = colDef(
+      name = "Banana",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    taro_financial = colDef(
+      name = "Taro",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    kumala_financial = colDef(
+      name = "Kumala",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    manioc_financial = colDef(
+      name = "Manioc",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    yam_financial = colDef(
+      name = "Yam",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Staple Crops Financial Damage (VT)", 
+             columns = c("total_staple_financial", "island_cabbage_financial", "banana_financial", 
+                        "taro_financial", "kumala_financial", "manioc_financial", "yam_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+
+### Table 2: Cash Crops Financial Damage
+
+
+```{r}
+# Calculate cash crops financial damage
+cash_financial <- cash_damage %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each crop (damaged production * unit cost)
+    kava_financial = kava_production_damaged * get_food_security_unit_cost("Cash Crop Production", "kava", Region),
+    coconut_financial = coconut_production_damaged * get_food_security_unit_cost("Cash Crop Production", "coconut", Region),
+    cocoa_financial = cocoa_production_damaged * get_food_security_unit_cost("Cash Crop Production", "cocoa", Region),
+    coffee_financial = coffee_production_damaged * get_food_security_unit_cost("Cash Crop Production", "coffee", Region),
+    vanilla_financial = vanilla_production_damaged * get_food_security_unit_cost("Cash Crop Production", "vanilla", Region),
+    tahitian_lime_financial = `tahitian lime_production_damaged` * get_food_security_unit_cost("Cash Crop Production", "tahitian lime", Region),
+    pepper_financial = pepper_production_damaged * get_food_security_unit_cost("Cash Crop Production", "pepper", Region),
+    noni_financial = noni_production_damaged * get_food_security_unit_cost("Cash Crop Production", "noni", Region),
+    
+    # Total cash crops financial damage
+    total_cash_financial = kava_financial + coconut_financial + cocoa_financial + 
+                           coffee_financial + vanilla_financial + tahitian_lime_financial + 
+                           pepper_financial + noni_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_cash_financial, kava_financial, coconut_financial, cocoa_financial,
+         coffee_financial, vanilla_financial, tahitian_lime_financial, pepper_financial, noni_financial)
+
+# Aggregate to province and national levels
+cash_financial_full <- compute_council_aggregates(cash_financial)
+
+# Reorder columns
+cash_financial_ordered <- cash_financial_full %>%
+  select(Region, total_cash_financial, kava_financial, coconut_financial, cocoa_financial,
+         coffee_financial, vanilla_financial, tahitian_lime_financial, pepper_financial, noni_financial)
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  cash_financial_ordered,
+  here::here("output", "FoodSecurity_04b_financial_damage_cash_crops.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(cash_financial_ordered)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    total_cash_financial = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    kava_financial = colDef(
+      name = "Kava",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    coconut_financial = colDef(
+      name = "Coconut",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    cocoa_financial = colDef(
+      name = "Cocoa",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    coffee_financial = colDef(
+      name = "Coffee",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    vanilla_financial = colDef(
+      name = "Vanilla",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    tahitian_lime_financial = colDef(
+      name = "Tahitian Lime",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    pepper_financial = colDef(
+      name = "Pepper",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    noni_financial = colDef(
+      name = "Noni",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Cash Crops Financial Damage (VT)", 
+             columns = c("total_cash_financial", "kava_financial", "coconut_financial", "cocoa_financial",
+                        "coffee_financial", "vanilla_financial", "tahitian_lime_financial", 
+                        "pepper_financial", "noni_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
 
 
 
+
+
+```{r}
+
+```
