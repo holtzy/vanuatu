@@ -2929,6 +2929,170 @@ reactable(
 
 # Health
 
-```{r}
+## Baseline: Health 
 
+```{r}
+# === DATA WRANGLING ===
+
+# Get health facility data
+health_facility_data <- full_data %>%
+  filter(Baseline == "Health") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Health Facility") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape health facility data
+facility_wide <- health_facility_data %>%
+  mutate(facility_type = tolower(trimws(Attribute))) %>%
+  group_by(Region, facility_type) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = facility_type,
+    values_from = Value,
+    names_prefix = "facility_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Get health professionals data
+health_professionals_data <- full_data %>%
+  filter(Baseline == "Health") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Health Professionals") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape health professionals data
+professionals_wide <- health_professionals_data %>%
+  mutate(professional_type = tolower(trimws(Attribute))) %>%
+  group_by(Region, professional_type) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = professional_type,
+    values_from = Value,
+    names_prefix = "prof_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Get hospital staff data
+hospital_staff_data <- full_data %>%
+  filter(Baseline == "Health") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Hospital Staff") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape hospital staff data
+hospital_staff_wide <- hospital_staff_data %>%
+  mutate(staff_type = tolower(trimws(Attribute))) %>%
+  group_by(Region, staff_type) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = staff_type,
+    values_from = Value,
+    names_prefix = "staff_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Combine all health data
+health_full <- facility_wide %>%
+  full_join(professionals_wide, by = "Region") %>%
+  full_join(hospital_staff_wide, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+health_aggregated <- compute_council_aggregates(health_full)
+
+# Reorder columns according to client's specification
+health_ordered <- health_aggregated %>%
+  select(
+    Region,
+    # Health Facility
+    facility_hospital,
+    `facility_health centre`,
+    facility_dispensary,
+    facility_aidpost,
+    # Health Professional
+    prof_doctor,
+    `prof_nurse practitioner`,
+    `prof_registered nurse`,
+    prof_midwife,
+    `prof_nurse aid`,
+    # Hospital Staff
+    `staff_clinical medical services`,
+    `staff_nonclinical medical services`,
+    `staff_clinical nursing services`,
+    `staff_nonclinical nursing services`,
+    `staff_pharmacy services`
+  )
+
+# === EXPORT TO CSV ===
+write.csv(
+  health_ordered,
+  here::here("output", "Health_01_baseline.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(health_ordered)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    # Health Facility
+    facility_hospital = colDef(name = "Hospital", format = colFormat(digits = 0)),
+    `facility_health centre` = colDef(name = "Health Centre", format = colFormat(digits = 0)),
+    facility_dispensary = colDef(name = "Dispensary", format = colFormat(digits = 0)),
+    facility_aidpost = colDef(name = "Aidpost", format = colFormat(digits = 0)),
+    
+    # Health Professional
+    prof_doctor = colDef(name = "Doctor", format = colFormat(digits = 0)),
+    `prof_nurse practitioner` = colDef(name = "Nurse Practitioner", format = colFormat(digits = 0)),
+    `prof_registered nurse` = colDef(name = "Registered Nurse", format = colFormat(digits = 0)),
+    prof_midwife = colDef(name = "Midwife", format = colFormat(digits = 0)),
+    `prof_nurse aid` = colDef(name = "Nurse Aid", format = colFormat(digits = 0)),
+    
+    # Hospital Staff
+    `staff_clinical medical services` = colDef(name = "Clinical Medical", format = colFormat(digits = 0)),
+    `staff_nonclinical medical services` = colDef(name = "Nonclinical Medical", format = colFormat(digits = 0)),
+    `staff_clinical nursing services` = colDef(name = "Clinical Nursing", format = colFormat(digits = 0)),
+    `staff_nonclinical nursing services` = colDef(name = "Nonclinical Nursing", format = colFormat(digits = 0)),
+    `staff_pharmacy services` = colDef(name = "Pharmacy", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Health Facility", columns = c("facility_hospital", "facility_health centre", "facility_dispensary", "facility_aidpost")),
+    colGroup(name = "Health Professional", columns = c("prof_doctor", "prof_nurse practitioner", "prof_registered nurse", "prof_midwife", "prof_nurse aid")),
+    colGroup(name = "Hospital Staff", columns = c("staff_clinical medical services", "staff_nonclinical medical services", "staff_clinical nursing services", "staff_nonclinical nursing services", "staff_pharmacy services"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
 ```
+
+
+
+
+
+
