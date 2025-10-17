@@ -3092,7 +3092,1137 @@ reactable(
 ```
 
 
+## Estimated Hazard Damage
 
+```{r}
+# === DATA WRANGLING ===
 
+# Add cyclone strength to baseline values
+health_with_config <- health_full %>%
+  left_join(config, by = c("Region" = "Area Council"))
 
+# Helper function for health damage multipliers (council-specific)
+get_health_damage_multiplier <- function(cyclone_category, indicator_type, attribute_type, area_council) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Health",
+      Indicator == indicator_type,
+      tolower(trimws(Attribute)) == tolower(trimws(attribute_type)),
+      `Area Council` == area_council
+    )
+  
+  # Check if we got any results
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  # Extract the value from the intensity column
+  result <- multiplier[[intensity_col]][1]
+  
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
+}
+
+# Calculate damage estimates for Health Facilities only
+# Keep UNROUNDED values for aggregation first
+damage_estimates_raw <- health_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Health Facility Damage - keep as decimals for now
+    facility_hospital_damaged = facility_hospital * get_health_damage_multiplier(Intensity, "Health Facility", "hospital", Region),
+    `facility_health centre_damaged` = `facility_health centre` * get_health_damage_multiplier(Intensity, "Health Facility", "health centre", Region),
+    facility_dispensary_damaged = facility_dispensary * get_health_damage_multiplier(Intensity, "Health Facility", "dispensary", Region),
+    facility_aidpost_damaged = facility_aidpost * get_health_damage_multiplier(Intensity, "Health Facility", "aidpost", Region)
+  ) %>%
+  ungroup() %>%
+  select(Region, facility_hospital_damaged, `facility_health centre_damaged`, 
+         facility_dispensary_damaged, facility_aidpost_damaged)
+
+# Aggregate to province and national levels FIRST
+damage_estimates_aggregated <- compute_council_aggregates(damage_estimates_raw)
+
+# NOW round all values (council, province, and national)
+damage_estimates_full <- damage_estimates_aggregated %>%
+  mutate(
+    facility_hospital_damaged = round(facility_hospital_damaged, 0),
+    `facility_health centre_damaged` = round(`facility_health centre_damaged`, 0),
+    facility_dispensary_damaged = round(facility_dispensary_damaged, 0),
+    facility_aidpost_damaged = round(facility_aidpost_damaged, 0)
+  )
+
+# === EXPORT TO CSV ===
+write.csv(
+  damage_estimates_full,
+  here::here("output", "Health_02_damage_estimates.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(damage_estimates_full)
+
+# Create the damage estimation reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    # Health Facility - showing as whole numbers
+    facility_hospital_damaged = colDef(name = "Hospital", format = colFormat(digits = 0)),
+    `facility_health centre_damaged` = colDef(name = "Health Centre", format = colFormat(digits = 0)),
+    facility_dispensary_damaged = colDef(name = "Dispensary", format = colFormat(digits = 0)),
+    facility_aidpost_damaged = colDef(name = "Aidpost", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Health Facility", columns = c("facility_hospital_damaged", "facility_health centre_damaged", "facility_dispensary_damaged", "facility_aidpost_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+## Immediate Response Resources
+
+```{r}
+# === DATA WRANGLING ===
+
+# Helper function to get resource multipliers
+get_health_resource_multiplier <- function(resource_type, area_council) {
+  multiplier <- resource_config %>%
+    filter(
+      Cluster == "Health",
+      Indicator == resource_type,
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
+# We need population data for calculating some resources
+# Get total population from Gender & Protection baseline
+population_data <- full_data %>%
+  filter(Baseline == "Gender & Protection") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Population Sex") %>%
+  mutate(Region = `Area Council`) %>%
+  group_by(Region) %>%
+  summarise(total_population = sum(Value, na.rm = TRUE), .groups = "drop")
+
+# Add cyclone categories and population to health damage data
+health_resources_base <- damage_estimates_raw %>%
+  left_join(config, by = c("Region" = "Area Council")) %>%
+  left_join(population_data, by = "Region")
+
+# Calculate resources needed
+resources_needed <- health_resources_base %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Calculate total damaged facilities for resource allocation
+    total_facilities_damaged = facility_hospital_damaged + `facility_health centre_damaged` + 
+                                facility_dispensary_damaged + facility_aidpost_damaged,
+    
+    # Calculate affected population using damage multiplier
+    damage_multiplier = get_health_damage_multiplier(Intensity, "Health Facility", "hospital", Region),
+    affected_population = round(total_population * damage_multiplier, 0),
+    
+    # Resources based on damaged facilities and affected population
+    medical_tent = round(total_facilities_damaged * get_health_resource_multiplier("Medical Tent", Region), 0),
+    emergency_health_kits = round(affected_population * get_health_resource_multiplier("Emergency Health Kits", Region), 0),
+    trauma_surgical_kits = round(total_facilities_damaged * get_health_resource_multiplier("Trauma and Surgical Kits", Region), 0),
+    essential_ncd_medicines = round(affected_population * get_health_resource_multiplier("Essential NCD Medicines", Region), 0),
+    mosquito_nets = round(affected_population * get_health_resource_multiplier("Mosquito Nets", Region), 0)
+  ) %>%
+  ungroup() %>%
+  select(Region, medical_tent, emergency_health_kits, trauma_surgical_kits, 
+         essential_ncd_medicines, mosquito_nets)
+
+# Aggregate to province and national levels
+resources_needed_full <- compute_council_aggregates(resources_needed)
+
+# === EXPORT TO CSV ===
+write.csv(
+  resources_needed_full,
+  here::here("output", "Health_03_resources_needed.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(resources_needed_full)
+
+# Create the resources needed reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    medical_tent = colDef(
+      name = "Medical Tent",
+      format = colFormat(digits = 0)
+    ),
+    emergency_health_kits = colDef(
+      name = "Emergency Health Kits",
+      format = colFormat(digits = 0)
+    ),
+    trauma_surgical_kits = colDef(
+      name = "Trauma and Surgical Kits",
+      format = colFormat(digits = 0)
+    ),
+    essential_ncd_medicines = colDef(
+      name = "Essential NCD Medicines",
+      format = colFormat(digits = 0)
+    ),
+    mosquito_nets = colDef(
+      name = "Mosquito Nets",
+      format = colFormat(digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Resources Needed", columns = c("medical_tent", "emergency_health_kits", "trauma_surgical_kits", "essential_ncd_medicines", "mosquito_nets"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+## Estimated Financial Damage
+
+```{r}
+# === DATA WRANGLING ===
+
+# Helper function to get unit costs for health facilities
+get_health_unit_cost <- function(facility_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Health",
+      Indicator == "Health Facility",
+      tolower(trimws(Attribute)) == tolower(trimws(facility_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Use the raw damage estimates (before rounding) for financial calculations
+health_financial <- damage_estimates_raw %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each facility type (in VT)
+    hospital_financial = facility_hospital_damaged * get_health_unit_cost("hospital", Region),
+    health_centre_financial = `facility_health centre_damaged` * get_health_unit_cost("health centre", Region),
+    dispensary_financial = facility_dispensary_damaged * get_health_unit_cost("dispensary", Region),
+    aidpost_financial = facility_aidpost_damaged * get_health_unit_cost("aidpost", Region),
+    
+    # Total financial damage
+    total_financial_damage = hospital_financial + health_centre_financial + 
+                              dispensary_financial + aidpost_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_financial_damage, hospital_financial, health_centre_financial,
+         dispensary_financial, aidpost_financial)
+
+# Aggregate to province and national levels
+health_financial_full <- compute_council_aggregates(health_financial)
+
+# Reorder columns to match specification
+health_financial_ordered <- health_financial_full %>%
+  select(Region, total_financial_damage, hospital_financial, health_centre_financial,
+         dispensary_financial, aidpost_financial)
+
+# === EXPORT TO CSV ===
+write.csv(
+  health_financial_ordered,
+  here::here("output", "Health_04_financial_damage.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(health_financial_ordered)
+
+# Create the financial damage reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    total_financial_damage = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    hospital_financial = colDef(
+      name = "Hospital",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    health_centre_financial = colDef(
+      name = "Health Centre",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    dispensary_financial = colDef(
+      name = "Dispensary",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    aidpost_financial = colDef(
+      name = "Aidpost",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Health Facility", columns = c("total_financial_damage", "hospital_financial", 
+                                                     "health_centre_financial", "dispensary_financial", 
+                                                     "aidpost_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+# Logistics
+
+## Baseline: Logistics Infrastructure 
+
+### Table 1: Infrastructure
+
+```{r}
+# === DATA WRANGLING ===
+
+# Get logistics infrastructure data
+logistics_infrastructure_data <- full_data %>%
+  filter(Baseline == "Logistics") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Infrastructure") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape infrastructure data
+infrastructure_wide <- logistics_infrastructure_data %>%
+  mutate(infrastructure_type = tolower(trimws(Attribute))) %>%
+  group_by(Region, infrastructure_type) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = infrastructure_type,
+    values_from = Value,
+    names_prefix = "infra_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+infrastructure_aggregated <- compute_council_aggregates(infrastructure_wide)
+
+# Reorder columns according to specification
+infrastructure_ordered <- infrastructure_aggregated %>%
+  select(
+    Region,
+    infra_airport,
+    infra_wharf,
+    `infra_permanent bridge`,
+    `infra_temporary bridge`,
+    `infra_police stations`,
+    `infra_fire hydrants`,
+    `infra_main water valves`
+  )
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  infrastructure_ordered,
+  here::here("output", "Logistics_01a_baseline_infrastructure.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(infrastructure_ordered)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    
+    infra_airport = colDef(name = "Airport", format = colFormat(digits = 0)),
+    infra_wharf = colDef(name = "Wharf", format = colFormat(digits = 0)),
+    `infra_permanent bridge` = colDef(name = "Permanent Bridge", format = colFormat(digits = 0)),
+    `infra_temporary bridge` = colDef(name = "Temporary Bridge", format = colFormat(digits = 0)),
+    `infra_police stations` = colDef(name = "Police Stations", format = colFormat(digits = 0)),
+    `infra_fire hydrants` = colDef(name = "Fire Hydrants", format = colFormat(digits = 0)),
+    `infra_main water valves` = colDef(name = "Main Water Valves", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Infrastructure", columns = c("infra_airport", "infra_wharf", "infra_permanent bridge", 
+                                                    "infra_temporary bridge", "infra_police stations", 
+                                                    "infra_fire hydrants", "infra_main water valves"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+### Table 2: Road Surface
+
+```{r}
+# Get logistics road surface data
+logistics_road_data <- full_data %>%
+  filter(Baseline == "Logistics") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  filter(Indicator == "Road Surface") %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value)
+
+# Reshape road surface data
+road_wide <- logistics_road_data %>%
+  mutate(road_type = tolower(trimws(Attribute))) %>%
+  group_by(Region, road_type) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = road_type,
+    values_from = Value,
+    names_prefix = "road_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+road_aggregated <- compute_council_aggregates(road_wide)
+
+# Reorder columns according to specification
+road_ordered <- road_aggregated %>%
+  select(
+    Region,
+    road_asphalt,
+    `road_chips seal`,
+    road_concrete,
+    road_earth,
+    road_gravel
+  )
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  road_ordered,
+  here::here("output", "Logistics_01b_baseline_road_surface.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(road_ordered)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    
+    road_asphalt = colDef(name = "Asphalt", format = colFormat(digits = 0)),
+    `road_chips seal` = colDef(name = "Chips Seal", format = colFormat(digits = 0)),
+    road_concrete = colDef(name = "Concrete", format = colFormat(digits = 0)),
+    road_earth = colDef(name = "Earth", format = colFormat(digits = 0)),
+    road_gravel = colDef(name = "Gravel", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Road Surface", columns = c("road_asphalt", "road_chips seal", "road_concrete", 
+                                                  "road_earth", "road_gravel"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+## Estimated Hazard Damage
+
+### Table 1: Infrastructure Damage
+
+```{r}
+# === DATA WRANGLING ===
+
+# Add cyclone strength to baseline values
+infrastructure_with_config <- infrastructure_wide %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Helper function for infrastructure damage multipliers (council-specific)
+get_logistics_damage_multiplier <- function(cyclone_category, indicator_type, attribute_type, area_council) {
+  intensity_col <- paste0("Intensity ", cyclone_category)
+  
+  multiplier <- baseline_factors %>%
+    filter(
+      Cluster == "Logistics",
+      Indicator == indicator_type,
+      tolower(trimws(Attribute)) == tolower(trimws(attribute_type)),
+      `Area Council` == area_council
+    )
+  
+  # Check if we got any results
+  if(nrow(multiplier) == 0) {
+    return(0)
+  }
+  
+  # Extract the value from the intensity column
+  result <- multiplier[[intensity_col]][1]
+  
+  return(ifelse(is.na(result) || length(result) == 0, 0, result))
+}
+
+# Calculate damage estimates for Infrastructure
+# Keep UNROUNDED values for aggregation first
+infrastructure_damage_raw <- infrastructure_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Infrastructure Damage - keep as decimals for now
+    infra_airport_damaged = infra_airport * get_logistics_damage_multiplier(Intensity, "Infrastructure", "airport", Region),
+    infra_wharf_damaged = infra_wharf * get_logistics_damage_multiplier(Intensity, "Infrastructure", "wharf", Region),
+    `infra_permanent bridge_damaged` = `infra_permanent bridge` * get_logistics_damage_multiplier(Intensity, "Infrastructure", "permanent bridge", Region),
+    `infra_temporary bridge_damaged` = `infra_temporary bridge` * get_logistics_damage_multiplier(Intensity, "Infrastructure", "temporary bridge", Region),
+    `infra_police stations_damaged` = `infra_police stations` * get_logistics_damage_multiplier(Intensity, "Infrastructure", "police stations", Region),
+    `infra_fire hydrants_damaged` = `infra_fire hydrants` * get_logistics_damage_multiplier(Intensity, "Infrastructure", "fire hydrants", Region),
+    `infra_main water valves_damaged` = `infra_main water valves` * get_logistics_damage_multiplier(Intensity, "Infrastructure", "main water valves", Region)
+  ) %>%
+  ungroup() %>%
+  select(Region, infra_airport_damaged, infra_wharf_damaged, `infra_permanent bridge_damaged`,
+         `infra_temporary bridge_damaged`, `infra_police stations_damaged`, 
+         `infra_fire hydrants_damaged`, `infra_main water valves_damaged`)
+
+# Aggregate to province and national levels FIRST
+infrastructure_damage_aggregated <- compute_council_aggregates(infrastructure_damage_raw)
+
+# NOW round all values (council, province, and national)
+infrastructure_damage_full <- infrastructure_damage_aggregated %>%
+  mutate(
+    infra_airport_damaged = round(infra_airport_damaged, 0),
+    infra_wharf_damaged = round(infra_wharf_damaged, 0),
+    `infra_permanent bridge_damaged` = round(`infra_permanent bridge_damaged`, 0),
+    `infra_temporary bridge_damaged` = round(`infra_temporary bridge_damaged`, 0),
+    `infra_police stations_damaged` = round(`infra_police stations_damaged`, 0),
+    `infra_fire hydrants_damaged` = round(`infra_fire hydrants_damaged`, 0),
+    `infra_main water valves_damaged` = round(`infra_main water valves_damaged`, 0)
+  )
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  infrastructure_damage_full,
+  here::here("output", "Logistics_02a_damage_infrastructure.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+# Format for display
+formatted1 <- format_table(infrastructure_damage_full)
+
+# Create the damage estimation reactable
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    # Infrastructure
+    infra_airport_damaged = colDef(name = "Airport", format = colFormat(digits = 0)),
+    infra_wharf_damaged = colDef(name = "Wharf", format = colFormat(digits = 0)),
+    `infra_permanent bridge_damaged` = colDef(name = "Permanent Bridge", format = colFormat(digits = 0)),
+    `infra_temporary bridge_damaged` = colDef(name = "Temporary Bridge", format = colFormat(digits = 0)),
+    `infra_police stations_damaged` = colDef(name = "Police Stations", format = colFormat(digits = 0)),
+    `infra_fire hydrants_damaged` = colDef(name = "Fire Hydrants", format = colFormat(digits = 0)),
+    `infra_main water valves_damaged` = colDef(name = "Main Water Valves", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Infrastructure", columns = c("infra_airport_damaged", "infra_wharf_damaged", 
+                                                    "infra_permanent bridge_damaged", "infra_temporary bridge_damaged",
+                                                    "infra_police stations_damaged", "infra_fire hydrants_damaged",
+                                                    "infra_main water valves_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+### Table 2: Road Surface Damage
+
+```{r}
+# Add cyclone strength to road baseline values
+road_with_config <- road_wide %>%
+  left_join(config, by = c("Region" = "Area Council"))
+
+# Calculate damage estimates for Road Surface
+# Keep UNROUNDED values for aggregation first
+road_damage_raw <- road_with_config %>%
+  filter(!is.na(Intensity)) %>%
+  rowwise() %>%
+  mutate(
+    # Road Surface Damage - keep as decimals for now
+    road_asphalt_damaged = road_asphalt * get_logistics_damage_multiplier(Intensity, "Road Surface", "asphalt", Region),
+    `road_chips seal_damaged` = `road_chips seal` * get_logistics_damage_multiplier(Intensity, "Road Surface", "chips seal", Region),
+    road_concrete_damaged = road_concrete * get_logistics_damage_multiplier(Intensity, "Road Surface", "concrete", Region),
+    road_earth_damaged = road_earth * get_logistics_damage_multiplier(Intensity, "Road Surface", "earth", Region),
+    road_gravel_damaged = road_gravel * get_logistics_damage_multiplier(Intensity, "Road Surface", "gravel", Region)
+  ) %>%
+  ungroup() %>%
+  select(Region, road_asphalt_damaged, `road_chips seal_damaged`, road_concrete_damaged,
+         road_earth_damaged, road_gravel_damaged)
+
+# Aggregate to province and national levels FIRST
+road_damage_aggregated <- compute_council_aggregates(road_damage_raw)
+
+# NOW round all values (council, province, and national)
+road_damage_full <- road_damage_aggregated %>%
+  mutate(
+    road_asphalt_damaged = round(road_asphalt_damaged, 0),
+    `road_chips seal_damaged` = round(`road_chips seal_damaged`, 0),
+    road_concrete_damaged = round(road_concrete_damaged, 0),
+    road_earth_damaged = round(road_earth_damaged, 0),
+    road_gravel_damaged = round(road_gravel_damaged, 0)
+  )
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  road_damage_full,
+  here::here("output", "Logistics_02b_damage_road_surface.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+# Format for display
+formatted2 <- format_table(road_damage_full)
+
+# Create the damage estimation reactable
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    # Road Surface
+    road_asphalt_damaged = colDef(name = "Asphalt", format = colFormat(digits = 0)),
+    `road_chips seal_damaged` = colDef(name = "Chips Seal", format = colFormat(digits = 0)),
+    road_concrete_damaged = colDef(name = "Concrete", format = colFormat(digits = 0)),
+    road_earth_damaged = colDef(name = "Earth", format = colFormat(digits = 0)),
+    road_gravel_damaged = colDef(name = "Gravel", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Road Surface", columns = c("road_asphalt_damaged", "road_chips seal_damaged", 
+                                                  "road_concrete_damaged", "road_earth_damaged", 
+                                                  "road_gravel_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+## Immediate Response Resources
+
+```{r}
+# === DATA WRANGLING ===
+
+# Helper function to get resource multipliers
+get_logistics_resource_multiplier <- function(resource_type, area_council) {
+  multiplier <- resource_config %>%
+    filter(
+      Cluster == "Logistics",
+      Indicator == resource_type,
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
+# Determine which councils are affected (have cyclone intensity assigned)
+affected_councils <- config %>%
+  filter(!is.na(Intensity)) %>%
+  select(`Area Council`, Province) %>%
+  distinct()
+
+# Count number of affected councils
+num_affected_councils <- nrow(affected_councils)
+
+# Count number of affected provinces
+num_affected_provinces <- affected_councils %>%
+  select(Province) %>%
+  distinct() %>%
+  nrow()
+
+# Create council-level resources (for councils that are affected)
+resources_needed_councils <- affected_councils %>%
+  rename(Region = `Area Council`) %>%
+  rowwise() %>%
+  mutate(
+    # Resources = multiplier * 1 (per affected council)
+    truck = round(1 * get_logistics_resource_multiplier("Truck", Region), 0),
+    fibreglass_boat = round(10 * get_logistics_resource_multiplier("Fibreglass Boat", Region), 0),
+    fuel = round(100 * get_logistics_resource_multiplier("Fuel", Region), 0),
+    chainsaw = round(2 * get_logistics_resource_multiplier("Chainsaw", Region), 0),
+    ship = 0  # Ships only at province/national level
+  ) %>%
+  ungroup() %>%
+  select(Region, truck, fibreglass_boat, ship, fuel, chainsaw)
+
+# Aggregate to province level
+province_resources <- resources_needed_councils %>%
+  left_join(council_province_lookup, by = c("Region" = "Council")) %>%
+  group_by(Province) %>%
+  summarise(
+    truck = sum(truck, na.rm = TRUE),
+    fibreglass_boat = sum(fibreglass_boat, na.rm = TRUE),
+    ship = 1,  # 1 ship per affected province
+    fuel = sum(fuel, na.rm = TRUE),
+    chainsaw = sum(chainsaw, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  rename(Region = Province)
+
+# National level - sum of provinces
+national_resources <- province_resources %>%
+  summarise(
+    truck = sum(truck, na.rm = TRUE),
+    fibreglass_boat = sum(fibreglass_boat, na.rm = TRUE),
+    ship = sum(ship, na.rm = TRUE),
+    fuel = sum(fuel, na.rm = TRUE),
+    chainsaw = sum(chainsaw, na.rm = TRUE)
+  ) %>%
+  mutate(Region = "National")
+
+# Combine all levels
+resources_needed_full <- bind_rows(
+  national_resources,
+  province_resources,
+  resources_needed_councils
+) %>%
+  mutate(default_order = match(Region, region_order)) %>%
+  arrange(default_order) %>%
+  select(-default_order)
+
+# === EXPORT TO CSV ===
+write.csv(
+  resources_needed_full,
+  here::here("output", "Logistics_03_resources_needed.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+# Format for display
+formatted <- format_table(resources_needed_full)
+
+# Create the resources needed reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    truck = colDef(
+      name = "Truck",
+      format = colFormat(digits = 0)
+    ),
+    fibreglass_boat = colDef(
+      name = "Fibreglass Boat",
+      format = colFormat(digits = 0)
+    ),
+    ship = colDef(
+      name = "Ship",
+      format = colFormat(digits = 0)
+    ),
+    fuel = colDef(
+      name = "Fuel (litres)",
+      format = colFormat(digits = 0)
+    ),
+    chainsaw = colDef(
+      name = "Chainsaw",
+      format = colFormat(digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Resources Needed", columns = c("truck", "fibreglass_boat", "ship", "fuel", "chainsaw"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+## Estimated Financial Damage
+
+### Table 1: Infrastructure Financial Damage
+
+```{r}
+# === DATA WRANGLING ===
+
+# Helper function to get unit costs for infrastructure
+get_infrastructure_unit_cost <- function(infrastructure_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Logistics",
+      Indicator == "Infrastructure",
+      tolower(trimws(Attribute)) == tolower(trimws(infrastructure_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Use the raw damage estimates (before rounding) for financial calculations
+infrastructure_financial <- infrastructure_damage_raw %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each infrastructure type (in VT)
+    airport_financial = infra_airport_damaged * get_infrastructure_unit_cost("airport", Region),
+    wharf_financial = infra_wharf_damaged * get_infrastructure_unit_cost("wharf", Region),
+    permanent_bridge_financial = `infra_permanent bridge_damaged` * get_infrastructure_unit_cost("permanent bridge", Region),
+    temporary_bridge_financial = `infra_temporary bridge_damaged` * get_infrastructure_unit_cost("temporary bridge", Region),
+    police_stations_financial = `infra_police stations_damaged` * get_infrastructure_unit_cost("police stations", Region),
+    fire_hydrants_financial = `infra_fire hydrants_damaged` * get_infrastructure_unit_cost("fire hydrants", Region),
+    main_water_valves_financial = `infra_main water valves_damaged` * get_infrastructure_unit_cost("main water valves", Region),
+    
+    # Total infrastructure financial damage
+    total_infrastructure_financial = airport_financial + wharf_financial + permanent_bridge_financial +
+                                      temporary_bridge_financial + police_stations_financial + 
+                                      fire_hydrants_financial + main_water_valves_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_infrastructure_financial, airport_financial, wharf_financial, 
+         permanent_bridge_financial, temporary_bridge_financial, police_stations_financial,
+         fire_hydrants_financial, main_water_valves_financial)
+
+# Aggregate to province and national levels
+infrastructure_financial_full <- compute_council_aggregates(infrastructure_financial)
+
+# Reorder columns
+infrastructure_financial_ordered <- infrastructure_financial_full %>%
+  select(Region, total_infrastructure_financial, airport_financial, wharf_financial,
+         permanent_bridge_financial, temporary_bridge_financial, police_stations_financial,
+         fire_hydrants_financial, main_water_valves_financial)
+
+# === EXPORT TABLE 1 TO CSV ===
+write.csv(
+  infrastructure_financial_ordered,
+  here::here("output", "Logistics_04a_financial_damage_infrastructure.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 1 ===
+formatted1 <- format_table(infrastructure_financial_ordered)
+
+reactable(
+  formatted1,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    total_infrastructure_financial = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    airport_financial = colDef(
+      name = "Airport",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    wharf_financial = colDef(
+      name = "Wharf",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    permanent_bridge_financial = colDef(
+      name = "Permanent Bridge",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    temporary_bridge_financial = colDef(
+      name = "Temporary Bridge",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    police_stations_financial = colDef(
+      name = "Police Stations",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    fire_hydrants_financial = colDef(
+      name = "Fire Hydrants",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    main_water_valves_financial = colDef(
+      name = "Main Water Valves",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Infrastructure", columns = c("total_infrastructure_financial", "airport_financial", 
+                                                    "wharf_financial", "permanent_bridge_financial",
+                                                    "temporary_bridge_financial", "police_stations_financial",
+                                                    "fire_hydrants_financial", "main_water_valves_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+### Table 2: Road Surface Financial Damage
+
+```{r}
+# Helper function to get unit costs for road surface
+get_road_unit_cost <- function(road_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Logistics",
+      Indicator == "Road Surface",
+      tolower(trimws(Attribute)) == tolower(trimws(road_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Use the raw damage estimates (before rounding) for financial calculations
+road_financial <- road_damage_raw %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each road surface type (in VT)
+    asphalt_financial = road_asphalt_damaged * get_road_unit_cost("asphalt", Region),
+    chips_seal_financial = `road_chips seal_damaged` * get_road_unit_cost("chips seal", Region),
+    concrete_financial = road_concrete_damaged * get_road_unit_cost("concrete", Region),
+    earth_financial = road_earth_damaged * get_road_unit_cost("earth", Region),
+    gravel_financial = road_gravel_damaged * get_road_unit_cost("gravel", Region),
+    
+    # Total road surface financial damage
+    total_road_financial = asphalt_financial + chips_seal_financial + concrete_financial +
+                            earth_financial + gravel_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_road_financial, asphalt_financial, chips_seal_financial,
+         concrete_financial, earth_financial, gravel_financial)
+
+# Aggregate to province and national levels
+road_financial_full <- compute_council_aggregates(road_financial)
+
+# Reorder columns
+road_financial_ordered <- road_financial_full %>%
+  select(Region, total_road_financial, asphalt_financial, chips_seal_financial,
+         concrete_financial, earth_financial, gravel_financial)
+
+# === EXPORT TABLE 2 TO CSV ===
+write.csv(
+  road_financial_ordered,
+  here::here("output", "Logistics_04b_financial_damage_road_surface.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION TABLE 2 ===
+formatted2 <- format_table(road_financial_ordered)
+
+reactable(
+  formatted2,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    total_road_financial = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    asphalt_financial = colDef(
+      name = "Asphalt",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    chips_seal_financial = colDef(
+      name = "Chips Seal",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    concrete_financial = colDef(
+      name = "Concrete",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    earth_financial = colDef(
+      name = "Earth",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    gravel_financial = colDef(
+      name = "Gravel",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Road Surface", columns = c("total_road_financial", "asphalt_financial", 
+                                                  "chips_seal_financial", "concrete_financial",
+                                                  "earth_financial", "gravel_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
 
