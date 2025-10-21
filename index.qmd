@@ -3206,58 +3206,33 @@ reactable(
 ```{r}
 # === DATA WRANGLING ===
 
-# Helper function to get resource multipliers
-get_health_resource_multiplier <- function(resource_type, area_council) {
-  multiplier <- resource_config %>%
-    filter(
-      Cluster == "Health",
-      Indicator == resource_type,
-      `Area Council` == area_council
-    ) %>%
-    pull(Value)
-  
-  return(ifelse(length(multiplier) > 0, multiplier, 0))
-}
-
-# We need population data for calculating some resources
-# Get total population from Gender & Protection baseline
-population_data <- full_data %>%
-  filter(Baseline == "Gender & Protection") %>%
-  filter(Year == max(Year, na.rm = TRUE)) %>%
-  filter(!is.na(`Area Council`)) %>%
-  filter(Indicator == "Population Sex") %>%
-  mutate(Region = `Area Council`) %>%
-  group_by(Region) %>%
-  summarise(total_population = sum(Value, na.rm = TRUE), .groups = "drop")
-
-# Add cyclone categories and population to health damage data
-health_resources_base <- damage_estimates_raw %>%
+# Calculate total damaged facilities (this is what we need for resources)
+health_facilities_damaged <- damage_estimates_raw %>%
   left_join(config, by = c("Region" = "Area Council")) %>%
-  left_join(population_data, by = "Region")
-
-# Calculate resources needed
-resources_needed <- health_resources_base %>%
   filter(!is.na(Intensity)) %>%
   rowwise() %>%
   mutate(
-    # Calculate total damaged facilities for resource allocation
-    total_facilities_damaged = facility_hospital_damaged + `facility_health centre_damaged` + 
-                                facility_dispensary_damaged + facility_aidpost_damaged,
-    
-    # Calculate affected population using damage multiplier
-    damage_multiplier = get_health_damage_multiplier(Intensity, "Health Facility", "hospital", Region),
-    affected_population = round(total_population * damage_multiplier, 0),
-    
-    # Resources based on damaged facilities and affected population
-    medical_tent = round(total_facilities_damaged * get_health_resource_multiplier("Medical Tent", Region), 0),
-    emergency_health_kits = round(affected_population * get_health_resource_multiplier("Emergency Health Kits", Region), 0),
-    trauma_surgical_kits = round(total_facilities_damaged * get_health_resource_multiplier("Trauma and Surgical Kits", Region), 0),
-    essential_ncd_medicines = round(affected_population * get_health_resource_multiplier("Essential NCD Medicines", Region), 0),
-    mosquito_nets = round(affected_population * get_health_resource_multiplier("Mosquito Nets", Region), 0)
+    # Calculate total damaged facilities
+    total_facilities_damaged = facility_hospital_damaged + `facility_health centre_damaged` +
+                                 facility_dispensary_damaged + facility_aidpost_damaged
   ) %>%
   ungroup() %>%
-  select(Region, medical_tent, emergency_health_kits, trauma_surgical_kits, 
-         essential_ncd_medicines, mosquito_nets)
+  select(Region, total_facilities_damaged)
+
+# Calculate resources needed based on FACILITIES with FIXED multipliers
+resources_needed <- health_facilities_damaged %>%
+  rowwise() %>%
+  mutate(
+    # ALL resources based on damaged facilities with fixed multipliers
+    medical_tent = round(1 * total_facilities_damaged, 0),
+    emergency_health_kits = round(5 * total_facilities_damaged, 0),
+    trauma_surgical_kits = round(5 * total_facilities_damaged, 0),
+    essential_ncd_medicines = round(1 * total_facilities_damaged, 0),
+    mosquito_nets = round(20 * total_facilities_damaged, 0)
+  ) %>%
+  ungroup() %>%
+  select(Region, medical_tent, emergency_health_kits, trauma_surgical_kits,
+          essential_ncd_medicines, mosquito_nets)
 
 # Aggregate to province and national levels
 resources_needed_full <- compute_council_aggregates(resources_needed)
