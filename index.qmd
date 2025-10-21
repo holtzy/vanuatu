@@ -3314,6 +3314,118 @@ reactable(
 )
 ```
 
+## Estimated Financial Damage
+```{r}
+# === DATA WRANGLING ===
+
+# Helper function to get unit costs for health facilities
+get_health_unit_cost <- function(facility_type, area_council) {
+  unit_cost <- financial_config %>%
+    filter(
+      Cluster == "Health",
+      Indicator == "Health Facility",
+      tolower(trimws(Attribute)) == tolower(trimws(facility_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+    
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Use the raw damage estimates (before rounding) for financial calculations
+health_financial <- damage_estimates_raw %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for each facility type (in VT)
+    hospital_financial = facility_hospital_damaged * get_health_unit_cost("hospital", Region),
+    health_centre_financial = `facility_health centre_damaged` * get_health_unit_cost("health centre", Region),
+    dispensary_financial = facility_dispensary_damaged * get_health_unit_cost("dispensary", Region),
+    aidpost_financial = facility_aidpost_damaged * get_health_unit_cost("aidpost", Region),
+    
+    # Total financial damage
+    total_financial_damage = hospital_financial + health_centre_financial +
+                              dispensary_financial + aidpost_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_financial_damage, hospital_financial, health_centre_financial,
+         dispensary_financial, aidpost_financial)
+
+# Aggregate to province and national levels
+health_financial_full <- compute_council_aggregates(health_financial)
+
+# Reorder columns to match specification
+health_financial_ordered <- health_financial_full %>%
+  select(Region, total_financial_damage, hospital_financial, health_centre_financial,
+         dispensary_financial, aidpost_financial)
+
+# === EXPORT TO CSV ===
+write.csv(
+  health_financial_ordered,
+  here::here("output", "Health_04_financial_damage.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+
+# Format for display
+formatted <- format_table(health_financial_ordered)
+
+# Create the financial damage reactable
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region", 
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    total_financial_damage = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    hospital_financial = colDef(
+      name = "Hospital",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    health_centre_financial = colDef(
+      name = "Health Centre",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    dispensary_financial = colDef(
+      name = "Dispensary",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    aidpost_financial = colDef(
+      name = "Aidpost",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Health Facility Financial Damage (VT)", 
+             columns = c("total_financial_damage", "hospital_financial",
+                        "health_centre_financial", "dispensary_financial",
+                        "aidpost_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
 # Logistics
 
 ## Baseline: Logistics Infrastructure 
