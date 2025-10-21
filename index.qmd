@@ -3206,6 +3206,19 @@ reactable(
 ```{r}
 # === DATA WRANGLING ===
 
+# Helper function to get resource multipliers from config
+get_health_resource_multiplier <- function(resource_type, area_council) {
+  multiplier <- resource_config %>%
+    filter(
+      Cluster == "Health",
+      Indicator == resource_type,
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+    
+  return(ifelse(length(multiplier) > 0, multiplier, 0))
+}
+
 # Calculate total damaged facilities (this is what we need for resources)
 health_facilities_damaged <- damage_estimates_raw %>%
   left_join(config, by = c("Region" = "Area Council")) %>%
@@ -3219,20 +3232,20 @@ health_facilities_damaged <- damage_estimates_raw %>%
   ungroup() %>%
   select(Region, total_facilities_damaged)
 
-# Calculate resources needed based on FACILITIES with FIXED multipliers
+# Calculate resources needed based on FACILITIES with multipliers from config
 resources_needed <- health_facilities_damaged %>%
   rowwise() %>%
   mutate(
-    # ALL resources based on damaged facilities with fixed multipliers
-    medical_tent = round(1 * total_facilities_damaged, 0),
-    emergency_health_kits = round(5 * total_facilities_damaged, 0),
-    trauma_surgical_kits = round(5 * total_facilities_damaged, 0),
-    essential_ncd_medicines = round(1 * total_facilities_damaged, 0),
-    mosquito_nets = round(20 * total_facilities_damaged, 0)
+    # ALL resources based on damaged facilities with multipliers from config file
+    medical_tent = round(get_health_resource_multiplier("Medical Tent", Region) * total_facilities_damaged, 0),
+    emergency_health_kits = round(get_health_resource_multiplier("Emergency Health Kits", Region) * total_facilities_damaged, 0),
+    trauma_surgical_kits = round(get_health_resource_multiplier("Trauma and Surgical Kits", Region) * total_facilities_damaged, 0),
+    essential_ncd_medicines = round(get_health_resource_multiplier("Essential NCD Medicines", Region) * total_facilities_damaged, 0),
+    mosquito_nets = round(get_health_resource_multiplier("Mosquito Nets", Region) * total_facilities_damaged, 0)
   ) %>%
   ungroup() %>%
   select(Region, medical_tent, emergency_health_kits, trauma_surgical_kits,
-          essential_ncd_medicines, mosquito_nets)
+         essential_ncd_medicines, mosquito_nets)
 
 # Aggregate to province and national levels
 resources_needed_full <- compute_council_aggregates(resources_needed)
@@ -3283,117 +3296,6 @@ reactable(
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "Resources Needed", columns = c("medical_tent", "emergency_health_kits", "trauma_surgical_kits", "essential_ncd_medicines", "mosquito_nets"))
-  ),
-  striped = TRUE,
-  highlight = TRUE,
-  bordered = TRUE,
-  theme = reactableTheme(
-    headerStyle = list(
-      "&:hover" = list(background = "#eee")
-    ),
-    borderColor = "#ddd",
-    stripedColor = "#f6f8fa"
-  ),
-  defaultPageSize = 15,
-  showPageSizeOptions = TRUE,
-  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
-  showSortable = TRUE
-)
-```
-
-## Estimated Financial Damage
-
-```{r}
-# === DATA WRANGLING ===
-
-# Helper function to get unit costs for health facilities
-get_health_unit_cost <- function(facility_type, area_council) {
-  unit_cost <- financial_config %>%
-    filter(
-      Cluster == "Health",
-      Indicator == "Health Facility",
-      tolower(trimws(Attribute)) == tolower(trimws(facility_type)),
-      `Area Council` == area_council
-    ) %>%
-    pull(Value)
-  
-  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
-}
-
-# Use the raw damage estimates (before rounding) for financial calculations
-health_financial <- damage_estimates_raw %>%
-  rowwise() %>%
-  mutate(
-    # Financial damage for each facility type (in VT)
-    hospital_financial = facility_hospital_damaged * get_health_unit_cost("hospital", Region),
-    health_centre_financial = `facility_health centre_damaged` * get_health_unit_cost("health centre", Region),
-    dispensary_financial = facility_dispensary_damaged * get_health_unit_cost("dispensary", Region),
-    aidpost_financial = facility_aidpost_damaged * get_health_unit_cost("aidpost", Region),
-    
-    # Total financial damage
-    total_financial_damage = hospital_financial + health_centre_financial + 
-                              dispensary_financial + aidpost_financial
-  ) %>%
-  ungroup() %>%
-  select(Region, total_financial_damage, hospital_financial, health_centre_financial,
-         dispensary_financial, aidpost_financial)
-
-# Aggregate to province and national levels
-health_financial_full <- compute_council_aggregates(health_financial)
-
-# Reorder columns to match specification
-health_financial_ordered <- health_financial_full %>%
-  select(Region, total_financial_damage, hospital_financial, health_centre_financial,
-         dispensary_financial, aidpost_financial)
-
-# === EXPORT TO CSV ===
-write.csv(
-  health_financial_ordered,
-  here::here("output", "Health_04_financial_damage.csv"),
-  row.names = FALSE
-)
-
-# === PRESENTATION ===
-# Format for display
-formatted <- format_table(health_financial_ordered)
-
-# Create the financial damage reactable
-reactable(
-  formatted,
-  columns = list(
-    Region = colDef(
-      name = "Region", 
-      minWidth = 150,
-      sticky = "left",
-      html = TRUE
-    ),
-    
-    total_financial_damage = colDef(
-      name = "Total Value",
-      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
-    ),
-    hospital_financial = colDef(
-      name = "Hospital",
-      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
-    ),
-    health_centre_financial = colDef(
-      name = "Health Centre",
-      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
-    ),
-    dispensary_financial = colDef(
-      name = "Dispensary",
-      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
-    ),
-    aidpost_financial = colDef(
-      name = "Aidpost",
-      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
-    )
-  ),
-  columnGroups = list(
-    colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Health Facility", columns = c("total_financial_damage", "hospital_financial", 
-                                                     "health_centre_financial", "dispensary_financial", 
-                                                     "aidpost_financial"))
   ),
   striped = TRUE,
   highlight = TRUE,
