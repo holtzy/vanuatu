@@ -4266,7 +4266,7 @@ shelter_aggregated <- compute_council_aggregates(shelter_wide)
 # === EXPORT TO CSV ===
 write.csv(
   shelter_aggregated %>% select(Region, everything()),
-  here::here("output", "Shelter_01_baseline_household_materials.csv"),
+  here::here("output", "Shelter_01_baseline.csv"),
   row.names = FALSE
 )
 
@@ -4320,8 +4320,169 @@ reactable(
 )
 ```
 
-## 
+## Estimated Hazard Damage 
 
 ```{r}
+# === DATA WRANGLING ===
 
+# Load damage multiplier configuration
+baseline_factors <- read.csv(
+  here::here("Data", "2a Input- Damage Multiplier.csv"),
+  check.names = FALSE
+)
+
+# Filter for Shelter damage functions
+shelter_damage_functions <- baseline_factors %>%
+  filter(Cluster == "Shelter")
+
+# Function to get damage rate for a given indicator, attribute, area council, and intensity
+get_shelter_damage_rate <- function(indicator, attribute, area_council, intensity) {
+  if (intensity == 0) return(0)
+  
+  intensity_col <- paste0("Intensity ", intensity)
+  
+  rate <- shelter_damage_functions %>%
+    filter(
+      Indicator == indicator,
+      tolower(trimws(Attribute)) == tolower(trimws(attribute)),
+      `Area Council` == area_council
+    ) %>%
+    pull(!!intensity_col)
+  
+  return(ifelse(length(rate) > 0, rate, 0))
+}
+
+# Get baseline shelter data at council level
+shelter_baseline <- full_data %>%
+  filter(Baseline == "Shelter") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`)
+
+# Get private households
+private_households <- shelter_baseline %>%
+  filter(Indicator == "Household Type", Attribute == "private households") %>%
+  select(Region, Value) %>%
+  rename(private_households = Value)
+
+# Get roof materials
+roof_materials <- shelter_baseline %>%
+  filter(Indicator == "Household Roof Material") %>%
+  mutate(material = paste0("roof_", tolower(trimws(Attribute)))) %>%
+  select(Region, material, Value) %>%
+  pivot_wider(
+    names_from = material,
+    values_from = Value
+  )
+
+# Get wall materials
+wall_materials <- shelter_baseline %>%
+  filter(Indicator == "Household Wall Material") %>%
+  mutate(material = paste0("wall_", tolower(trimws(Attribute)))) %>%
+  select(Region, material, Value) %>%
+  pivot_wider(
+    names_from = material,
+    values_from = Value
+  )
+
+# Combine baseline data
+shelter_baseline_wide <- private_households %>%
+  left_join(roof_materials, by = "Region") %>%
+  left_join(wall_materials, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Join with hazard intensity from config
+shelter_with_intensity <- shelter_baseline_wide %>%
+  left_join(
+    config %>% select(`Area Council`, Intensity),
+    by = c("Region" = "Area Council")
+  ) %>%
+  mutate(Intensity = replace_na(Intensity, 0))
+
+# Calculate damage for each household type/material
+shelter_damage_raw <- shelter_with_intensity %>%
+  rowwise() %>%
+  mutate(
+    # Private households damaged
+    private_households_damaged = private_households * get_shelter_damage_rate("Household Type", "private households", Region, Intensity),
+    
+    # Roof materials damaged
+    roof_concrete_damaged = roof_concrete * get_shelter_damage_rate("Household Roof Material", "concrete", Region, Intensity),
+    roof_metal_damaged = roof_metal * get_shelter_damage_rate("Household Roof Material", "metal", Region, Intensity),
+    roof_wood_damaged = roof_wood * get_shelter_damage_rate("Household Roof Material", "wood", Region, Intensity),
+    
+    # Wall materials damaged
+    wall_concrete_damaged = wall_concrete * get_shelter_damage_rate("Household Wall Material", "concrete", Region, Intensity),
+    wall_metal_damaged = wall_metal * get_shelter_damage_rate("Household Wall Material", "metal", Region, Intensity),
+    wall_wood_damaged = wall_wood * get_shelter_damage_rate("Household Wall Material", "wood", Region, Intensity)
+  ) %>%
+  ungroup()
+
+# Round for presentation
+shelter_damage_rounded <- shelter_damage_raw %>%
+  select(Region, ends_with("_damaged")) %>%
+  mutate(across(where(is.numeric), ~round(.x, 0)))
+
+# Aggregate to province and national levels
+shelter_damage_aggregated <- compute_council_aggregates(shelter_damage_rounded)
+
+# Reorder columns
+shelter_damage_ordered <- shelter_damage_aggregated %>%
+  select(Region, private_households_damaged,
+         roof_concrete_damaged, roof_metal_damaged, roof_wood_damaged,
+         wall_concrete_damaged, wall_metal_damaged, wall_wood_damaged)
+
+# === EXPORT TO CSV ===
+write.csv(
+  shelter_damage_ordered,
+  here::here("output", "Shelter_02_estimated_damage.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(shelter_damage_ordered)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region",   
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    
+    private_households_damaged = colDef(name = "Total Private Households", format = colFormat(digits = 0)),
+    
+    roof_concrete_damaged = colDef(name = "Concrete", format = colFormat(digits = 0)),
+    roof_metal_damaged = colDef(name = "Metal", format = colFormat(digits = 0)),
+    roof_wood_damaged = colDef(name = "Wood", format = colFormat(digits = 0)),
+    
+    wall_concrete_damaged = colDef(name = "Concrete", format = colFormat(digits = 0)),
+    wall_metal_damaged = colDef(name = "Metal", format = colFormat(digits = 0)),
+    wall_wood_damaged = colDef(name = "Wood", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Number of Households", columns = c("private_households_damaged")),
+    colGroup(name = "Main Roof Materials", columns = c("roof_concrete_damaged", "roof_metal_damaged", "roof_wood_damaged")),
+    colGroup(name = "Main Wall Materials", columns = c("wall_concrete_damaged", "wall_metal_damaged", "wall_wood_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
 ```
