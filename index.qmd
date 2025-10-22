@@ -4486,3 +4486,110 @@ reactable(
   showSortable = TRUE
 )
 ```
+
+## Immediate Response Resources
+
+```{r}
+# === DATA WRANGLING ===
+
+# Load resources configuration
+resource_config <- read.csv(
+  here::here("Data", "3aii Input- Resources Sent.csv"),
+  check.names = FALSE
+)
+
+# Filter for Shelter resources
+shelter_resources <- resource_config %>%
+  filter(Cluster == "Shelter")
+
+# Function to get resource quantity per household
+get_shelter_resource_quantity <- function(resource_type, area_council) {
+  quantity <- shelter_resources %>%
+    filter(
+      tolower(trimws(Indicator)) == tolower(trimws(resource_type)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(quantity) > 0, quantity, 0))
+}
+
+# Use the damaged households from previous section
+shelter_resources_calc <- shelter_damage_raw %>%
+  select(Region, private_households_damaged) %>%
+  rowwise() %>%
+  mutate(
+    # Calculate resource needs based on damaged households
+    tent = private_households_damaged * get_shelter_resource_quantity("tent", Region),
+    solar_lamp = private_households_damaged * get_shelter_resource_quantity("solar lamp", Region),
+    kitchen_set = private_households_damaged * get_shelter_resource_quantity("kitchen set", Region),
+    jerrycan_10l = private_households_damaged * get_shelter_resource_quantity("jerrycan 10l", Region),
+    sleeping_mat = private_households_damaged * get_shelter_resource_quantity("sleeping mat", Region),
+    blanket = private_households_damaged * get_shelter_resource_quantity("blanket", Region)
+  ) %>%
+  ungroup()
+
+# Round for presentation
+shelter_resources_rounded <- shelter_resources_calc %>%
+  mutate(across(where(is.numeric), ~round(.x, 0)))
+
+# Aggregate to province and national levels
+shelter_resources_aggregated <- compute_council_aggregates(shelter_resources_rounded)
+
+# Reorder columns
+shelter_resources_ordered <- shelter_resources_aggregated %>%
+  select(Region, private_households_damaged, tent, solar_lamp, kitchen_set, 
+         jerrycan_10l, sleeping_mat, blanket)
+
+# === EXPORT TO CSV ===
+write.csv(
+  shelter_resources_ordered,
+  here::here("output", "Shelter_03_resources.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(shelter_resources_ordered)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region",   
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    
+    private_households_damaged = colDef(name = "Number of Households", format = colFormat(digits = 0)),
+    tent = colDef(name = "Tent", format = colFormat(digits = 0)),
+    solar_lamp = colDef(name = "Solar Lamp", format = colFormat(digits = 0)),
+    kitchen_set = colDef(name = "Kitchen Set", format = colFormat(digits = 0)),
+    jerrycan_10l = colDef(name = "Jerrycan 10L", format = colFormat(digits = 0)),
+    sleeping_mat = colDef(name = "Sleeping Mat", format = colFormat(digits = 0)),
+    blanket = colDef(name = "Blanket", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Number of Households", columns = c("private_households_damaged")),
+    colGroup(name = "Resources", columns = c("tent", "solar_lamp", "kitchen_set", 
+                                               "jerrycan_10l", "sleeping_mat", "blanket"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
