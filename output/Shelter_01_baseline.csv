@@ -1,4 +1,4 @@
-"Region","total_households","household roof material_concrete","household roof material_metal","household roof material_wood","household wall material_concrete","household wall material_metal","household wall material_wood"
+"Region","total_households","roof_concrete","roof_metal","roof_wood","wall_concrete","wall_metal","wall_wood"
 "National",72482.0546920189,1877.35951210822,35462.9623715556,1033.00941663945,22076.040378248,14366.2390292872,4656.25537513887
 "Torba",2794.95252753011,81.5249281381653,581.784470195177,3.87625960775018,405.903255968896,216.092994118753,122.513426305331
 "Torres",251.536722793333,3.62793350182691,37.4886461855448,0,15.7210451745833,4.83724466910255,4.83724466910255
