@@ -4593,3 +4593,427 @@ reactable(
   showSortable = TRUE
 )
 ```
+
+## Estimated Financial Damage
+
+```{r}
+# === DATA WRANGLING ===
+
+# Load financial configuration
+financial_config <- read.csv(
+  here::here("Data", "4a Input- Finance Estimates.csv"),
+  check.names = FALSE
+)
+
+# Filter for Shelter financial costs
+shelter_financial <- financial_config %>%
+  filter(Cluster == "Shelter")
+
+# Function to get unit cost for shelter items
+get_shelter_unit_cost <- function(indicator, attribute, area_council) {
+  unit_cost <- shelter_financial %>%
+    filter(
+      Indicator == indicator,
+      tolower(trimws(Attribute)) == tolower(trimws(attribute)),
+      `Area Council` == area_council
+    ) %>%
+    pull(Value)
+  
+  return(ifelse(length(unit_cost) > 0, unit_cost, 0))
+}
+
+# Get baseline appliance data at council level
+appliance_baseline <- full_data %>%
+  filter(Baseline == "Shelter", Indicator == "Household Appliances") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Attribute, Value) %>%
+  pivot_wider(
+    names_from = Attribute,
+    values_from = Value,
+    names_prefix = "appliance_"
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Get baseline private households (needed for damage rate calculation)
+baseline_private_households <- full_data %>%
+  filter(Baseline == "Shelter", Indicator == "Household Type", Attribute == "private households") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Value) %>%
+  rename(private_households_baseline = Value)
+
+# Use the raw damage estimates (before rounding) for financial calculations
+shelter_financial_calc <- shelter_damage_raw %>%
+  left_join(appliance_baseline, by = "Region") %>%
+  left_join(baseline_private_households, by = "Region") %>%
+  rowwise() %>%
+  mutate(
+    # Financial damage for roof materials
+    roof_concrete_financial = roof_concrete_damaged * get_shelter_unit_cost("Household Roof Material", "concrete", Region),
+    roof_metal_financial = roof_metal_damaged * get_shelter_unit_cost("Household Roof Material", "metal", Region),
+    roof_wood_financial = roof_wood_damaged * get_shelter_unit_cost("Household Roof Material", "wood", Region),
+    
+    # Financial damage for wall materials
+    wall_concrete_financial = wall_concrete_damaged * get_shelter_unit_cost("Household Wall Material", "concrete", Region),
+    wall_metal_financial = wall_metal_damaged * get_shelter_unit_cost("Household Wall Material", "metal", Region),
+    wall_wood_financial = wall_wood_damaged * get_shelter_unit_cost("Household Wall Material", "wood", Region),
+    
+    # Calculate damaged appliances based on household damage rate
+    damage_rate = ifelse(private_households_baseline > 0, private_households_damaged / private_households_baseline, 0),
+    freezer_damaged = ifelse(!is.na(appliance_freezer), appliance_freezer * damage_rate, 0),
+    refrigerator_damaged = ifelse(!is.na(appliance_refrigerator), appliance_refrigerator * damage_rate, 0),
+    tv_damaged = ifelse(!is.na(appliance_tv), appliance_tv * damage_rate, 0),
+    
+    # Calculate financial damage for appliances
+    freezer_financial = freezer_damaged * get_shelter_unit_cost("Household Appliances", "freezer", Region),
+    refrigerator_financial = refrigerator_damaged * get_shelter_unit_cost("Household Appliances", "refridgerator", Region),
+    tv_financial = tv_damaged * get_shelter_unit_cost("Household Appliances", "tv", Region),
+    
+    # Calculate total household financial damage (sum of all components)
+    private_households_financial = roof_concrete_financial + roof_metal_financial + roof_wood_financial +
+                                   wall_concrete_financial + wall_metal_financial + wall_wood_financial +
+                                   freezer_financial + refrigerator_financial + tv_financial,
+    
+    # Total financial damage (same as private households since that's the sum of all components)
+    total_financial = private_households_financial
+  ) %>%
+  ungroup() %>%
+  select(Region, total_financial, private_households_financial,
+         roof_concrete_financial, roof_metal_financial, roof_wood_financial,
+         wall_concrete_financial, wall_metal_financial, wall_wood_financial,
+         freezer_financial, refrigerator_financial, tv_financial)
+
+# Aggregate to province and national levels
+shelter_financial_aggregated <- compute_council_aggregates(shelter_financial_calc)
+
+# Reorder columns
+shelter_financial_ordered <- shelter_financial_aggregated %>%
+  select(Region, total_financial, private_households_financial,
+         roof_concrete_financial, roof_metal_financial, roof_wood_financial,
+         wall_concrete_financial, wall_metal_financial, wall_wood_financial,
+         freezer_financial, refrigerator_financial, tv_financial)
+
+# === EXPORT TO CSV ===
+write.csv(
+  shelter_financial_ordered,
+  here::here("output", "Shelter_04_financial_damage.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(shelter_financial_ordered)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region",   
+      minWidth = 150,
+      sticky = "left",
+      html = TRUE
+    ),
+    
+    total_financial = colDef(
+      name = "Total Value",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    private_households_financial = colDef(
+      name = "Total Private Households",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    
+    roof_concrete_financial = colDef(
+      name = "Concrete",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    roof_metal_financial = colDef(
+      name = "Metal",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    roof_wood_financial = colDef(
+      name = "Wood",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    
+    wall_concrete_financial = colDef(
+      name = "Concrete",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    wall_metal_financial = colDef(
+      name = "Metal",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    wall_wood_financial = colDef(
+      name = "Wood",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    
+    freezer_financial = colDef(
+      name = "Freezer",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    refrigerator_financial = colDef(
+      name = "Refrigerator",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    ),
+    tv_financial = colDef(
+      name = "TV",
+      format = colFormat(suffix = " VT", separators = TRUE, digits = 0)
+    )
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Total Value", columns = c("total_financial")),
+    colGroup(name = "Total Private Households", columns = c("private_households_financial")),
+    colGroup(name = "Main Roof Materials", columns = c("roof_concrete_financial", "roof_metal_financial", "roof_wood_financial")),
+    colGroup(name = "Main Wall Materials", columns = c("wall_concrete_financial", "wall_metal_financial", "wall_wood_financial")),
+    colGroup(name = "Household Appliances", columns = c("freezer_financial", "refrigerator_financial", "tv_financial"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+# WASH
+
+## Baseline
+
+```{r}
+# === DATA WRANGLING ===
+
+# Filter for WASH baseline at Area Council level
+wash_data <- full_data %>%
+  filter(Baseline == "WASH") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`)
+
+# Get total households from Shelter baseline (since WASH doesn't have it)
+total_households <- full_data %>%
+  filter(Baseline == "Shelter", Indicator == "Household Type", Attribute == "number households") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`) %>%
+  select(Region, Value) %>%
+  rename(total_households = Value)
+
+# Get drinking water sources
+drinking_water <- wash_data %>%
+  filter(Indicator == "Household Drinking Water") %>%
+  mutate(water_type = paste0("water_", tolower(trimws(Attribute)))) %>%
+  select(Region, water_type, Value) %>%
+  pivot_wider(
+    names_from = water_type,
+    values_from = Value
+  )
+
+# Get toilet types
+toilet_type <- wash_data %>%
+  filter(Indicator == "Household Toilet") %>%
+  mutate(toilet_type = paste0("toilet_", tolower(trimws(Attribute)))) %>%
+  select(Region, toilet_type, Value) %>%
+  pivot_wider(
+    names_from = toilet_type,
+    values_from = Value
+  )
+
+# Combine all data
+wash_wide <- total_households %>%
+  left_join(drinking_water, by = "Region") %>%
+  left_join(toilet_type, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Compute aggregates (province and national levels)
+wash_aggregated <- compute_council_aggregates(wash_wide)
+
+# === EXPORT TO CSV ===
+write.csv(
+  wash_aggregated %>% select(Region, everything()),
+  here::here("output", "WASH_01_baseline.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(wash_aggregated)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region",   
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    
+    total_households = colDef(name = "", format = colFormat(digits = 0)),
+    
+    water_piped = colDef(name = "Piped", format = colFormat(digits = 0)),
+    water_well = colDef(name = "Well", format = colFormat(digits = 0)),
+    water_tank = colDef(name = "Tank", format = colFormat(digits = 0)),
+    
+    `toilet_pit latrine` = colDef(name = "Pit Latrine", format = colFormat(digits = 0)),
+    toilet_vip = colDef(name = "VIP", format = colFormat(digits = 0)),
+    toilet_flush = colDef(name = "Flush", format = colFormat(digits = 0)),
+    `toilet_water sealed` = colDef(name = "Water Sealed", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Total Households", columns = c("total_households")),
+    colGroup(name = "Drinking Water", columns = c("water_piped", "water_well", "water_tank")),
+    colGroup(name = "Toilet Type", columns = c("toilet_pit latrine", "toilet_vip", "toilet_flush", "toilet_water sealed"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
+## Estimated Hazard Damage
+
+```{r}
+# === DATA WRANGLING ===
+
+# Filter for WASH damage functions
+wash_damage_functions <- baseline_factors %>%
+  filter(Cluster == "WASH")
+
+# Function to get damage rate for WASH items
+get_wash_damage_rate <- function(indicator, attribute, area_council, intensity) {
+  if (intensity == 0) return(0)
+  
+  intensity_col <- paste0("Intensity ", intensity)
+  
+  rate <- wash_damage_functions %>%
+    filter(
+      Indicator == indicator,
+      tolower(trimws(Attribute)) == tolower(trimws(attribute)),
+      `Area Council` == area_council
+    ) %>%
+    pull(!!intensity_col)
+  
+  return(ifelse(length(rate) > 0, rate, 0))
+}
+
+# Get baseline WASH data at council level
+wash_baseline <- wash_wide
+
+# Join with hazard intensity from config
+wash_with_intensity <- wash_baseline %>%
+  left_join(
+    config %>% select(`Area Council`, Intensity),
+    by = c("Region" = "Area Council")
+  ) %>%
+  mutate(Intensity = replace_na(Intensity, 0))
+
+# Calculate damage for each WASH type
+wash_damage_raw <- wash_with_intensity %>%
+  rowwise() %>%
+  mutate(
+    # Drinking water damaged
+    water_piped_damaged = water_piped * get_wash_damage_rate("Household Drinking Water", "piped", Region, Intensity),
+    water_well_damaged = water_well * get_wash_damage_rate("Household Drinking Water", "well", Region, Intensity),
+    water_tank_damaged = water_tank * get_wash_damage_rate("Household Drinking Water", "tank", Region, Intensity),
+    
+    # Toilet types damaged
+    toilet_pit_latrine_damaged = `toilet_pit latrine` * get_wash_damage_rate("Household Toilet", "pit latrine", Region, Intensity),
+    toilet_vip_damaged = toilet_vip * get_wash_damage_rate("Household Toilet", "vip", Region, Intensity),
+    toilet_flush_damaged = toilet_flush * get_wash_damage_rate("Household Toilet", "flush", Region, Intensity),
+    toilet_water_sealed_damaged = `toilet_water sealed` * get_wash_damage_rate("Household Toilet", "water sealed", Region, Intensity)
+  ) %>%
+  ungroup()
+
+# Round for presentation
+wash_damage_rounded <- wash_damage_raw %>%
+  select(Region, ends_with("_damaged")) %>%
+  mutate(across(where(is.numeric), ~round(.x, 0)))
+
+# Aggregate to province and national levels
+wash_damage_aggregated <- compute_council_aggregates(wash_damage_rounded)
+
+# Reorder columns
+wash_damage_ordered <- wash_damage_aggregated %>%
+  select(Region, water_piped_damaged, water_well_damaged, water_tank_damaged,
+         toilet_pit_latrine_damaged, toilet_vip_damaged, toilet_flush_damaged, toilet_water_sealed_damaged)
+
+# === EXPORT TO CSV ===
+write.csv(
+  wash_damage_ordered,
+  here::here("output", "WASH_02_estimated_damage.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(wash_damage_ordered)
+
+reactable(
+  formatted,
+  columns = list(
+    Region = colDef(
+      name = "Region",   
+      minWidth = 150,
+      sortable = TRUE,
+      defaultSortOrder = "asc",
+      html = TRUE,
+      sticky = "left"
+    ),
+    
+    water_piped_damaged = colDef(name = "Piped", format = colFormat(digits = 0)),
+    water_well_damaged = colDef(name = "Well", format = colFormat(digits = 0)),
+    water_tank_damaged = colDef(name = "Tank", format = colFormat(digits = 0)),
+    
+    toilet_pit_latrine_damaged = colDef(name = "Pit Latrine", format = colFormat(digits = 0)),
+    toilet_vip_damaged = colDef(name = "VIP", format = colFormat(digits = 0)),
+    toilet_flush_damaged = colDef(name = "Flush", format = colFormat(digits = 0)),
+    toilet_water_sealed_damaged = colDef(name = "Water Sealed", format = colFormat(digits = 0))
+  ),
+  columnGroups = list(
+    colGroup(name = "Region", columns = c("Region")),
+    colGroup(name = "Drinking Water", columns = c("water_piped_damaged", "water_well_damaged", "water_tank_damaged")),
+    colGroup(name = "Toilet Type", columns = c("toilet_pit_latrine_damaged", "toilet_vip_damaged", "toilet_flush_damaged", "toilet_water_sealed_damaged"))
+  ),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
+```
+
