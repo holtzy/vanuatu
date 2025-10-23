@@ -5281,7 +5281,7 @@ business_aggregated <- compute_council_aggregates(business_wide)
 # === EXPORT TO CSV ===
 write.csv(
   business_aggregated %>% select(Region, everything()),
-  here::here("output", "Business_01_baseline_industry_types.csv"),
+  here::here("output", "Business_01_baseline.csv"),
   row.names = FALSE
 )
 
