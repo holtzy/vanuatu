@@ -5245,8 +5245,101 @@ reactable(
 
 # Business
 
-## Baseline 
+## Baseline
 
 ```{r}
+# === DATA WRANGLING ===
 
+# Filter for Business baseline at Area Council level
+business_data <- full_data %>%
+  filter(Baseline == "Business") %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  filter(!is.na(`Area Council`)) %>%
+  mutate(Region = `Area Council`)
+
+# Get businesses by industry type and sum them by Region and Attribute
+industry_types <- business_data %>%
+  filter(Indicator == "Industry Type") %>%
+  group_by(Region, Attribute) %>%
+  summarise(Value = sum(Value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(industry = paste0("industry_", tolower(trimws(Attribute)))) %>%
+  select(Region, industry, Value) %>%
+  pivot_wider(
+    names_from = industry,
+    values_from = Value
+  ) %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Calculate total businesses
+business_wide <- industry_types %>%
+  mutate(total_businesses = rowSums(select(., starts_with("industry_")), na.rm = TRUE)) %>%
+  select(Region, total_businesses, everything())
+
+# Compute aggregates (province and national levels)
+business_aggregated <- compute_council_aggregates(business_wide)
+
+# === EXPORT TO CSV ===
+write.csv(
+  business_aggregated %>% select(Region, everything()),
+  here::here("output", "Business_01_baseline_industry_types.csv"),
+  row.names = FALSE
+)
+
+# === PRESENTATION ===
+formatted <- format_table(business_aggregated)
+
+# Get all industry columns (excluding Region and total_businesses)
+industry_cols <- setdiff(names(formatted), c("Region", "total_businesses"))
+
+# Create column definitions dynamically
+column_defs <- list(
+  Region = colDef(
+    name = "Region",   
+    minWidth = 150,
+    sortable = TRUE,
+    defaultSortOrder = "asc",
+    html = TRUE,
+    sticky = "left"
+  ),
+  total_businesses = colDef(name = "", format = colFormat(digits = 0))
+)
+
+# Add definitions for all industry columns
+for (col in industry_cols) {
+  # Create readable name from column name
+  readable_name <- gsub("industry_", "", col)
+  readable_name <- tools::toTitleCase(readable_name)
+  
+  column_defs[[col]] <- colDef(
+    name = readable_name,
+    format = colFormat(digits = 0)
+  )
+}
+
+# Create column groups - single "Industry Type" group spanning all industry columns
+all_groups <- list(
+  colGroup(name = "Region", columns = c("Region")),
+  colGroup(name = "Total Businesses", columns = c("total_businesses")),
+  colGroup(name = "Industry Type", columns = industry_cols)
+)
+
+reactable(
+  formatted,
+  columns = column_defs,
+  columnGroups = all_groups,
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    headerStyle = list(
+      "&:hover" = list(background = "#eee")
+    ),
+    borderColor = "#ddd",
+    stripedColor = "#f6f8fa"
+  ),
+  defaultPageSize = 15,
+  showPageSizeOptions = TRUE,
+  pageSizeOptions = c(10, 15, 25, 50, 75, 100),
+  showSortable = TRUE
+)
 ```
