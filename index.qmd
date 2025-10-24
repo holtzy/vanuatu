@@ -2929,7 +2929,7 @@ reactable(
 
 # Health
 
-## Baseline: Health 
+## Baseline: Number of Health Facilities and Staff
 
 ```{r}
 # === DATA WRANGLING ===
@@ -4218,7 +4218,7 @@ reactable(
 
 # Shelter 
 
-## Baseline
+## Baseline: Number of Private Households by Roof and Wall Materials
 
 ```{r}
 # Filter for Shelter baseline at Area Council level
@@ -4794,7 +4794,7 @@ reactable(
 
 # WASH
 
-## Baseline
+## Baseline: Household Drinking Water Sources and Toilet Types
 
 ```{r}
 # === DATA WRANGLING ===
