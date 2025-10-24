@@ -4420,6 +4420,7 @@ shelter_damage_raw <- shelter_with_intensity %>%
 
 # Round for presentation
 shelter_damage_rounded <- shelter_damage_raw %>%
+  filter(Intensity > 0) %>%  
   select(Region, ends_with("_damaged")) %>%
   mutate(across(where(is.numeric), ~round(.x, 0)))
 
@@ -4516,6 +4517,7 @@ get_shelter_resource_quantity <- function(resource_type, area_council) {
 
 # Use the damaged households from previous section
 shelter_resources_calc <- shelter_damage_raw %>%
+  filter(Intensity > 0) %>%  # <-- ADD THIS LINE
   select(Region, private_households_damaged) %>%
   rowwise() %>%
   mutate(
@@ -4647,6 +4649,7 @@ baseline_private_households <- full_data %>%
 
 # Use the raw damage estimates (before rounding) for financial calculations
 shelter_financial_calc <- shelter_damage_raw %>%
+  filter(Intensity > 0) %>%  # <-- ADD THIS LIN
   left_join(appliance_baseline, by = "Region") %>%
   left_join(baseline_private_households, by = "Region") %>%
   rowwise() %>%
