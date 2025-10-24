@@ -4956,6 +4956,7 @@ wash_damage_raw <- wash_with_intensity %>%
 
 # Round for presentation
 wash_damage_rounded <- wash_damage_raw %>%
+  filter(Intensity > 0) %>%  # <-- ADD THIS LINE
   select(Region, ends_with("_damaged")) %>%
   mutate(across(where(is.numeric), ~round(.x, 0)))
 
@@ -5043,6 +5044,7 @@ get_wash_resource_quantity <- function(resource_type, area_council) {
 
 # Calculate resource needs based on damaged facilities
 wash_resources_calc <- wash_damage_raw %>%
+  filter(Intensity > 0) %>%  # <-- ADD THIS LINE
   select(Region, water_piped_damaged, water_well_damaged, water_tank_damaged,
          toilet_pit_latrine_damaged) %>%
   rowwise() %>%
@@ -5139,6 +5141,7 @@ get_wash_unit_cost <- function(indicator, attribute, area_council) {
 
 # Use the raw damage estimates (before rounding) for financial calculations
 wash_financial_calc <- wash_damage_raw %>%
+  filter(Intensity > 0) %>%  # <-- ADD THIS LINE
   rowwise() %>%
   mutate(
     # Financial damage for drinking water (in VT)
