@@ -146,10 +146,8 @@ format_table <- function(data){
 }
 ```
 
-# Education
 
-## Baseline: Number of Schools, Students, and Teachers
-
+Load and clean 'full data'
 ```{r}
 full_data <- read.csv(here::here("Data", "1c_input_baseline.csv"), check.names = FALSE)
 
@@ -171,7 +169,110 @@ valid_councils <- region_order[!region_order %in% c("National", "Torba", "Sanma"
 
 full_data <- full_data %>%
   filter(`Area Council` %in% valid_councils)
+```
 
+# Data Quality Checks
+````{r}
+#| label: data-quality-checks
+#| warning: true
+
+# === 1. INPUT DATA VALIDATION ===
+
+# Check for unrecognized Area Council names
+data_councils <- unique(full_data$`Area Council`)
+unrecognized <- setdiff(data_councils, region_order)
+if (length(unrecognized) > 0) {
+  warning("⚠️ Unrecognized Area Councils found: ", paste(unrecognized, collapse = ", "))
+} else {
+  message("✓ All Area Councils recognized")
+}
+
+# Check for case inconsistencies (potential duplicates)
+lowercase_counts <- table(tolower(data_councils))
+potential_dupes <- names(lowercase_counts[lowercase_counts > 1])
+if (length(potential_dupes) > 0) {
+  warning("⚠️ Possible duplicate councils with different capitalization: ", paste(potential_dupes, collapse = ", "))
+} else {
+  message("✓ No capitalization inconsistencies detected")
+}
+
+# Check for missing councils (councils in config but not in baseline)
+config_councils <- unique(config$`Area Council`)
+missing_baseline <- setdiff(config_councils, data_councils)
+if (length(missing_baseline) > 0) {
+  warning("⚠️ Councils in hazard config but missing from baseline: ", paste(missing_baseline, collapse = ", "))
+} else {
+  message("✓ All configured councils have baseline data")
+}
+
+# Check for councils in baseline but not in config (won't receive damage estimates)
+missing_config <- setdiff(data_councils, config_councils)
+if (length(missing_config) > 0) {
+  message("ℹ️ Councils with baseline data but no hazard config (will show 0 damage): ", paste(missing_config, collapse = ", "))
+}
+
+# === 2. DATA COMPLETENESS CHECK ===
+
+# Check which baselines are available per council
+baseline_coverage <- full_data %>%
+  group_by(`Area Council`, Baseline) %>%
+  summarise(n_records = n(), .groups = "drop") %>%
+  pivot_wider(names_from = Baseline, values_from = n_records, values_fill = 0)
+
+# Expected baselines that may legitimately be missing for some councils
+# (rural/remote areas without businesses, telecom towers, or health facilities)
+optional_baselines <- c("Business", "Emergency Telecommunications", "Health")
+required_baselines <- c("Education", "Energy", "Food Security", "Gender & Protection", 
+                        "Logistics", "Shelter", "WASH")
+
+# Check for missing REQUIRED baselines (these are real issues)
+missing_required <- baseline_coverage %>%
+  rowwise() %>%
+  filter(any(c_across(any_of(required_baselines)) == 0)) %>%
+  ungroup()
+
+# Check for missing OPTIONAL baselines (informational only)
+missing_optional <- baseline_coverage %>%
+  rowwise() %>%
+  filter(any(c_across(any_of(optional_baselines)) == 0)) %>%
+  ungroup()
+
+if (nrow(missing_required) > 0) {
+  warning("⚠️ Some councils are missing required baseline data. See 'QC_baseline_coverage.csv'")
+  write.csv(baseline_coverage, here::here("output", "QC_baseline_coverage.csv"), row.names = FALSE)
+  baseline_completeness_pass <- FALSE
+} else {
+  message("✓ All councils have required baseline data")
+  baseline_completeness_pass <- TRUE
+}
+
+if (nrow(missing_optional) > 0) {
+  n_missing_business <- sum(baseline_coverage$Business == 0, na.rm = TRUE)
+  n_missing_telecom <- sum(baseline_coverage$`Emergency Telecommunications` == 0, na.rm = TRUE)
+  n_missing_health <- sum(baseline_coverage$Health == 0, na.rm = TRUE)
+  message("ℹ️ Optional baseline gaps (expected for rural councils): ",
+          n_missing_business, " without Business, ",
+          n_missing_telecom, " without Telecom, ",
+          n_missing_health, " without Health")
+  write.csv(baseline_coverage, here::here("output", "QC_baseline_coverage.csv"), row.names = FALSE)
+}
+
+# === 3. RANDOM SAMPLE FOR MANUAL REVIEW ===
+
+set.seed(as.numeric(Sys.Date())) # Reproducible daily sample
+sample_councils <- sample(data_councils, min(5, length(data_councils)))
+
+message("📋 Manual review sample for ", Sys.Date(), ": ", paste(sample_councils, collapse = ", "))
+
+# Store for use after calculations complete
+qc_sample_councils <- sample_councils
+````
+
+# Education
+
+## Baseline: Number of Schools, Students, and Teachers
+
+```{r}
 # === DATA WRANGLING ===
 # Filter for Education in Baseline column and Area Council level data
 education_data <- full_data %>%
@@ -1233,7 +1334,8 @@ infra_damage <- energy_infra_with_config %>%
 # Now calculate resources needed
 # Join household damage data with infrastructure damage data
 resources_base <- damage_estimates %>%
-  left_join(infra_damage, by = "Region")
+  left_join(infra_damage, by = "Region") %>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
 
 # Calculate total electricity households affected
 resources_needed <- resources_base %>%
@@ -5366,5 +5468,110 @@ reactable(
   showPageSizeOptions = TRUE,
   pageSizeOptions = c(10, 15, 25, 50, 75, 100),
   showSortable = TRUE
+)
+```
+
+# Output Quality Checks
+```{r}
+#| label: output-quality-checks
+
+# === VALIDATE EXPORTED CSV FILES ===
+
+validate_csv <- function(filepath) {
+  if (!file.exists(filepath)) return(data.frame(File = basename(filepath), Issue = "File not found", Pass = FALSE))
+  
+  df <- read.csv(filepath, check.names = FALSE)
+  issues <- character()
+  
+  numeric_cols <- df %>% select(where(is.numeric))
+  
+  if (any(numeric_cols < 0, na.rm = TRUE)) {
+    issues <- c(issues, "Negative values")
+  }
+  if (any(is.na(numeric_cols))) {
+    issues <- c(issues, paste0("NA values (", sum(is.na(numeric_cols)), ")"))
+  }
+  
+  if (length(issues) == 0) {
+    return(data.frame(File = basename(filepath), Issue = "✓ Pass", Pass = TRUE))
+  } else {
+    return(data.frame(File = basename(filepath), Issue = paste(issues, collapse = "; "), Pass = FALSE))
+  }
+}
+
+# Get all output CSVs, excluding QC files (they may have NAs by design)
+output_files <- list.files(here::here("output"), pattern = "\\.csv$", full.names = TRUE)
+output_files <- output_files[!grepl("^QC_", basename(output_files))]
+
+# Validate each
+validation_results <- lapply(output_files, validate_csv) %>% bind_rows()
+
+# Determine overall pass/fail
+output_validation_pass <- all(validation_results$Pass)
+
+if (output_validation_pass) {
+  message("✓ All output files passed validation")
+} else {
+  warning("⚠️ Some output files have issues")
+}
+
+# Display detailed results
+reactable(
+  validation_results %>% select(File, Issue),
+  columns = list(
+    File = colDef(name = "Output File", minWidth = 300),
+    Issue = colDef(name = "Status", minWidth = 150)
+  ),
+  striped = TRUE,
+  bordered = TRUE,
+  filterable = TRUE
+)
+
+# === MANUAL REVIEW SAMPLE EXPORT ===
+
+# Compile key metrics for sampled councils
+manual_review <- bind_rows(
+  education_aggregated %>% 
+    filter(Region %in% qc_sample_councils) %>% 
+    select(Region, starts_with("ecce_"), starts_with("primary_")) %>%
+    mutate(Sector = "Education", .before = 1),
+  
+  shelter_damage_ordered %>% 
+    filter(Region %in% qc_sample_councils) %>%
+    mutate(Sector = "Shelter Damage", .before = 1),
+  
+  health_financial_ordered %>% 
+    filter(Region %in% qc_sample_councils) %>%
+    mutate(Sector = "Health Financial", .before = 1)
+)
+
+write.csv(manual_review, here::here("output", "QC_manual_review_sample.csv"), row.names = FALSE)
+message("📁 Manual review sample exported to output/QC_manual_review_sample.csv")
+
+# === QC SUMMARY TABLE ===
+
+qc_summary <- data.frame(
+  Check = c("Area Councils recognized", 
+            "No capitalization issues",
+            "Config-baseline alignment",
+            "Required baseline completeness",
+            "Output file validation"),
+  Status = c(
+    ifelse(length(unrecognized) == 0, "✓ Pass", "⚠️ Issues"),
+    ifelse(length(potential_dupes) == 0, "✓ Pass", "⚠️ Issues"),
+    ifelse(length(missing_baseline) == 0, "✓ Pass", "⚠️ Issues"),
+    ifelse(baseline_completeness_pass, "✓ Pass", "⚠️ Issues"),
+    ifelse(output_validation_pass, "✓ Pass", "⚠️ Issues")
+  )
+)
+
+reactable(
+  qc_summary,
+  columns = list(
+    Check = colDef(name = "Quality Check", minWidth = 250),
+    Status = colDef(name = "Status", minWidth = 100)
+  ),
+  striped = TRUE,
+  bordered = TRUE
 )
 ```
