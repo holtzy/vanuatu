@@ -36,7 +36,7 @@ This report runs based on a config file which provides the cyclone intensity app
 - Province
 - Area Council
 - Hazard
-- Intensity (number from 2 to 3)
+- Intensity (number from 2 to 4)
 
 Let's load this file to use it later in our analysis:
 
@@ -80,7 +80,7 @@ region_order <- c(
   "Mota", "East Gaua", "West Gaua", "Merelava",
   "Sanma", "Luganville", "North West Santo", "Big Bay Coast", "Big Bay Inland", 
   "West Santo", "South Santo 1", "South Santo 2", "East Santo", "South East Santo", 
-  "Canal - Fanafo", "West Malo", "East Malo",
+  "Canal Fanafo", "West Malo", "East Malo",
   "Penama", "West Ambae", "North Ambae", "East Ambae", "South Ambae", "North Maewo", 
   "South Maewo", "North Pentecost", "Central Pentecost 1", "Central Pentecost 2", 
   "South Pentecost",
@@ -152,6 +152,25 @@ format_table <- function(data){
 
 ```{r}
 full_data <- read.csv(here::here("Data", "1c_input_baseline.csv"), check.names = FALSE)
+
+# Standardize Area Council names
+full_data <- full_data %>%
+  mutate(`Area Council` = case_when(
+    `Area Council` == "Central malekula" ~ "Central Malekula",
+    `Area Council` == "Central pentecost 2" ~ "Central Pentecost 2",
+    `Area Council` == "East santo" ~ "East Santo",
+    `Area Council` == "luganville" ~ "Luganville",
+    `Area Council` == "North West malekula" ~ "North West Malekula",
+    `Area Council` == "pentecost" ~ "Pentecost",
+    `Area Council` == "West gaua" ~ "West Gaua",
+    TRUE ~ `Area Council`
+  ))
+
+# Filter to only valid Area Councils to avoid double-counting
+valid_councils <- region_order[!region_order %in% c("National", "Torba", "Sanma", "Penama", "Malampa", "Shefa", "Tafea")]
+
+full_data <- full_data %>%
+  filter(`Area Council` %in% valid_councils)
 
 # === DATA WRANGLING ===
 # Filter for Education in Baseline column and Area Council level data
