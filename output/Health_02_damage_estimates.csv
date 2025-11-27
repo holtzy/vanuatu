@@ -1,43 +1,43 @@
-"facility_hospital_damaged","facility_health centre_damaged","facility_dispensary_damaged","facility_aidpost_damaged","Region"
-1,1,14,38,"National"
-0,0,1,3,"Malampa"
-0,0,0,0,"North West Malekula"
-0,0,0,0,"North East Malekula"
-0,0,0,0,"Central Malekula"
-0,0,0,0,"South West Malekula"
-0,0,0,0,"South East Malekula"
-0,0,0,0,"South Malekula"
-0,0,0,0,"North Ambrym"
-0,0,0,0,"West Ambrym"
-0,0,0,0,"South East Ambrym"
-0,0,0,0,"Paama"
-1,1,6,18,"Shefa"
-1,0,1,4,"Port Vila"
-0,0,0,2,"Vermali"
-0,0,0,0,"Vermaul"
-0,0,0,2,"Varisu"
-0,0,1,0,"North Tongoa"
-0,0,1,1,"Tongariki"
-0,0,1,1,"Makimae"
-0,0,1,1,"Nguna"
-0,0,0,1,"Emau"
-0,0,1,1,"Malorua"
-0,1,0,1,"North Efate"
-0,1,0,0,"Mele"
-0,0,0,1,"Tanvasoko"
-0,0,1,0,"Ifira"
-0,0,1,1,"Erakor"
-0,0,0,1,"Eratap"
-0,0,0,1,"Eton"
-0,0,6,18,"Tafea"
-0,0,2,0,"North Erromango"
-0,0,0,0,"South Erromango"
-0,0,0,0,"Aniwa"
-0,0,0,2,"North Tanna"
-0,0,0,4,"West Tanna"
-0,0,0,3,"Middle Bush Tanna"
-0,0,1,4,"South West Tanna"
-0,0,0,2,"Whitesands"
-0,0,0,2,"South Tanna"
-0,0,0,1,"Futuna"
-0,0,0,0,"Aneityum"
+"Region","total_facilities_damaged","facility_hospital_damaged","facility_health centre_damaged","facility_dispensary_damaged","facility_aidpost_damaged"
+"National",54,1,1,14,38
+"Malampa",4,0,0,1,3
+"North West Malekula",0,0,0,0,0
+"North East Malekula",0,0,0,0,0
+"Central Malekula",0,0,0,0,0
+"South West Malekula",0,0,0,0,0
+"South East Malekula",0,0,0,0,0
+"South Malekula",0,0,0,0,0
+"North Ambrym",0,0,0,0,0
+"West Ambrym",0,0,0,0,0
+"South East Ambrym",0,0,0,0,0
+"Paama",0,0,0,0,0
+"Shefa",26,1,1,6,18
+"Port Vila",6,1,0,1,4
+"Vermali",2,0,0,0,2
+"Vermaul",0,0,0,0,0
+"Varisu",2,0,0,0,2
+"North Tongoa",1,0,0,1,0
+"Tongariki",2,0,0,1,1
+"Makimae",2,0,0,1,1
+"Nguna",2,0,0,1,1
+"Emau",1,0,0,0,1
+"Malorua",2,0,0,1,1
+"North Efate",2,0,1,0,1
+"Mele",1,0,1,0,0
+"Tanvasoko",1,0,0,0,1
+"Ifira",1,0,0,1,0
+"Erakor",2,0,0,1,1
+"Eratap",1,0,0,0,1
+"Eton",1,0,0,0,1
+"Tafea",24,0,0,6,18
+"North Erromango",2,0,0,2,0
+"South Erromango",0,0,0,0,0
+"Aniwa",0,0,0,0,0
+"North Tanna",2,0,0,0,2
+"West Tanna",4,0,0,0,4
+"Middle Bush Tanna",3,0,0,0,3
+"South West Tanna",5,0,0,1,4
+"Whitesands",2,0,0,0,2
+"South Tanna",2,0,0,0,2
+"Futuna",1,0,0,0,1
+"Aneityum",0,0,0,0,0

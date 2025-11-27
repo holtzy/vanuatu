@@ -1,10 +1,10 @@
-"Sector","Region","ecce_schools","ecce_teachers","ecce_students","primary_schools","primary_teachers","primary_students","private_households_damaged","roof_concrete_damaged","roof_metal_damaged","roof_wood_damaged","wall_concrete_damaged","wall_metal_damaged","wall_wood_damaged","total_financial_damage","hospital_financial","health_centre_financial","dispensary_financial","aidpost_financial"
-"Education","Mota",2,3,14,4,6,138,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"Education","Merelava",6,3,25,6,7,133,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"Education","South Santo 1",14,13,103,14,44,948,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"Education","Malorua",4,8,67,8,13,396,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"Education","West Tanna",44,37,576,28,85,2251,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-"Shelter Damage","Malorua",NA,NA,NA,NA,NA,NA,706,14,622,3,314,303,27,NA,NA,NA,NA,NA
-"Shelter Damage","West Tanna",NA,NA,NA,NA,NA,NA,1783,99,753,113,548,369,52,NA,NA,NA,NA,NA
-"Health Financial","Malorua",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,23800000,0,0,7e+06,16800000
-"Health Financial","West Tanna",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,5.8e+07,1e+07,0,0,4.8e+07
+"Sector","Region","ecce_schools","ecce_teachers","ecce_students","primary_schools","primary_teachers","primary_students","private_households_damaged","total_roof_damaged","roof_concrete_damaged","roof_metal_damaged","roof_wood_damaged","total_wall_damaged","wall_concrete_damaged","wall_metal_damaged","wall_wood_damaged","total_financial_damage","hospital_financial","health_centre_financial","dispensary_financial","aidpost_financial"
+"Education","Mota",2,3,14,4,6,138,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Education","Merelava",6,3,25,6,7,133,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Education","South Santo 1",14,13,103,14,44,948,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Education","Malorua",4,8,67,8,13,396,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Education","West Tanna",44,37,576,28,85,2251,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Shelter Damage","Malorua",NA,NA,NA,NA,NA,NA,706,639,14,622,3,644,314,303,27,NA,NA,NA,NA,NA
+"Shelter Damage","West Tanna",NA,NA,NA,NA,NA,NA,1783,965,99,753,113,969,548,369,52,NA,NA,NA,NA,NA
+"Health Financial","Malorua",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,23800000,0,0,7e+06,16800000
+"Health Financial","West Tanna",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,5.8e+07,1e+07,0,0,4.8e+07

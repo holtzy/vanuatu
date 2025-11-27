@@ -284,7 +284,7 @@ education_data <- full_data %>%
 # Reshape the data to get Schools, Students, Teachers as separate columns
 education_wide <- education_data %>%
   mutate(
-    education_level = tolower(Attribute),  # Keep lowercase for consistency
+    education_level = tolower(Attribute),
     measure_type = case_when(
       grepl("Number Schools", Indicator) ~ "schools",
       grepl("Students", Indicator) ~ "students",
@@ -300,6 +300,15 @@ education_wide <- education_data %>%
     names_sep = "_"
   ) %>%
   mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+# Add total columns
+education_wide <- education_wide %>%
+  mutate(
+    total_schools = ecce_schools + primary_schools + secondary_schools,
+    total_students = ecce_students + primary_students + secondary_students,
+    total_teachers = ecce_teachers + primary_teachers + secondary_teachers
+  ) %>%
+  select(Region, total_schools, total_students, total_teachers, everything())
 
 # Compute aggregates (province and national levels)
 education_aggregated <- compute_council_aggregates(education_wide)
@@ -328,6 +337,11 @@ reactable(
       sticky = "left"
     ),
     
+    # Add to columns list
+    total_schools = colDef(name = "Schools", format = colFormat(digits = 0)),
+    total_students = colDef(name = "Students", format = colFormat(digits = 0)),
+    total_teachers = colDef(name = "Teachers", format = colFormat(digits = 0)),
+
     # ECCE columns
     ecce_schools = colDef(name = "Schools", format = colFormat(digits = 0)),
     ecce_students = colDef(name = "Students", format = colFormat(digits = 0)),
@@ -344,6 +358,7 @@ reactable(
     secondary_teachers = colDef(name = "Teachers", format = colFormat(digits = 0))
   ),
   columnGroups = list(
+    colGroup(name = "Totals", columns = c("total_schools", "total_students", "total_teachers")),
     colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "ECCE", columns = c("ecce_schools", "ecce_students", "ecce_teachers")),
     colGroup(name = "Primary", columns = c("primary_schools", "primary_students", "primary_teachers")),
@@ -428,6 +443,14 @@ damage_estimates <- education_with_config %>%
   ungroup() %>%
   select(Region, contains("_damaged"), contains("_affected"))
 
+# Add total columns
+damage_estimates <- damage_estimates %>%
+  mutate(
+    total_schools_damaged = ecce_schools_damaged + primary_schools_damaged + secondary_schools_damaged,
+    total_students_affected = ecce_students_affected + primary_students_affected + secondary_students_affected
+  ) %>%
+  select(Region, total_schools_damaged, total_students_affected, everything())
+
 # Aggregate to province and national levels
 damage_estimates_full <- compute_council_aggregates(damage_estimates)
 
@@ -452,6 +475,9 @@ reactable(
       html = TRUE
     ),
     
+    total_schools_damaged = colDef(name = "Schools", format = colFormat(digits = 0)),
+    total_students_affected = colDef(name = "Students", format = colFormat(digits = 0)),
+
     # ECCE columns
     ecce_schools_damaged = colDef(name = "Schools Damaged", format = colFormat(digits = 0)),
     ecce_students_affected = colDef(name = "Students Affected", format = colFormat(digits = 0)),
@@ -465,6 +491,7 @@ reactable(
     secondary_students_affected = colDef(name = "Students Affected", format = colFormat(digits = 0))
   ),
   columnGroups = list(
+    colGroup(name = "Totals", columns = c("total_schools_damaged", "total_students_affected")),
     colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "ECCE", columns = c("ecce_schools_damaged", "ecce_students_affected")),
     colGroup(name = "Primary", columns = c("primary_schools_damaged", "primary_students_affected")),
@@ -783,6 +810,13 @@ telecom_wide <- telecom_data %>%
   ) %>%
   mutate(across(where(is.numeric), ~replace_na(.x, 0)))
 
+# Add total column
+telecom_wide <- telecom_wide %>%
+  mutate(
+    total_towers = towers_digicel + towers_vodafone
+  ) %>%
+  select(Region, total_towers, everything())
+
 # Compute aggregates (province and national levels)
 telecom_aggregated <- compute_council_aggregates(telecom_wide)
 
@@ -809,6 +843,9 @@ reactable(
       html = TRUE,
       sticky = "left"
     ),
+    total_towers = colDef(
+      name = "Total", 
+      format = colFormat(digits = 0)),
     towers_digicel = colDef(
       name = "Digicel", 
       format = colFormat(digits = 0)
@@ -820,7 +857,7 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Number of Towers", columns = c("towers_digicel", "towers_vodafone"))
+    colGroup(name = "Number of Towers", columns = c("total_towers","towers_digicel", "towers_vodafone"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -2343,29 +2380,30 @@ reactable(
       format = colFormat(digits = 0)
     ),
     island_cabbage_cuttings = colDef(
-      name = "Island Cabbage Cuttings", 
+      name = "Island Cabbage", 
       format = colFormat(digits = 0)
     ),
     taro_seedlings = colDef(
-      name = "Taro Seedlings", 
+      name = "Taro", 
       format = colFormat(digits = 0)
     ),
     kumala_cuttings = colDef(
-      name = "Kumala Cuttings", 
+      name = "Kumala", 
       format = colFormat(digits = 0)
     ),
     manioc_cuttings = colDef(
-      name = "Manioc Cuttings", 
+      name = "Manioc", 
       format = colFormat(digits = 0)
     ),
     yam_cuttings = colDef(
-      name = "Yam Cuttings", 
+      name = "Yam", 
       format = colFormat(digits = 0)
     )
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Staple Crops Resources", columns = c("num_households_affected", "island_cabbage_cuttings", "taro_seedlings", "kumala_cuttings", "manioc_cuttings", "yam_cuttings"))
+    colGroup(name = "Affected Households", columns = c("num_households_affected")),
+    colGroup(name = "Staple Crops Resources (Cuttings/Seedlings)", columns = c("island_cabbage_cuttings", "taro_seedlings", "kumala_cuttings", "manioc_cuttings", "yam_cuttings"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -3128,21 +3166,30 @@ health_full <- facility_wide %>%
 health_aggregated <- compute_council_aggregates(health_full)
 
 # Reorder columns according to client's specification
+# Add total columns
 health_ordered <- health_aggregated %>%
+  mutate(
+    total_facilities = facility_hospital + `facility_health centre` + facility_dispensary + facility_aidpost,
+    total_professionals = prof_doctor + `prof_nurse practitioner` + `prof_registered nurse` + prof_midwife + `prof_nurse aid`,
+    total_staff = `staff_clinical medical services` + `staff_nonclinical medical services` + `staff_clinical nursing services` + `staff_nonclinical nursing services` + `staff_pharmacy services`
+  ) %>%
   select(
     Region,
     # Health Facility
+    total_facilities,
     facility_hospital,
     `facility_health centre`,
     facility_dispensary,
     facility_aidpost,
     # Health Professional
+    total_professionals,
     prof_doctor,
     `prof_nurse practitioner`,
     `prof_registered nurse`,
     prof_midwife,
     `prof_nurse aid`,
     # Hospital Staff
+    total_staff,
     `staff_clinical medical services`,
     `staff_nonclinical medical services`,
     `staff_clinical nursing services`,
@@ -3170,12 +3217,14 @@ reactable(
       html = TRUE
     ),
     # Health Facility
+    total_facilities = colDef(name = "Total", format = colFormat(digits = 0)),
     facility_hospital = colDef(name = "Hospital", format = colFormat(digits = 0)),
     `facility_health centre` = colDef(name = "Health Centre", format = colFormat(digits = 0)),
     facility_dispensary = colDef(name = "Dispensary", format = colFormat(digits = 0)),
     facility_aidpost = colDef(name = "Aidpost", format = colFormat(digits = 0)),
     
     # Health Professional
+    total_professionals = colDef(name = "Total", format = colFormat(digits = 0)),
     prof_doctor = colDef(name = "Doctor", format = colFormat(digits = 0)),
     `prof_nurse practitioner` = colDef(name = "Nurse Practitioner", format = colFormat(digits = 0)),
     `prof_registered nurse` = colDef(name = "Registered Nurse", format = colFormat(digits = 0)),
@@ -3183,6 +3232,7 @@ reactable(
     `prof_nurse aid` = colDef(name = "Nurse Aid", format = colFormat(digits = 0)),
     
     # Hospital Staff
+    total_staff = colDef(name = "Total", format = colFormat(digits = 0)),
     `staff_clinical medical services` = colDef(name = "Clinical Medical", format = colFormat(digits = 0)),
     `staff_nonclinical medical services` = colDef(name = "Nonclinical Medical", format = colFormat(digits = 0)),
     `staff_clinical nursing services` = colDef(name = "Clinical Nursing", format = colFormat(digits = 0)),
@@ -3191,9 +3241,9 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Health Facility", columns = c("facility_hospital", "facility_health centre", "facility_dispensary", "facility_aidpost")),
-    colGroup(name = "Health Professional", columns = c("prof_doctor", "prof_nurse practitioner", "prof_registered nurse", "prof_midwife", "prof_nurse aid")),
-    colGroup(name = "Hospital Staff", columns = c("staff_clinical medical services", "staff_nonclinical medical services", "staff_clinical nursing services", "staff_nonclinical nursing services", "staff_pharmacy services"))
+    colGroup(name = "Health Facility", columns = c("total_facilities", "facility_hospital", "facility_health centre", "facility_dispensary", "facility_aidpost")),
+    colGroup(name = "Health Professional", columns = c("total_professionals", "prof_doctor", "prof_nurse practitioner", "prof_registered nurse", "prof_midwife", "prof_nurse aid")),
+    colGroup(name = "Hospital Staff", columns = c("total_staff", "staff_clinical medical services", "staff_nonclinical medical services", "staff_clinical nursing services", "staff_nonclinical nursing services", "staff_pharmacy services"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -3265,13 +3315,17 @@ damage_estimates_raw <- health_with_config %>%
 damage_estimates_aggregated <- compute_council_aggregates(damage_estimates_raw)
 
 # NOW round all values (council, province, and national)
+# Add total column after aggregation and rounding
 damage_estimates_full <- damage_estimates_aggregated %>%
   mutate(
     facility_hospital_damaged = round(facility_hospital_damaged, 0),
     `facility_health centre_damaged` = round(`facility_health centre_damaged`, 0),
     facility_dispensary_damaged = round(facility_dispensary_damaged, 0),
-    facility_aidpost_damaged = round(facility_aidpost_damaged, 0)
-  )
+    facility_aidpost_damaged = round(facility_aidpost_damaged, 0),
+    total_facilities_damaged = facility_hospital_damaged + `facility_health centre_damaged` + facility_dispensary_damaged + facility_aidpost_damaged
+  ) %>%
+  select(Region, total_facilities_damaged, facility_hospital_damaged, `facility_health centre_damaged`,
+         facility_dispensary_damaged, facility_aidpost_damaged)
 
 # === EXPORT TO CSV ===
 write.csv(
@@ -3294,8 +3348,7 @@ reactable(
       sticky = "left",
       html = TRUE
     ),
-    
-    # Health Facility - showing as whole numbers
+    total_facilities_damaged = colDef(name = "Total", format = colFormat(digits = 0)),
     facility_hospital_damaged = colDef(name = "Hospital", format = colFormat(digits = 0)),
     `facility_health centre_damaged` = colDef(name = "Health Centre", format = colFormat(digits = 0)),
     facility_dispensary_damaged = colDef(name = "Dispensary", format = colFormat(digits = 0)),
@@ -3303,7 +3356,7 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Health Facility", columns = c("facility_hospital_damaged", "facility_health centre_damaged", "facility_dispensary_damaged", "facility_aidpost_damaged"))
+    colGroup(name = "Health Facility Damaged", columns = c("total_facilities_damaged", "facility_hospital_damaged", "facility_health centre_damaged", "facility_dispensary_damaged", "facility_aidpost_damaged"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -3582,8 +3635,12 @@ infrastructure_aggregated <- compute_council_aggregates(infrastructure_wide)
 
 # Reorder columns according to specification
 infrastructure_ordered <- infrastructure_aggregated %>%
+  mutate(
+    total_infrastructure = infra_airport + infra_wharf + `infra_permanent bridge` + `infra_temporary bridge` + `infra_police stations` + `infra_fire hydrants` + `infra_main water valves`
+  ) %>%
   select(
     Region,
+    total_infrastructure,
     infra_airport,
     infra_wharf,
     `infra_permanent bridge`,
@@ -3609,12 +3666,10 @@ reactable(
     Region = colDef(
       name = "Region", 
       minWidth = 150,
-      sortable = TRUE,
-      defaultSortOrder = "asc",
-      html = TRUE,
-      sticky = "left"
+      sticky = "left",
+      html = TRUE
     ),
-    
+    total_infrastructure = colDef(name = "Total", format = colFormat(digits = 0)),
     infra_airport = colDef(name = "Airport", format = colFormat(digits = 0)),
     infra_wharf = colDef(name = "Wharf", format = colFormat(digits = 0)),
     `infra_permanent bridge` = colDef(name = "Permanent Bridge", format = colFormat(digits = 0)),
@@ -3625,9 +3680,9 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Infrastructure", columns = c("infra_airport", "infra_wharf", "infra_permanent bridge", 
-                                                    "infra_temporary bridge", "infra_police stations", 
-                                                    "infra_fire hydrants", "infra_main water valves"))
+    colGroup(name = "Infrastructure", columns = c("total_infrastructure", "infra_airport", "infra_wharf", "infra_permanent bridge",
+                                                   "infra_temporary bridge", "infra_police stations",
+                                                   "infra_fire hydrants", "infra_main water valves"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -3675,8 +3730,12 @@ road_aggregated <- compute_council_aggregates(road_wide)
 
 # Reorder columns according to specification
 road_ordered <- road_aggregated %>%
+  mutate(
+    total_road_km = road_asphalt + `road_chips seal` + road_concrete + road_earth + road_gravel
+  ) %>%
   select(
     Region,
+    total_road_km,
     road_asphalt,
     `road_chips seal`,
     road_concrete,
@@ -3700,12 +3759,10 @@ reactable(
     Region = colDef(
       name = "Region", 
       minWidth = 150,
-      sortable = TRUE,
-      defaultSortOrder = "asc",
-      html = TRUE,
-      sticky = "left"
+      sticky = "left",
+      html = TRUE
     ),
-    
+    total_road_km = colDef(name = "Total (km)", format = colFormat(digits = 0)),
     road_asphalt = colDef(name = "Asphalt", format = colFormat(digits = 0)),
     `road_chips seal` = colDef(name = "Chips Seal", format = colFormat(digits = 0)),
     road_concrete = colDef(name = "Concrete", format = colFormat(digits = 0)),
@@ -3714,8 +3771,8 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Road Surface", columns = c("road_asphalt", "road_chips seal", "road_concrete", 
-                                                  "road_earth", "road_gravel"))
+    colGroup(name = "Road Surface (km)", columns = c("total_road_km", "road_asphalt", "road_chips seal", "road_concrete",
+                                                 "road_earth", "road_gravel"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -3792,6 +3849,7 @@ infrastructure_damage_raw <- infrastructure_with_config %>%
 infrastructure_damage_aggregated <- compute_council_aggregates(infrastructure_damage_raw)
 
 # NOW round all values (council, province, and national)
+# Add total column after rounding
 infrastructure_damage_full <- infrastructure_damage_aggregated %>%
   mutate(
     infra_airport_damaged = round(infra_airport_damaged, 0),
@@ -3800,8 +3858,12 @@ infrastructure_damage_full <- infrastructure_damage_aggregated %>%
     `infra_temporary bridge_damaged` = round(`infra_temporary bridge_damaged`, 0),
     `infra_police stations_damaged` = round(`infra_police stations_damaged`, 0),
     `infra_fire hydrants_damaged` = round(`infra_fire hydrants_damaged`, 0),
-    `infra_main water valves_damaged` = round(`infra_main water valves_damaged`, 0)
-  )
+    `infra_main water valves_damaged` = round(`infra_main water valves_damaged`, 0),
+    total_infrastructure_damaged = infra_airport_damaged + infra_wharf_damaged + `infra_permanent bridge_damaged` + `infra_temporary bridge_damaged` + `infra_police stations_damaged` + `infra_fire hydrants_damaged` + `infra_main water valves_damaged`
+  ) %>%
+  select(Region, total_infrastructure_damaged, infra_airport_damaged, infra_wharf_damaged, `infra_permanent bridge_damaged`,
+         `infra_temporary bridge_damaged`, `infra_police stations_damaged`,
+         `infra_fire hydrants_damaged`, `infra_main water valves_damaged`)
 
 # === EXPORT TABLE 1 TO CSV ===
 write.csv(
@@ -3824,8 +3886,7 @@ reactable(
       sticky = "left",
       html = TRUE
     ),
-    
-    # Infrastructure
+    total_infrastructure_damaged = colDef(name = "Total", format = colFormat(digits = 0)),
     infra_airport_damaged = colDef(name = "Airport", format = colFormat(digits = 0)),
     infra_wharf_damaged = colDef(name = "Wharf", format = colFormat(digits = 0)),
     `infra_permanent bridge_damaged` = colDef(name = "Permanent Bridge", format = colFormat(digits = 0)),
@@ -3836,10 +3897,10 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Infrastructure", columns = c("infra_airport_damaged", "infra_wharf_damaged", 
-                                                    "infra_permanent bridge_damaged", "infra_temporary bridge_damaged",
-                                                    "infra_police stations_damaged", "infra_fire hydrants_damaged",
-                                                    "infra_main water valves_damaged"))
+    colGroup(name = "Infrastructure Damaged", columns = c("total_infrastructure_damaged", "infra_airport_damaged", "infra_wharf_damaged",
+                                                   "infra_permanent bridge_damaged", "infra_temporary bridge_damaged",
+                                                  "infra_police stations_damaged", "infra_fire hydrants_damaged",
+                                                  "infra_main water valves_damaged"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -3892,8 +3953,11 @@ road_damage_full <- road_damage_aggregated %>%
     `road_chips seal_damaged` = round(`road_chips seal_damaged`, 0),
     road_concrete_damaged = round(road_concrete_damaged, 0),
     road_earth_damaged = round(road_earth_damaged, 0),
-    road_gravel_damaged = round(road_gravel_damaged, 0)
-  )
+    road_gravel_damaged = round(road_gravel_damaged, 0),
+    total_road_damaged = road_asphalt_damaged + `road_chips seal_damaged` + road_concrete_damaged + road_earth_damaged + road_gravel_damaged
+  ) %>%
+  select(Region, total_road_damaged, road_asphalt_damaged, `road_chips seal_damaged`, road_concrete_damaged,
+         road_earth_damaged, road_gravel_damaged)
 
 # === EXPORT TABLE 2 TO CSV ===
 write.csv(
@@ -3916,8 +3980,7 @@ reactable(
       sticky = "left",
       html = TRUE
     ),
-    
-    # Road Surface
+    total_road_damaged = colDef(name = "Total (km)", format = colFormat(digits = 0)),
     road_asphalt_damaged = colDef(name = "Asphalt", format = colFormat(digits = 0)),
     `road_chips seal_damaged` = colDef(name = "Chips Seal", format = colFormat(digits = 0)),
     road_concrete_damaged = colDef(name = "Concrete", format = colFormat(digits = 0)),
@@ -3926,9 +3989,9 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Road Surface", columns = c("road_asphalt_damaged", "road_chips seal_damaged", 
-                                                  "road_concrete_damaged", "road_earth_damaged", 
-                                                  "road_gravel_damaged"))
+    colGroup(name = "Road Surface Damaged (km)", columns = c("total_road_damaged", "road_asphalt_damaged", "road_chips seal_damaged",
+                                                 "road_concrete_damaged", "road_earth_damaged",
+                                                 "road_gravel_damaged"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -4550,9 +4613,13 @@ shelter_damage_aggregated <- compute_council_aggregates(shelter_damage_rounded)
 
 # Reorder columns
 shelter_damage_ordered <- shelter_damage_aggregated %>%
+  mutate(
+    total_roof_damaged = roof_concrete_damaged + roof_metal_damaged + roof_wood_damaged,
+    total_wall_damaged = wall_concrete_damaged + wall_metal_damaged + wall_wood_damaged
+  ) %>%
   select(Region, private_households_damaged,
-         roof_concrete_damaged, roof_metal_damaged, roof_wood_damaged,
-         wall_concrete_damaged, wall_metal_damaged, wall_wood_damaged)
+         total_roof_damaged, roof_concrete_damaged, roof_metal_damaged, roof_wood_damaged,
+         total_wall_damaged, wall_concrete_damaged, wall_metal_damaged, wall_wood_damaged)
 
 # === EXPORT TO CSV ===
 write.csv(
@@ -4568,20 +4635,20 @@ reactable(
   formatted,
   columns = list(
     Region = colDef(
-      name = "Region",   
+      name = "Region",       
       minWidth = 150,
-      sortable = TRUE,
-      defaultSortOrder = "asc",
-      html = TRUE,
-      sticky = "left"
+      sticky = "left",
+      html = TRUE
     ),
     
     private_households_damaged = colDef(name = "Total Private Households", format = colFormat(digits = 0)),
     
+    total_roof_damaged = colDef(name = "Total", format = colFormat(digits = 0)),
     roof_concrete_damaged = colDef(name = "Concrete", format = colFormat(digits = 0)),
     roof_metal_damaged = colDef(name = "Metal", format = colFormat(digits = 0)),
     roof_wood_damaged = colDef(name = "Wood", format = colFormat(digits = 0)),
     
+    total_wall_damaged = colDef(name = "Total", format = colFormat(digits = 0)),
     wall_concrete_damaged = colDef(name = "Concrete", format = colFormat(digits = 0)),
     wall_metal_damaged = colDef(name = "Metal", format = colFormat(digits = 0)),
     wall_wood_damaged = colDef(name = "Wood", format = colFormat(digits = 0))
@@ -4589,8 +4656,8 @@ reactable(
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "Number of Households", columns = c("private_households_damaged")),
-    colGroup(name = "Main Roof Materials", columns = c("roof_concrete_damaged", "roof_metal_damaged", "roof_wood_damaged")),
-    colGroup(name = "Main Wall Materials", columns = c("wall_concrete_damaged", "wall_metal_damaged", "wall_wood_damaged"))
+    colGroup(name = "Main Roof Materials Damaged", columns = c("total_roof_damaged", "roof_concrete_damaged", "roof_metal_damaged", "roof_wood_damaged")),
+    colGroup(name = "Main Wall Materials Damaged", columns = c("total_wall_damaged", "wall_concrete_damaged", "wall_metal_damaged", "wall_wood_damaged"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -4965,6 +5032,16 @@ wash_wide <- total_households %>%
 # Compute aggregates (province and national levels)
 wash_aggregated <- compute_council_aggregates(wash_wide)
 
+# Add total columns
+wash_aggregated <- wash_aggregated %>%
+  mutate(
+    total_water = water_piped + water_well + water_tank,
+    total_toilet = `toilet_pit latrine` + toilet_vip + toilet_flush + `toilet_water sealed`
+  ) %>%
+  select(Region, total_households,
+         total_water, water_piped, water_well, water_tank,
+         total_toilet, `toilet_pit latrine`, toilet_vip, toilet_flush, `toilet_water sealed`)
+
 # === EXPORT TO CSV ===
 write.csv(
   wash_aggregated %>% select(Region, everything()),
@@ -4979,20 +5056,20 @@ reactable(
   formatted,
   columns = list(
     Region = colDef(
-      name = "Region",   
+      name = "Region",       
       minWidth = 150,
-      sortable = TRUE,
-      defaultSortOrder = "asc",
-      html = TRUE,
-      sticky = "left"
+      sticky = "left",
+      html = TRUE
     ),
     
     total_households = colDef(name = "", format = colFormat(digits = 0)),
     
+    total_water = colDef(name = "Total", format = colFormat(digits = 0)),
     water_piped = colDef(name = "Piped", format = colFormat(digits = 0)),
     water_well = colDef(name = "Well", format = colFormat(digits = 0)),
     water_tank = colDef(name = "Tank", format = colFormat(digits = 0)),
     
+    total_toilet = colDef(name = "Total", format = colFormat(digits = 0)),
     `toilet_pit latrine` = colDef(name = "Pit Latrine", format = colFormat(digits = 0)),
     toilet_vip = colDef(name = "VIP", format = colFormat(digits = 0)),
     toilet_flush = colDef(name = "Flush", format = colFormat(digits = 0)),
@@ -5001,8 +5078,8 @@ reactable(
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
     colGroup(name = "Total Households", columns = c("total_households")),
-    colGroup(name = "Drinking Water", columns = c("water_piped", "water_well", "water_tank")),
-    colGroup(name = "Toilet Type", columns = c("toilet_pit latrine", "toilet_vip", "toilet_flush", "toilet_water sealed"))
+    colGroup(name = "Drinking Water", columns = c("total_water", "water_piped", "water_well", "water_tank")),
+    colGroup(name = "Toilet Type", columns = c("total_toilet", "toilet_pit latrine", "toilet_vip", "toilet_flush", "toilet_water sealed"))
   ),
   striped = TRUE,
   highlight = TRUE,
@@ -5086,8 +5163,13 @@ wash_damage_aggregated <- compute_council_aggregates(wash_damage_rounded)
 
 # Reorder columns
 wash_damage_ordered <- wash_damage_aggregated %>%
-  select(Region, water_piped_damaged, water_well_damaged, water_tank_damaged,
-         toilet_pit_latrine_damaged, toilet_vip_damaged, toilet_flush_damaged, toilet_water_sealed_damaged)
+  mutate(
+    total_water_damaged = water_piped_damaged + water_well_damaged + water_tank_damaged,
+    total_toilet_damaged = toilet_pit_latrine_damaged + toilet_vip_damaged + toilet_flush_damaged + toilet_water_sealed_damaged
+  ) %>%
+  select(Region,
+         total_water_damaged, water_piped_damaged, water_well_damaged, water_tank_damaged,
+         total_toilet_damaged, toilet_pit_latrine_damaged, toilet_vip_damaged, toilet_flush_damaged, toilet_water_sealed_damaged)
 
 # === EXPORT TO CSV ===
 write.csv(
@@ -5103,18 +5185,18 @@ reactable(
   formatted,
   columns = list(
     Region = colDef(
-      name = "Region",   
+      name = "Region",       
       minWidth = 150,
-      sortable = TRUE,
-      defaultSortOrder = "asc",
-      html = TRUE,
-      sticky = "left"
+      sticky = "left",
+      html = TRUE
     ),
     
+    total_water_damaged = colDef(name = "Total", format = colFormat(digits = 0)),
     water_piped_damaged = colDef(name = "Piped", format = colFormat(digits = 0)),
     water_well_damaged = colDef(name = "Well", format = colFormat(digits = 0)),
     water_tank_damaged = colDef(name = "Tank", format = colFormat(digits = 0)),
     
+    total_toilet_damaged = colDef(name = "Total", format = colFormat(digits = 0)),
     toilet_pit_latrine_damaged = colDef(name = "Pit Latrine", format = colFormat(digits = 0)),
     toilet_vip_damaged = colDef(name = "VIP", format = colFormat(digits = 0)),
     toilet_flush_damaged = colDef(name = "Flush", format = colFormat(digits = 0)),
@@ -5122,8 +5204,8 @@ reactable(
   ),
   columnGroups = list(
     colGroup(name = "Region", columns = c("Region")),
-    colGroup(name = "Drinking Water", columns = c("water_piped_damaged", "water_well_damaged", "water_tank_damaged")),
-    colGroup(name = "Toilet Type", columns = c("toilet_pit_latrine_damaged", "toilet_vip_damaged", "toilet_flush_damaged", "toilet_water_sealed_damaged"))
+    colGroup(name = "Drinking Water Damaged", columns = c("total_water_damaged", "water_piped_damaged", "water_well_damaged", "water_tank_damaged")),
+    colGroup(name = "Toilet Type Damaged", columns = c("total_toilet_damaged", "toilet_pit_latrine_damaged", "toilet_vip_damaged", "toilet_flush_damaged", "toilet_water_sealed_damaged"))
   ),
   striped = TRUE,
   highlight = TRUE,
