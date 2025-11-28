@@ -5660,7 +5660,7 @@ reactable(
 
 # Map Visualization {.tabset}
 
-This interactive map shows the estimated number of private households damaged by the cyclone across Vanuatu's Area Councils. **Hover over each council** to view detailed damage statistics including roof and wall materials affected. Councils shown in grey have no damage data available.
+This interactive map displays data from **Section 10 - Shelter, Table 10.2 - Estimated Hazard Damage**, showing the estimated number of private households damaged by the cyclone across Vanuatu's Area Councils. **Hover over each council** to view detailed damage statistics including roof and wall materials affected. Councils shown in grey have no damage data available.
 
 ```{r map-setup, include=FALSE}
 library(sf)
@@ -5739,3 +5739,5 @@ leaflet(councils_map) %>%
   ) %>%
   setView(lng = 167.5, lat = -16, zoom = 6)
 ````
+
+*Note: Tanvasoko council (Shefa Province) is not displayed on this map due to a naming mismatch between the 2016 council boundary data and current council names. Data for this council is included in the tables above.*
