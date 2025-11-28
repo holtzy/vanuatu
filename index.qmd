@@ -5657,3 +5657,70 @@ reactable(
   bordered = TRUE
 )
 ```
+
+## Map Visualization {.tabset}
+
+## Map Visualization
+```{r map-setup, include=FALSE}
+library(sf)
+library(leaflet)
+library(viridis)
+
+# Define province names to exclude
+provinces <- c("Malampa", "Penama", "Sanma", "Shefa", "Tafea", "Torba")
+
+# Load Area Council boundaries
+councils_sf <- st_read(here::here("Data", "GIS_layers", "2016_phc_vut_acid_4326.geojson"), quiet = TRUE)
+
+# Prepare damage data for mapping
+# Note: "Tanvasoko" (Shefa) not found in 2016 GeoJSON boundaries
+map_data <- shelter_damage_aggregated %>%
+  filter(!Region %in% c("National", provinces)) %>%
+  select(Region, private_households_damaged)
+
+# Join spatial data with damage data
+councils_map <- councils_sf %>%
+  left_join(map_data, by = c("acname" = "Region"))
+```
+```{r damage-map, fig.height=8, fig.width=10}
+# Create color palette
+pal <- colorNumeric(
+  palette = "YlOrRd",
+  domain = councils_map$private_households_damaged,
+  na.color = "#cccccc"
+)
+
+# Create interactive map
+leaflet(councils_map) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(private_households_damaged),
+    fillOpacity = 0.7,
+    color = "#333333",
+    weight = 1,
+    highlightOptions = highlightOptions(
+      weight = 2,
+      color = "#000000",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    ),
+    label = ~paste0(
+      "<strong>", acname, "</strong><br>",
+      "Households Damaged: ", format(round(private_households_damaged, 0), big.mark = ",")
+    ) %>% lapply(htmltools::HTML),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = ~private_households_damaged,
+    title = "Households<br>Damaged",
+    opacity = 0.7,
+    labFormat = labelFormat(big.mark = ",", digits = 0)
+  ) %>%
+  setView(lng = 167.5, lat = -16, zoom = 6)
+```
